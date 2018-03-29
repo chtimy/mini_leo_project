@@ -120,7 +120,7 @@ func buildGraphics():
 	#map generation
 	m_map.graphicsMap = Node2D.new()
 	m_map.graphicsMap.set_script(load(\"res://scripts/fightMap.gd\"))
-	m_map.graphicsMap.init(m_map, tileSize, \"res://images/map.fightScene/overlay.png\")
+	m_map.graphicsMap.init(m_map, tileSize, \"res://images/map/fightScene/overlay.png\", get_viewport())
 	add_child(m_map.graphicsMap)
 		
 	#characters generation
@@ -252,7 +252,7 @@ func lineOK(var line):
 	
 	"
 
-[node name="fightScene" type="Node2D" index="0"]
+[node name="fightScene" type="Node2D"]
 
 script = SubResource( 1 )
 _sections_unfolded = [ "Z Index" ]

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bg.svg-6b40bd345f0fac1af36de6266860c48f.stex"
+path="res://.import/overlay.png-7530751766d481d1ae72f9539679eb61.stex"
 
 [deps]
 
-source_file="res://dessins_projets/inkscape/bg.svg"
-source_md5="dfa35eb2201a13b3d285325b2158b34f"
+source_file="res://images/map/fightScene/overlay.png"
+source_md5="bc76f6e8a67b5c0055957f84d8de389f"
 
-dest_files=[ "res://.import/bg.svg-6b40bd345f0fac1af36de6266860c48f.stex" ]
-dest_md5="a78ef4b524e2bae839fa540b9d063628"
+dest_files=[ "res://.import/overlay.png-7530751766d481d1ae72f9539679eb61.stex" ]
+dest_md5="ee7e8372c7a34d27f62f8124b67582c4"
 
 [params]
 
