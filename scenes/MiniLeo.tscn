@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=2]
 
-[ext_resource path="res://scenes/MiniLeo.gd" type="Script" id=1]
+[ext_resource path="res://scripts/MiniLeo.gd" type="Script" id=1]
 [ext_resource path="res://images/mini_leo/face.png" type="Texture" id=2]
 [ext_resource path="res://images/symboles/eye.png" type="Texture" id=3]
 [ext_resource path="res://images/symboles/exclamation.png" type="Texture" id=4]
@@ -48,6 +48,7 @@ margin_top = -52.0
 margin_right = 21.0
 margin_bottom = -29.0
 rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
 mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
@@ -65,6 +66,7 @@ margin_right = 20.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 20, 20 )
 rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
 mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
@@ -85,6 +87,7 @@ margin_right = 44.0
 margin_bottom = 20.0
 rect_min_size = Vector2( 20, 20 )
 rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
 mouse_filter = 1
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1

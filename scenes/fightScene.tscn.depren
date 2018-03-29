@@ -1,0 +1,142 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://images/mini_leo/cote_droit.png" type="Texture" id=1]
+[ext_resource path="res://scenes/menuAttackFight.tscn" type="PackedScene" id=2]
+
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Node2D
+
+#struct Character
+#{
+	#string name
+	#int life
+	#float %attack
+	#float %defence
+	#float ...
+	#int attacks []
+	#int group
+	#int nbDeplacementBase
+	#...
+	#graphics
+#}
+
+# Dictionnary of :
+#struct Action
+#{
+#	string name
+#	string pathToTexture[]
+#	int actionId
+#}
+var m_actions = []
+
+var m_nbVilains = 4
+var m_matrix = []
+var m_characters = []
+var m_objects = []
+
+var m_menusAttack = []
+#order of turns
+var turns = []
+var m_currentMenuAttack
+
+func _ready():
+	var viewportSize = get_viewport_rect().size
+	var bg = get_node(\"background\")
+	bg.set_texture(load(\"res://images/map/fightScene/bg02.png\"))
+	bg.set_scale(Vector2(bg.texture.get_size() / viewportSize))
+	
+	var leo = get_node(\"leo\")
+	leo.set_texture(load(\"res://images/mini_leo/cote_droit.png\"))
+	leo.set_scale(Vector2(1.5,1.5))
+	leo.set_position(Vector2(viewportSize * Vector2(0.1, 0.4)))
+	
+	#generation vilains
+	var vilains = []
+	for i in range(m_nbVilains):
+		vilains.append(Sprite.new())
+		vilains[i].set_texture(load(\"res://images/characters/blond/blond.png\"))
+		vilains[i].set_position(Vector2(viewportSize * Vector2(0.8 - i * 0.1, 0.5 - i * 0.1)))
+		get_node(\".\").add_child(vilains[i])
+		
+	m_menusAttack.append(get_node(\"menuAttackLeo\"))
+	m_currentMenuAttack = m_menusAttack[0]
+	
+	#import actions file
+	#a optimiser
+	var actionsFightFile = File.new()
+	#a mettre en binaire
+	if actionsFightFile.open(\"res://images/map/fightScene/actions.txt\", File.READ):
+		var nb = actionsFightFile.get_line()
+		for i in range(nb):
+			var action
+			{
+				name = actionsFightFile.get_line(),
+				pathToTexture = [actionsFightFile.get_line(), actionsFightFile.get_line()],
+				id = actionsFightFile.get_line()
+			}
+			#faudrait vérifier les doublons
+			m_actions[action.name] = action
+
+func create(var matrix, var characters, var objects):
+	m_matrix = matrix
+	m_characters = characters
+	m_objects = objects
+	buildGraphics()
+	
+func destroy():
+	m_matrix = []
+	m_characters = []
+	m_objects = []
+	destroyGraphics()
+
+func destroyGraphics():
+	pass
+
+func buildGraphics():
+	#map generation
+	#for case in m_matrix
+	#characters generation
+	for character in m_characters:
+		character.menu = menuInteractionsAttack.new(character.actions)
+		#creation character node
+		#character.graphicsCharacter = ???
+	#objects generation
+	#for object in m_objects:
+
+
+func _process(delta):
+	#Players turn
+	playerTurn()
+	#Enemis turn
+	pass
+
+func playerTurn():
+	var action
+	#si menu retourne action
+	if currentMenuAttack.getAction(action) == 1 :
+		print(action)
+		#exec action
+		#change currentMenu 
+	pass
+"
+
+[node name="fightScene" type="Node2D" index="0"]
+
+script = SubResource( 1 )
+_sections_unfolded = [ "Z Index" ]
+
+[node name="background" type="Sprite" parent="." index="0"]
+
+centered = false
+region_rect = Rect2( 0, 0, 2000, 1000 )
+_sections_unfolded = [ "Animation", "Offset", "Region", "Transform", "Z Index" ]
+
+[node name="leo" type="Sprite" parent="." index="1"]
+
+texture = ExtResource( 1 )
+
+[node name="menuAttackLeoo" parent="." index="2" instance=ExtResource( 2 )]
+
+

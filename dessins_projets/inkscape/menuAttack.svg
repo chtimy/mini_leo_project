@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   inkscape:version="0.92.1 r15371"
+   sodipodi:docname="menuAttack.svg">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.98994949"
+     inkscape:cx="393.72916"
+     inkscape:cy="872.07086"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1600"
+     inkscape:window-height="837"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="opacity:1;vector-effect:none;fill:#ffffd3;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       id="rect4487"
+       width="91.659233"
+       height="21.733627"
+       x="33.337498"
+       y="61.331844"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4489"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.26458333,0,0,0.26458333,25.020549,3.6426364)"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409"><flowRegion
+         id="flowRegion4491"><rect
+           id="rect4493"
+           width="346.42859"
+           height="82.142845"
+           x="130"
+           y="231.80539" /></flowRegion><flowPara
+         id="flowPara4495"
+         style="font-size:53.33333588px">Block</flowPara></flowRoot>    <rect
+       y="93.671455"
+       x="33.604767"
+       height="21.733627"
+       width="91.659233"
+       id="rect4524"
+       style="opacity:1;vector-effect:none;fill:#ffffd3;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409" />
+    <flowRoot
+       transform="matrix(0.26458333,0,0,0.26458333,25.628882,35.858224)"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot4532"
+       xml:space="preserve"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409"><flowRegion
+         id="flowRegion4528"><rect
+           y="231.80539"
+           x="130"
+           height="82.142845"
+           width="346.42859"
+           id="rect4526" /></flowRegion><flowPara
+         style="font-size:53.33333588px"
+         id="flowPara4530">Cross</flowPara></flowRoot>    <rect
+       style="opacity:1;vector-effect:none;fill:#ffffd3;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       id="rect4534"
+       width="91.659233"
+       height="21.733627"
+       x="33.070229"
+       y="128.95103"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4542"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.26458333,0,0,0.26458333,12.161455,71.261827)"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409"><flowRegion
+         id="flowRegion4538"><rect
+           id="rect4536"
+           width="346.42859"
+           height="82.142845"
+           x="130"
+           y="231.80539" /></flowRegion><flowPara
+         id="flowPara4540"
+         style="font-size:53.33333588px">Posterize</flowPara></flowRoot>    <rect
+       y="61.599113"
+       x="153.87605"
+       height="21.733627"
+       width="91.659233"
+       id="rect4544"
+       style="opacity:1;vector-effect:none;fill:#8ad462;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409" />
+    <flowRoot
+       transform="matrix(0.26458333,0,0,0.26458333,145.55911,3.9099059)"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot4552"
+       xml:space="preserve"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409"><flowRegion
+         id="flowRegion4548"><rect
+           y="231.80539"
+           x="130"
+           height="82.142845"
+           width="346.42859"
+           id="rect4546" /></flowRegion><flowPara
+         style="font-size:53.33333588px"
+         id="flowPara4550">Block</flowPara></flowRoot>    <rect
+       style="opacity:1;vector-effect:none;fill:#8ad462;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       id="rect4554"
+       width="91.659233"
+       height="21.733627"
+       x="154.14333"
+       y="93.938728"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4562"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.26458333,0,0,0.26458333,146.16744,36.125494)"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409"><flowRegion
+         id="flowRegion4558"><rect
+           id="rect4556"
+           width="346.42859"
+           height="82.142845"
+           x="130"
+           y="231.80539" /></flowRegion><flowPara
+         id="flowPara4560"
+         style="font-size:53.33333588px">Cross</flowPara></flowRoot>    <rect
+       y="129.21831"
+       x="153.60878"
+       height="21.733627"
+       width="91.659233"
+       id="rect4564"
+       style="opacity:1;vector-effect:none;fill:#8ad462;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409" />
+    <flowRoot
+       transform="matrix(0.26458333,0,0,0.26458333,132.70001,71.529097)"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot4572"
+       xml:space="preserve"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409"><flowRegion
+         id="flowRegion4568"><rect
+           y="231.80539"
+           x="130"
+           height="82.142845"
+           width="346.42859"
+           id="rect4566" /></flowRegion><flowPara
+         style="font-size:53.33333588px"
+         id="flowPara4570">Posterize</flowPara></flowRoot>  </g>
+</svg>

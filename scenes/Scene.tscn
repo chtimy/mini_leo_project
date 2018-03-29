@@ -49,21 +49,25 @@ func _ready():
 	connect(\"remove_current_object_from_inventory\", get_node(\"HUDGameLayer/inventory\"), \"on_remove_current_object_from_inventory\")
 	
 	state = GAME
-	
 	set_process(true)
 	
 	print(\"game node : end ready function\")
 	
 func _process(delta):
 	if Input.is_action_just_released(\"ui_open_inventory\"):
+		print(state)
 		if (state == GAME):
+			get_node(\"HUDGameLayer\").show()
 			state = HUD
 		else:
+			get_node(\"HUDGameLayer\").hide()
 			state = GAME
-	if (state == GAME):
-		move_mini_leo(delta)
-	elif (state == HUD):
-		get_node(\"HUDGameLayer\").control(Input)	
+	else:
+		if (state == GAME):
+			move_mini_leo(delta)
+		elif (state == HUD && get_node(\"HUDGameLayer\").control(Input) == 0):
+			get_node(\"HUDGameLayer\").hide()
+			state = GAME
 	
 func move_mini_leo(delta):
 	#move mini_leo in relation to the map
@@ -109,55 +113,56 @@ var inventory_close = true
 enum DIRECTION{LEFT, RIGHT, UP, DOWN}
 enum states{INIT, COMBINE}
 enum TYPE_FRAME{BASE_FRAME, COMBINE_FRAME}
-var state = HIDE
+var state = INIT
 
 func _ready():
 	print(\"HUDGameLayer node : begin _ready function\")		
 	inventory = get_node(\"inventory\")
 	inventory.hide()
 	print(\"HUDGameLayer node : end _ready function\")
+	
+func show():
+	inventory.show()
+
+func hide():
+	inventory.hide()
 
 func control(event):
-	if event.is_action_pressed(\"ui_take\"):
+	if event.is_action_just_released(\"ui_take\"):
 		if(state == INIT):
-			print(\"grab\")
-			inventory.hide()
 			inventory.grap_object()
-			return INIT
-		elif(state == COMBINE):
-			if(inventory.combine_cursor()):
-				inventory.combineObjects()
-				state = INIT
-				return INIT
-	elif event.is_action_pressed(\"ui_combine\"):
-		if(state == CHOOSE):
+		elif(state == COMBINE) && (inventory.combine_cursor()):
+			inventory.combineObjects()
+			state = INIT
+		return 0
+	elif event.is_action_just_released(\"ui_combine\"):
+		if(state == INIT):
 			inventory.add_combine_cursor()
 			state = COMBINE
-			return COMBINE
 		elif(state == COMBINE):
 			inventory.remove_combine_cursor()
 			state = INIT
-			return INIT
-	elif event.is_action_pressed(\"ui_right\"):
+	elif event.is_action_just_released(\"ui_right\"):
 		if(state == INIT):
 			get_node(\"inventory\").shift_selection(RIGHT, BASE_FRAME)
 		elif(state == COMBINE):
 			get_node(\"inventory\").shift_selection(RIGHT, COMBINE_FRAME)
-	elif event.is_action_pressed(\"ui_left\"):
+	elif event.is_action_just_released(\"ui_left\"):
 		if(state == INIT):
 			get_node(\"inventory\").shift_selection(LEFT, BASE_FRAME)
 		elif(state == COMBINE):
 			get_node(\"inventory\").shift_selection(LEFT, COMBINE_FRAME)
-	elif event.is_action_pressed(\"ui_up\"):
+	elif event.is_action_just_released(\"ui_up\"):
 		if(state == INIT):
 			get_node(\"inventory\").shift_selection(UP, BASE_FRAME)
 		elif(state == COMBINE):
 			get_node(\"inventory\").shift_selection(UP, COMBINE_FRAME)
-	elif event.is_action_pressed(\"ui_down\"):
+	elif event.is_action_just_released(\"ui_down\"):
 		if(state == INIT):
 			get_node(\"inventory\").shift_selection(DOWN, BASE_FRAME)
 		elif(state == COMBINE):
 			get_node(\"inventory\").shift_selection(DOWN, COMBINE_FRAME)
+	return 1
 
 func _on_liana_button_up():
 	print(\"HUDGameLayer node : begin _on_liana_button_up function\")		
@@ -240,7 +245,7 @@ func shift_selection(direction, frame_type):
 		frame = get_node(\"baseFrame\")
 	else:
 		frame = get_node(\"combineFrame\")
-		
+	print(sizeCaseInventory)
 	if(direction == RIGHT):
 		frame.set_position(Vector2(frame.get_position().x +  sizeCaseInventory.x, frame.get_position().y))
 		indexFrame += indexFrame
@@ -287,7 +292,7 @@ func combine_objects():
 	"
 _sections_unfolded = [ "Resource" ]
 
-[node name="game" type="Node2D" index="0"]
+[node name="game" type="Node2D"]
 
 script = SubResource( 1 )
 

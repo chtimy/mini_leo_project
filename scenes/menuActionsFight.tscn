@@ -1,0 +1,173 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://images/hud/menuFight/bg.jpg" type="Texture" id=1]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Control
+
+#struct Button
+#{
+#	string name
+#	textureButton button
+#	int actionId
+#}
+
+const NORMAL_TEXTURE = 0
+const ACTIVE_TEXTURE = 1
+
+var m_buttons = []
+var m_currentButton = 0
+
+#attention il y a redondance des informations #pour que ce soit plus clair
+#listActions : liste d'actions dans le fichier texte d'actions (dictionnaire)
+#actions : liste d'actions lié aux personnages (strings)
+func init(var i_listActionsDico, var i_actionsStringsCharacter):
+	for actionStringCharacter in i_actionsStringsCharacter:
+		var action = i_listActionsDico[actionStringCharacter]
+		#nouveau bouton pour l'action
+		var button = {
+			#nom de l'action
+			name = action.name,
+			#assignation des textures
+			actionner = addItem(action.pathToTexture[0], action.pathToTexture[1]),
+			#id de l'action
+			actionId = action.id
+		}
+		m_buttons.append(button)
+		#if first option -> active the button
+	if m_buttons.size() > 0:
+		setActiveButton(0, ACTIVE_TEXTURE)
+
+func reinit():
+	m_currentButton = 0
+	var i = 0
+	for button in m_buttons:
+		setActiveButton(i, NORMAL_TEXTURE)
+		i += 1
+	setActiveButton(0, ACTIVE_TEXTURE)
+	
+func _ready():
+	var viewportSize = get_viewport_rect().size
+	var menuAttackSize = Vector2(0.1, 0.2)
+	var menuAttackPosition = Vector2(0.7, 0.65)
+	set_custom_minimum_size(menuAttackSize * viewportSize)
+	set_size(menuAttackSize * viewportSize)
+	set_position(viewportSize * menuAttackPosition)
+	get_node(\"TextureRect\").set_custom_minimum_size(get_node(\"ScrollContainer\").get_size())
+	get_node(\"TextureRect\").set_size(get_node(\"ScrollContainer\").get_size())
+	get_node(\"TextureRect\").set_expand(true)
+	
+#Ajout d'un nouveau TextureButton avec 
+#pathTexture (texture normale) et 
+#pathTexturePressed (texture press) en entrée
+func addItem(var pathTexture, var pathTexturePressed):
+	var sizeMenu = get_size()
+	var choice = {
+		textureButton = TextureButton.new(),
+		textures = [load(pathTexture), load(pathTexturePressed)]
+	}
+	choice.textureButton.set_normal_texture(load(pathTexture))
+	get_node(\"ScrollContainer/VBoxContainer\").add_child(choice.textureButton)
+	choice.textureButton.set_expand(true)
+	#on essaye de scaler le bouton pour le case dans le layout à la bonne taille
+	var scaleButton = (sizeMenu.y * 0.2) / choice.textureButton.texture_normal.get_size().y
+	choice.textureButton.set_custom_minimum_size(choice.textureButton.texture_normal.get_size() * scaleButton)
+	#utile??
+	choice.textureButton.set_size(choice.textureButton.texture_normal.get_size() * scaleButton)
+	return choice
+
+# On gère le control du menu courant
+func getAction():
+	var action
+	if Input.is_action_just_released(\"ui_take\"):
+		action = m_buttons[m_currentButton].actionId
+	elif Input.is_action_pressed(\"ui_down\"):
+		if m_currentButton < m_buttons.size() - 1:
+			m_currentButton = m_currentButton + 1
+			setActiveButton(m_currentButton - 1, NORMAL_TEXTURE)
+			setActiveButton(m_currentButton, ACTIVE_TEXTURE)
+	elif Input.is_action_pressed(\"ui_up\"):
+		if m_currentButton > 0:
+			m_currentButton = m_currentButton - 1
+			setActiveButton(m_currentButton + 1, NORMAL_TEXTURE)
+			setActiveButton(m_currentButton, ACTIVE_TEXTURE)
+	return action
+
+func setActiveButton(var index, var indexTexture):
+	m_buttons[index].actionner.textureButton.set_normal_texture(m_buttons[index].actionner.textures[indexTexture])
+"
+
+[node name="Control" type="Control"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 403.0
+margin_bottom = 377.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+script = SubResource( 1 )
+
+[node name="TextureRect" type="TextureRect" parent="." index="0"]
+
+visible = false
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 210.0
+margin_bottom = 260.0
+rect_min_size = Vector2( 210, 26 )
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 0
+_sections_unfolded = [ "Grow Direction", "Rect" ]
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 212.0
+margin_bottom = 239.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = true
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+scroll_horizontal_enabled = false
+scroll_horizontal = 0
+scroll_vertical_enabled = true
+scroll_vertical = 0
+_sections_unfolded = [ "Hint", "Rect", "Scroll" ]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+_sections_unfolded = [ "Rect" ]
+
+
