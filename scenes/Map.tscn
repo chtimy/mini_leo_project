@@ -7,7 +7,6 @@
 [ext_resource path="res://scripts/liana.gd" type="Script" id=5]
 [ext_resource path="res://images/map/stone.png" type="Texture" id=6]
 
-
 [sub_resource type="GDScript" id=1]
 
 resource_name = "map_objects_script"
@@ -107,7 +106,7 @@ _sections_unfolded = [ "Resource" ]
 custom_solver_bias = 0.0
 radius = 10.0
 
-[node name="map" type="Node2D"]
+[node name="map" type="Node2D" index="0"]
 
 [node name="waterfall" type="Sprite" parent="." index="0"]
 

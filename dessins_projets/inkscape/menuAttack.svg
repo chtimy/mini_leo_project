@@ -25,9 +25,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.98994949"
-     inkscape:cx="393.72916"
-     inkscape:cy="872.07086"
+     inkscape:zoom="0.49497475"
+     inkscape:cx="10.820461"
+     inkscape:cy="857.13296"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -44,7 +44,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -190,5 +190,55 @@
            width="346.42859"
            id="rect4566" /></flowRegion><flowPara
          style="font-size:53.33333588px"
-         id="flowPara4570">Posterize</flowPara></flowRoot>  </g>
+         id="flowPara4570">Posterize</flowPara></flowRoot>    <rect
+       inkscape:export-ydpi="409"
+       inkscape:export-xdpi="409"
+       y="166.36877"
+       x="33.604767"
+       height="21.733627"
+       width="91.659233"
+       id="rect4512"
+       style="opacity:1;vector-effect:none;fill:#ffffd3;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       inkscape:export-filename="C:\Users\Jérémy Riffet\Godot\mini_leo\images\hud\menuFight\deplacer.png" />
+    <flowRoot
+       inkscape:export-ydpi="409"
+       inkscape:export-xdpi="409"
+       transform="matrix(0.26458333,0,0,0.26458333,3.074291,108.14502)"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot4520"
+       xml:space="preserve"
+       inkscape:export-filename="C:\Users\Jérémy Riffet\Godot\mini_leo\images\hud\menuFight\deplacer.png"><flowRegion
+         id="flowRegion4516"><rect
+           y="231.80539"
+           x="130"
+           height="82.142845"
+           width="346.42859"
+           id="rect4514" /></flowRegion><flowPara
+         style="font-size:53.33333588px"
+         id="flowPara4518">Se déplacer</flowPara></flowRoot>    <rect
+       inkscape:export-ydpi="409"
+       inkscape:export-xdpi="409"
+       style="opacity:1;vector-effect:none;fill:#8ad462;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       id="rect4522"
+       width="91.659233"
+       height="21.733627"
+       x="154.14333"
+       y="166.63605"
+       inkscape:export-filename="C:\Users\Jérémy Riffet\Godot\mini_leo\images\hud\menuFight\deplacerChecked.png" />
+    <flowRoot
+       inkscape:export-ydpi="409"
+       inkscape:export-xdpi="409"
+       xml:space="preserve"
+       id="flowRoot4531"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.26458333,0,0,0.26458333,124.14739,108.94683)"
+       inkscape:export-filename="C:\Users\Jérémy Riffet\Godot\mini_leo\images\hud\menuFight\deplacerChecked.png"><flowRegion
+         id="flowRegion4527"><rect
+           id="rect4525"
+           width="346.42859"
+           height="82.142845"
+           x="130"
+           y="231.80539" /></flowRegion><flowPara
+         id="flowPara4529"
+         style="font-size:53.33333588px">Se déplacer</flowPara></flowRoot>  </g>
 </svg>

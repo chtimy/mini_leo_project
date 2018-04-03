@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/menuAttack.svg-bcc29a8a66aace1aa334b5273b400a23.stex"
+path="res://.import/cursor.png-070c139495c41aecf90d071c0e9a2b3b.stex"
 
 [deps]
 
-source_file="res://dessins_projets/inkscape/menuAttack.svg"
-source_md5="13c719f10436bc453728eb4db9f56512"
+source_file="res://images/map/fightScene/cursor.png"
+source_md5="1b99a95e74e22d8028e38b39065ab471"
 
-dest_files=[ "res://.import/menuAttack.svg-bcc29a8a66aace1aa334b5273b400a23.stex" ]
-dest_md5="c001bc83b2b2539be4b4b04c8b86db4a"
+dest_files=[ "res://.import/cursor.png-070c139495c41aecf90d071c0e9a2b3b.stex" ]
+dest_md5="80b763aeb8d599c45c26712241324489"
 
 [params]
 

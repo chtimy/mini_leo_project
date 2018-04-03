@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/menuAttack.svg-bcc29a8a66aace1aa334b5273b400a23.stex"
+path="res://.import/tilesFight.svg-742a507fe32e56e738b10ae0706385c9.stex"
 
 [deps]
 
-source_file="res://dessins_projets/inkscape/menuAttack.svg"
-source_md5="13c719f10436bc453728eb4db9f56512"
+source_file="res://dessins_projets/inkscape/tilesFight.svg"
+source_md5="7627232b7c8cec49320e7ee84a1ddee2"
 
-dest_files=[ "res://.import/menuAttack.svg-bcc29a8a66aace1aa334b5273b400a23.stex" ]
-dest_md5="c001bc83b2b2539be4b4b04c8b86db4a"
+dest_files=[ "res://.import/tilesFight.svg-742a507fe32e56e738b10ae0706385c9.stex" ]
+dest_md5="875501679e92f2e6419dc2fa326241c0"
 
 [params]
 

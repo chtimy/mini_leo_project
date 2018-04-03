@@ -4,24 +4,20 @@
 # id de l'action
 # path de la texture normale
 # path de la texture pressed
-# nombre de pts d'attaques
-# nombre de pts de défense
-# nbCases portée
-# directions 0 -> ortho 1 -> diago 2 -> rond
+# type
+# target
 # nombre d'effets
 # si > 0 alors 
 	# nom de l'effet
 
-2
+3
 
 cross
 0
 res://images/hud/menuFight/cross.png
 res://images/hud/menuFight/crossChecked.png
-0
-0
 1
-0
+1
 1
 desequilibre
 
@@ -29,10 +25,8 @@ posterize
 1
 res://images/hud/menuFight/posterize.png
 res://images/hud/menuFight/posterizeChecked.png
-3
-0
 1
-0
+1
 1
 desequilibre
 
@@ -40,8 +34,6 @@ deplacer
 2
 res://images/hud/menuFight/deplacer.png
 res://images/hud/menuFight/deplacerChecked.png
-0
-0
 0
 0
 0
