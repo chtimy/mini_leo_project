@@ -13,6 +13,7 @@ var m_characters = []
 var m_objects = []
 var m_menusAttack = []
 var m_map
+var m_selectables = []
 
 var ReaderScript = load(\"res://RPGFightFramework/scripts/reader.gd\").new()
 
@@ -62,7 +63,7 @@ func _ready():
 # matrix : map de la scène de combat
 # characters : personnages et ennemis dans la zone de combat
 # objects : objets dans la zone de combat
-func init(var mapName, var characters, var objects):
+func init(var mapName, var selectables):
 	var tileSize = get_viewport().get_size().y * TILESIZE
 	#map generation
 	m_map = Node2D.new()
@@ -89,12 +90,12 @@ func init(var mapName, var characters, var objects):
 		#init turns
 		m_turns.push_back(0)
 		m_turns.push_back(1)
-	
+
 #Destruction de la zone de combat
 func destroy():
 	m_characters = []
 	m_objects = []
-	
+
 func _process(delta):
 	var turn = m_turns.front()
 	if m_characters[turn].m_category == \"Players\":
@@ -143,7 +144,7 @@ func playerTurn(var turn):
 
 func enemiTurn(var turn):
 	pass
-	
+
 func get_target_character(var position):
 	for character in m_characters:
 		if character.m_position == position:
