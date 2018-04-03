@@ -1,6 +1,4 @@
-[gd_scene load_steps=3 format=2]
-
-[ext_resource path="res://images/mini_leo/cote_droit.png" type="Texture" id=1]
+[gd_scene load_steps=2 format=2]
 
 [sub_resource type="GDScript" id=1]
 
@@ -56,7 +54,6 @@ func _ready():
 		characters.append(character)
 		characters.append(ennemi)
 		var objects = []
-			
 		init(\"res://data/fightScene/mapFight01.txt\", characters, objects)
 		#fin base de test
 		set_process(true)
@@ -153,22 +150,10 @@ func get_target_character(var position):
 			return character
 	return null"
 
-[node name="fightScene" type="Node2D"]
+[node name="fightScene" type="Node2D" index="0"]
 
 position = Vector2( -1, 1 )
 script = SubResource( 1 )
 _sections_unfolded = [ "Transform", "Z Index" ]
-
-[node name="background" type="Sprite" parent="." index="0"]
-
-visible = false
-centered = false
-region_rect = Rect2( 0, 0, 2000, 1000 )
-_sections_unfolded = [ "Animation", "Offset", "Region", "Transform", "Z Index" ]
-
-[node name="leo" type="Sprite" parent="." index="1"]
-
-visible = false
-texture = ExtResource( 1 )
 
 
