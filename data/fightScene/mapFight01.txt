@@ -6,9 +6,11 @@
 #initial positions for enemis (if > 0)
 #number of initial positions for objects
 #initial positions for objects (if > 0)
-#matrix 0 -> nothing 1 -> grass 2 -> decoration 
+#matrix 0 -> nothing 1-n -> texture 
 1
-res://images/map/fightScene/herbe.png
+res://images/map/fightScene/herbe.png 
+res://images/map/fightScene/overlay.png 
+res://images/map/fightScene/cursor.png
 1
 0 0
 1

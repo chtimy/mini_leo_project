@@ -13,7 +13,7 @@ var m_tileSize
 var m_cursor
 var m_currentPositionCursor
 
-func init(var mapName, var tileSize, var overlayTexturePath, var cursorOverlayTexturePath, var ReaderScript):
+func init(var mapName, var tileSize, var ReaderScript):
 	var map = ReaderScript.readMapFile(mapName)
 	m_tileSize = tileSize
 	var i = 0

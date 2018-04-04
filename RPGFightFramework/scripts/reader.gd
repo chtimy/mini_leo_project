@@ -63,6 +63,10 @@ func readMapFile(var path):
 		map.textures = []
 		for i in range(nb):
 			map.textures.append(nextLine(mapFile))
+		#read overlay texture
+		map.overlayTexturePath = nextLine(mapFile)
+		#read cursor texture
+		map.cursorTexturePath = nextLine(mapFile)
 		#read initial positions for characters (0) enemis (1) and objects (2)
 		map.initialPositions = []
 		for k in range(3):
