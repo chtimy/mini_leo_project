@@ -23,6 +23,10 @@ var m_currentButton = 0
 #listActions : liste d'actions dans le fichier texte d'actions (dictionnaire)
 #actions : liste d'actions lié aux personnages (strings)
 func init(var i_listActionsDico, var i_actionsStringsCharacter):
+#	var scroll = ScrollContainer.new()
+#	var vbox = VBoxContainer.new()
+#	add_child(scroll)
+#	scroll.add_child(vbox)
 	for actionStringCharacter in i_actionsStringsCharacter:
 		var action = i_listActionsDico.m_actions[actionStringCharacter]
 		#nouveau bouton pour l'action
@@ -96,7 +100,12 @@ func getAction():
 
 func setActiveButton(var index, var indexTexture):
 	m_buttons[index].actionner.textureButton.set_normal_texture(m_buttons[index].actionner.textures[indexTexture])
-"
+
+func enable(var boolean):
+	print(boolean)
+	set_visible(boolean)
+	if !boolean:
+		reinit()"
 
 [node name="Control" type="Control" index="0"]
 

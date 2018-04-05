@@ -16,6 +16,7 @@ func init(var name, var position, var actionNames, var category, var tileSize, v
 	initGraphics(scene)
 	
 func initGraphics(var scene):
+	var tileSize = scene.getTileSize()
 	#init graphics character (position, orientation)
 	m_graphics = Sprite.new()
 	m_graphics.set_texture(load(m_texturePaths[0]))
@@ -24,6 +25,10 @@ func initGraphics(var scene):
 	m_graphics.set_centered(false)
 	m_graphics.set_z_index(1)
 	scene.add_child(m_graphics)
+	
+func setPosition(var position):
+	.setPosition(position)
+	m_graphics.set_position(m_position * m_tileSize)
 	
 func move(var newPosition):
 	print(m_name, " bouge en ", newPosition)

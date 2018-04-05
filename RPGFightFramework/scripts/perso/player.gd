@@ -1,14 +1,23 @@
-extends "res://RPGFightFramework/scripts/characterPerso.gd"
+extends "res://RPGFightFramework/scripts/perso/characterPerso.gd"
 
-var m_menus
+var m_menu
 
 func init(var name, var position, var actionNames, var category, var tileSize, var pathsToTextures, var life, var attackPourcentage, var defensePoucentage, var nbStepsBase, var state, var scene):
 	.init(name, position, actionNames, category, tileSize, pathsToTextures, life, attackPourcentage, defensePoucentage, nbStepsBase, state, scene)
-	initMenu(scene)
-	
-func initMenu(var scene):
-	#init menu
-	m_menu = load("res://RPGFightFramework/scenes/menuActionsFight.tscn").instance()
-	scene.add_child(m_menu)
-	m_menu.init(actions, m_actionNames)
-	m_menu.set_visible(false)
+
+# @function : initMenu
+# @description : Initialise un menu graphique à partie des actions liées au personnage
+# @params :
+# 	scene : l'objet scene de combat
+# 	actionsDico : dictionnaire d'actions disponibles
+func initMenu(var scene, var actionsDico):
+	if m_actionNames == null:
+		print("Error : impossible de créer le menu, Character non initialisé")
+	else:
+		m_menu = load("res://RPGFightFramework/scenes/menuActionsFight.tscn").instance()
+		m_menu.init(actionsDico, m_actionNames)
+		m_menu.set_visible(false)
+		scene.add_child(m_menu)
+		
+func getMenu():
+	return m_menu

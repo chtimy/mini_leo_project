@@ -1,5 +1,3 @@
-extends Node
-
 var m_actions = {
 	}
 var m_toolFunctions = {
@@ -26,3 +24,6 @@ func collectActions(var descrActions):
 									   rangeCond = funcref(get_script(), s2)}
 	m_toolFunctions["is_something_there"] = funcref(get_script(), "is_something_there")
 	m_toolFunctions["is_enemi_there"] = funcref(get_script(), "is_enemi_there")
+	
+func getAction(var name):
+	return m_actions[name]

@@ -19,3 +19,9 @@ func init(var name, var position, var actionNames, var category, var tileSize, v
 	m_tileSize = tileSize
 	m_actionNames = actionNames
 	m_texturePaths = pathsToTextures
+	m_category = category
+	
+func isCategory(var category):
+	if m_category == category:
+		return true
+	return false

@@ -14,30 +14,38 @@ var m_cursor
 var m_currentPositionCursor
 
 func init(var mapName, var tileSize, var ReaderScript):
-	var map = ReaderScript.readMapFile(mapName)
+	var mapDescr = ReaderScript.readMapFile(mapName)
 	m_tileSize = tileSize
 	var i = 0
 	var j = 0
-	m_initialPositions = map.initialPositions
+	m_initialPositions = mapDescr.initialPositions
 	m_matrix = []
 	m_matOverlay = []
 	#for case in m_map
-	for i in range(map.matrix.size()):
+	for i in range(mapDescr.matrix.size()):
 		m_matrix.append([])
 		m_matOverlay.append([])
-		for j in range(map.matrix[i].size()):
-			m_matrix[i].append({ value = map.matrix[i][j], tileSprite = Sprite.new(), overlaySprite = Sprite.new(), overlay = 0 } )
+		for j in range(mapDescr.matrix[i].size()):
+			m_matrix[i].append({ value = mapDescr.matrix[i][j], tileSprite = Sprite.new(), overlaySprite = Sprite.new(), overlay = 0 } )
 			var tile = m_matrix[i][j].tileSprite
-			tile.set_texture(load(map.textures[map.matrix[i][j]-1]))
-			tile.set_scale(m_tileSize/tile.get_texture().get_size())
-			tile.set_position(Vector2(i,j) * m_tileSize)
-			tile.set_centered(false)
+			var texture = load(mapDescr.textures[mapDescr.matrix[i][j]-1])
+			if texture == null:
+				print("Error : la texture n'a pas pu être chargée : \"", mapDescr.textures[mapDescr.matrix[i][j]-1],"\"")
+			else:
+				tile.set_texture(texture)
+				tile.set_scale(m_tileSize/tile.get_texture().get_size())
+				tile.set_centered(false)
+			tile.set_position(Vector2(i,j) * m_tileSize)	
 			add_child(tile)
 			var overlay = m_matrix[i][j].overlaySprite
-			overlay.set_texture(load(overlayTexturePath))
-			overlay.set_scale(m_tileSize/overlay.get_texture().get_size())
+			texture = load(mapDescr.overlayTexturePath)
+			if texture == null:
+				print("Error : la texture n'a pas pu être chargée : \"", mapDescr.overlayTexturePath, "\"")
+			else:
+				overlay.set_texture(texture)
+				overlay.set_scale(m_tileSize/overlay.get_texture().get_size())
+				overlay.set_centered(false)
 			overlay.set_position(Vector2(i,j) * m_tileSize)
-			overlay.set_centered(false)
 			overlay.set_visible(false)
 			overlay.set_z_index(2)
 			m_matOverlay[i].append(0)
@@ -45,7 +53,7 @@ func init(var mapName, var tileSize, var ReaderScript):
 			
 	#cursor to choose the tile
 	m_cursor = Sprite.new()
-	m_cursor.set_texture(load(cursorOverlayTexturePath))
+	m_cursor.set_texture(load(mapDescr.cursorTexturePath))
 	m_cursor.set_scale(m_tileSize/m_cursor.get_texture().get_size().x)
 	m_cursor.set_centered(false)
 	m_cursor.set_position(Vector2(0, 0))

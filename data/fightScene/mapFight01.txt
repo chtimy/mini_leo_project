@@ -8,8 +8,8 @@
 #initial positions for objects (if > 0)
 #matrix 0 -> nothing 1-n -> texture 
 1
-res://images/map/fightScene/herbe.png 
-res://images/map/fightScene/overlay.png 
+res://images/map/fightScene/herbe.png
+res://images/map/fightScene/overlay.png
 res://images/map/fightScene/cursor.png
 1
 0 0

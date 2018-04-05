@@ -6,3 +6,6 @@ var m_name
 func init(var name, var position):
 	m_name = name
 	m_position = position
+	
+func setPosition(var position):
+	m_position = position
