@@ -13,7 +13,7 @@ func deplacerRange(var characters, var currentCharacterIndex, var objects, var p
 
 func posterizeAction(var character, var enemi):
 	#print("posterizeAction")
-	enemi.takeDamages(character.m_nbAttack)
+	enemi.takeDamages(character.m_attackPourcentage)
 	enemi.applyEffect("stunt")
 func posterizeRange(var characters, var currentCharacterIndex, var objects, var position, var toolFunctions):
 	#print("posterizeRange")

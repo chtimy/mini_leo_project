@@ -1,9 +1,5 @@
 extends "res://RPGFightFramework/scripts/sceneFight.gd"
 
-const TILESIZE = 0.1
-
-var ReaderScript = load("res://RPGFightFramework/scripts/reader.gd").new()
-
 func _ready():
 	#Taille de la tile de la map en fonction de la taille de du viewport
 	m_tileSize = get_viewport().get_size().y * TILESIZE
@@ -22,6 +18,6 @@ func _ready():
 	for o in objects:
 		selectables.append(o)
 	
-	.init("res://data/fightScene/mapFight01.txt", "res://RPGFightFramework/scripts/turn.gd", selectables)
+	.init("res://data/fightScene/mapFight01.txt", "res://RPGFightFramework/scripts/turn.gd", selectables, get_viewport().get_size())
 	#fin base de test
 	.set_process(true)

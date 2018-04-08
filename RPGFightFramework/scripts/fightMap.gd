@@ -64,6 +64,7 @@ func init(var mapName, var tileSize, var ReaderScript):
 func activeCases(var rangeCond, var toolFunctions, var characters, var currentCharacterIndex, var objects):
 	for i in range(m_matrix.size()):
 		for j in range(m_matrix[i].size()):
+			print(rangeCond)
 			if rangeCond.call_func(characters, currentCharacterIndex, objects, Vector2(i, j), toolFunctions):
 				m_matOverlay[i][j] = 1
 				enableOverlayCases(Vector2(i, j))

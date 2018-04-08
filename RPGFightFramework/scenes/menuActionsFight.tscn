@@ -6,6 +6,9 @@
 
 script/source = "extends Control
 
+var menuAttackSize = Vector2(0.1, 0.2)
+var menuAttackPosition = Vector2(0.7, 0.65)
+
 #struct Button
 #{
 #	string name
@@ -22,11 +25,17 @@ var m_currentButton = 0
 #attention il y a redondance des informations #pour que ce soit plus clair
 #listActions : liste d'actions dans le fichier texte d'actions (dictionnaire)
 #actions : liste d'actions lié aux personnages (strings)
-func init(var i_listActionsDico, var i_actionsStringsCharacter):
-#	var scroll = ScrollContainer.new()
-#	var vbox = VBoxContainer.new()
-#	add_child(scroll)
-#	scroll.add_child(vbox)
+func init(var i_listActionsDico, var i_actionsStringsCharacter, var viewportSize):
+	var scroll = ScrollContainer.new()
+	var vbox = VBoxContainer.new()
+	add_child(scroll)
+	scroll.add_child(vbox)
+	set_custom_minimum_size(menuAttackSize * viewportSize)
+	set_size(menuAttackSize * viewportSize)
+	set_position(viewportSize * menuAttackPosition)
+#	get_node(\"TextureRect\").set_custom_minimum_size(get_node(\"ScrollContainer\").get_size())
+#	get_node(\"TextureRect\").set_size(get_node(\"ScrollContainer\").get_size())
+#	get_node(\"TextureRect\").set_expand(true)
 	for actionStringCharacter in i_actionsStringsCharacter:
 		var action = i_listActionsDico.m_actions[actionStringCharacter]
 		#nouveau bouton pour l'action
@@ -34,7 +43,7 @@ func init(var i_listActionsDico, var i_actionsStringsCharacter):
 			#nom de l'action
 			name = action.name,
 			#assignation des textures
-			actionner = addItem(action.pathToTextures[0], action.pathToTextures[1]),
+			actionner = addItem(action.pathToTextures[0], action.pathToTextures[1], menuAttackSize * viewportSize),
 			#id de l'action
 			actionId = action.id
 		}
@@ -51,22 +60,10 @@ func reinit():
 		i += 1
 	setActiveButton(0, ACTIVE_TEXTURE)
 	
-func _ready():
-	var viewportSize = get_viewport_rect().size
-	var menuAttackSize = Vector2(0.1, 0.2)
-	var menuAttackPosition = Vector2(0.7, 0.65)
-	set_custom_minimum_size(menuAttackSize * viewportSize)
-	set_size(menuAttackSize * viewportSize)
-	set_position(viewportSize * menuAttackPosition)
-	get_node(\"TextureRect\").set_custom_minimum_size(get_node(\"ScrollContainer\").get_size())
-	get_node(\"TextureRect\").set_size(get_node(\"ScrollContainer\").get_size())
-	get_node(\"TextureRect\").set_expand(true)
-	
-#Ajout d'un nouveau TextureButton avec 
+#Ajout d'un nouveau< TextureButton avec 
 #pathTexture (texture normale) et 
 #pathTexturePressed (texture press) en entrée
-func addItem(var pathTexture, var pathTexturePressed):
-	var sizeMenu = get_size()
+func addItem(var pathTexture, var pathTexturePressed, var sizeMenu):
 	var choice = {
 		textureButton = TextureButton.new(),
 		textures = [load(pathTexture), load(pathTexturePressed)]
@@ -76,6 +73,8 @@ func addItem(var pathTexture, var pathTexturePressed):
 	choice.textureButton.set_expand(true)
 	#on essaye de scaler le bouton pour le case dans le layout à la bonne taille
 	var scaleButton = (sizeMenu.y * 0.2) / choice.textureButton.texture_normal.get_size().y
+	print(sizeMenu)
+	print(choice.textureButton.texture_normal.get_size())
 	choice.textureButton.set_custom_minimum_size(choice.textureButton.texture_normal.get_size() * scaleButton)
 	#utile??
 	choice.textureButton.set_size(choice.textureButton.texture_normal.get_size() * scaleButton)

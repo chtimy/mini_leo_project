@@ -62,7 +62,7 @@ func playerTurn(var turn):
 			if m_currentAction.type == 0:
 				m_currentAction.process.call_func(m_characters[turn], pos)
 			elif m_currentAction.type == 1:
-				m_currentAction.process.call_func(m_characters[turn], get_target_character(pos))
+				m_currentAction.process.call_func(m_characters[turn], getTargetCharacter(pos))
 			m_state = END_TURN
 	elif m_state == END_TURN:
 		m_map.disableSelection()
@@ -75,3 +75,13 @@ func playerTurn(var turn):
 # 	turn : tour courant
 func enemiTurn(var turn):
 	pass
+	
+# @function : getTargetCharacter
+# @description : Recherche quel personnage correspond à la position en entrée
+# @params :
+# 	position : position recherchée
+func getTargetCharacter(var position):
+	for character in m_characters:
+		if character.m_position == position:
+			return character
+	return null
