@@ -2,7 +2,7 @@
 
 [ext_resource path="res://RPGFightFramework/scripts/perso/sceneFightPerso.gd" type="Script" id=1]
 
-[node name="fightScene" type="Node2D"]
+[node name="fightScene" type="Node2D" index="0"]
 
 position = Vector2( -1, 1 )
 script = ExtResource( 1 )

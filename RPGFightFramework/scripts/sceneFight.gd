@@ -79,6 +79,16 @@ func init(var mapFilePath, var turnScriptPath, var selectables, var viewportSize
 func _process(delta):
 	m_turnHandler.play()
 	
+# @function : getTargetCharacter
+# @description : Recherche quel personnage correspond à la position en entrée
+# @params :
+# 	position : position recherchée
+func getTargetCharacter(var position):
+	for character in m_characters:
+		if character.m_position == position:
+			return character
+	return null
+	
 func getTileSize():
 	return m_tileSize
 func getActionsDico():
