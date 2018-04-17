@@ -46,7 +46,7 @@ func init(var mapFilePath, var turnScriptPath, var selectables, var viewportSize
 		print("Error : Liste d'actions impossible a initialiser")
 	#map generation
 	m_map = Node2D.new()
-	var script = load("res://RPGFightFramework/scripts/fightMap.gd")
+	var script = load("res://RPGFightFramework/scripts/mapMatrix.gd")
 	if script == null:
 		print("Error : le script n'a pas pu être chargée : ", "res://RPGFightFramework/scripts/fightMap.gd")
 	else :

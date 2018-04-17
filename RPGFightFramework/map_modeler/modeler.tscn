@@ -1,0 +1,66 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Spatial
+
+var m_currentCube
+var m_map
+var m_camera
+
+func _ready():
+	m_camera = Camera.new()
+	m_camera.look_at_from_position(Vector3(10,10,10), Vector3(0,0,0), Vector3(0,1,0))
+	add_child(m_camera)
+	m_currentCube = newCube(Vector3(0,0,0))
+	
+	creationMatrix(10, 10, 10)
+	
+	set_process(true)
+	
+func creationMatrix(var sizeX, var sizeY, var sizeZ):
+	m_map = []
+	m_map.resize(sizeX)
+	for i in range(sizeX):
+		m_map[i] = []
+		m_map[i].resize(sizeY)
+		for j in range(sizeY):
+			m_map[i][j] = []
+			m_map[i][j].resize(sizeZ)
+	
+
+func _process(delta):
+	if Input.is_action_just_released(\"ui_down\"):
+		m_currentCube.translate(Vector3(0,0,1))
+	elif Input.is_action_just_released(\"ui_up\"):
+		m_currentCube.translate(Vector3(0,0,-1))
+	elif Input.is_action_just_released(\"ui_right\"):
+		m_currentCube.translate(Vector3(1,0,0))
+	elif Input.is_action_just_released(\"ui_left\"):
+		m_currentCube.translate(Vector3(-1,0,0))
+	elif Input.is_action_just_released(\"ui_levelYup\"):
+		m_currentCube.translate(Vector3(0,1,0))
+	elif Input.is_action_just_released(\"ui_levelYdown\"):
+		m_currentCube.translate(Vector3(0,-1,0))
+	elif Input.is_action_just_released(\"ui_select\"):
+		putCube(m_currentCube)
+
+func putCube(var cube):
+	m_map[cube.get_translation().x][cube.get_translation().y][cube.get_translation().z] = cube
+	m_currentCube = newCube(cube.get_translation())
+
+func newCube(var position):
+	var cubeMeshInstance = MeshInstance.new()
+	var cubeMesh = CubeMesh.new()
+	cubeMesh.set_size(Vector3(1,1,1))
+	cubeMeshInstance.set_mesh(cubeMesh)
+	cubeMeshInstance.set_translation(position)
+	add_child(cubeMeshInstance)
+	return cubeMeshInstance
+	"
+
+[node name="Modelleur" type="Spatial" index="0"]
+
+script = SubResource( 1 )
+
+

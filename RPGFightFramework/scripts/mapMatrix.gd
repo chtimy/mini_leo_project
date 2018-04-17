@@ -1,7 +1,11 @@
 extends "res://RPGFightFramework/scripts/fightMap.gd"
 
+var m_matrix
+var m_matOverlay
+var m_tileSize
+
 func init(var mapName, var tileSize, var ReaderScript):
-	.init(mapName, tileSize, ReaderScript)
+	.init()
 	var mapDescr = ReaderScript.readMapFile(mapName)
 	m_tileSize = tileSize
 	var i = 0
@@ -38,7 +42,7 @@ func init(var mapName, var tileSize, var ReaderScript):
 			overlay.set_z_index(2)
 			m_matOverlay[i].append(0)
 			add_child(overlay)
-			
+
 	#cursor to choose the tile
 	m_cursor = Sprite.new()
 	m_cursor.set_texture(load(mapDescr.cursorTexturePath))
@@ -76,20 +80,17 @@ func chooseTile():
 			m_currentPositionCursor.x -= 1
 	m_cursor.set_position(m_currentPositionCursor * m_tileSize)
 	return null
-
-func setCurrentPositionCursor(var position):
-	m_currentPositionCursor = position
 	
 func isTileOk(var position):
 	if m_matOverlay[position.x][position.y]:
 		return true
 	return false
-	
+
 func enableOverlayCases(var position):
 	if insideMatrix(position):
 		if freeCase(position):
 	 		m_matrix[position.x][position.y].overlaySprite.set_visible(true)
-			
+
 func disableSelection():
 	m_cursor.set_visible(false)
 	disableAllOverlayCases()
