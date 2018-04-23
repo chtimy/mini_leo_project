@@ -10,7 +10,7 @@
 # si > 0 alors 
 	# nom de l'effet
 
-3
+8
 
 cross
 0
@@ -30,10 +30,50 @@ res://images/hud/menuFight/posterizeChecked.png
 1
 desequilibre
 
-deplacer
+deplacement
 2
 res://images/hud/menuFight/deplacer.png
 res://images/hud/menuFight/deplacerChecked.png
 0
 0
+0
+
+steal
+3
+res://images/hud/menuFight/steal.png
+res://images/hud/menuFight/stealChecked.png
+1
+1
+0
+
+block
+4
+res://images/hud/menuFight/block.png
+res://images/hud/menuFight/blockChecked.png
+1
+0
+0
+
+from_downtown
+5
+res://images/hud/menuFight/downtown.png
+res://images/hud/menuFight/downtownChecked.png
+1
+1
+0
+
+up_and_down
+6
+res://images/hud/menuFight/updown.png
+res://images/hud/menuFight/updownChecked.png
+1
+1
+0
+
+passe
+7
+res://images/hud/menuFight/passe.png
+res://images/hud/menuFight/passeChecked.png
+1
+1
 0

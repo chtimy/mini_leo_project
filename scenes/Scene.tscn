@@ -292,7 +292,7 @@ func combine_objects():
 	"
 _sections_unfolded = [ "Resource" ]
 
-[node name="game" type="Node2D"]
+[node name="game" type="Node2D" index="0"]
 
 script = SubResource( 1 )
 

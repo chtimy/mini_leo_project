@@ -13,7 +13,7 @@ var m_objects
 #during turn
 enum {INIT_TURN, CHOOSE_MENU, TARGET, END_TURN}
 
-func init(var characters, var objects, var actionsDico, var map):
+func _init(var characters, var objects, var actionsDico, var map):
 	m_actionsDico = actionsDico
 	m_characters = characters
 	m_map = map
@@ -23,6 +23,7 @@ func init(var characters, var objects, var actionsDico, var map):
 	
 func play():
 	var turn = m_turns.front()
+	print(m_turns)
 	if m_characters[turn].isCategory("Players"):
 		#Players turn
 		if playerTurn(turn):
@@ -68,13 +69,15 @@ func playerTurn(var turn):
 		m_map.disableSelection()
 		#if pas mort alors on met le tour derriere
 		m_state = INIT_TURN
+		return true
+	return false
 
 # @function enemiTurn
 # @description : Gestion du tour de l'ennemi
 # @params :
 # 	turn : tour courant
 func enemiTurn(var turn):
-	pass
+	return true
 	
 # @function : getTargetCharacter
 # @description : Recherche quel personnage correspond à la position en entrée

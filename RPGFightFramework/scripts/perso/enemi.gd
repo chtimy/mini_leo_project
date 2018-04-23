@@ -1,5 +1,5 @@
-extends "res://RPGFightFramework/scripts/characterPerso.gd"
+extends "res://RPGFightFramework/scripts/perso/characterPerso.gd"
 
 
-func init(var name, var position, var actionNames, var category, var tileSize, var pathsToTextures, var life, var attackPourcentage, var defensePoucentage, var nbStepsBase, var state, var scene):
-	.init(name, position, actionNames, category, tileSize, pathsToTextures, life, attackPourcentage, defensePoucentage, nbStepsBase, state, scene)
+func _init(var name, var position, var actionNames, var category, var life, var caracteristics, var state, var graphics).(name, position, actionNames, category, life, caracteristics, state, graphics):
+	pass

@@ -11,8 +11,9 @@
 res://images/map/fightScene/herbe.png
 res://images/map/fightScene/overlay.png
 res://images/map/fightScene/cursor.png
-1
+2
 0 0
+0 1
 1
 2 2
 0

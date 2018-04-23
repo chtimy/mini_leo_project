@@ -13,5 +13,5 @@ func on_liana_get_action(action, object):
 	print("liana2 node : begin on_liana_get_action function")		
 	if action == "ui_take" && is_in_group("objects_in_environment"):
 		emit_signal("grapping_object", get_node("."))
-	print("liana2 node : end on_liana_get_action function")		
+	print("liana2 node : end on_liana_get_action function")
 	

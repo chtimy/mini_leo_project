@@ -1,10 +1,12 @@
+const READER_CLASS = preload("res://RPGFightFramework/scripts/reader.gd")
+
 var m_actions = {
 	}
 var m_toolFunctions = {
 	}
 
-func init(var ReaderScript):
-	var descrActions = ReaderScript.readActionsFile()
+func _init():
+	var descrActions = READER_CLASS.new().readActionsFile()
 	if descrActions != null:
 		collectActions(descrActions)
 		return true
