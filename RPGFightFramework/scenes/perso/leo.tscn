@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://materials/overlay.tres" type="Material" id=1]
+[ext_resource path="res://materials/elementMaterial2.tres" type="Material" id=1]
 
 [sub_resource type="CubeMesh" id=1]
 
@@ -9,7 +9,7 @@ subdivide_width = 0
 subdivide_height = 0
 subdivide_depth = 0
 
-[node name="MeshInstance" type="MeshInstance" index="0"]
+[node name="MeshInstance" type="MeshInstance"]
 
 layers = 1
 material_override = null
@@ -23,6 +23,6 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 1 )
 skeleton = NodePath("..")
 material/0 = ExtResource( 1 )
-_sections_unfolded = [ "Geometry", "LOD", "material" ]
+_sections_unfolded = [ "Geometry", "LOD", "Pause", "Transform", "Visibility", "material" ]
 
 

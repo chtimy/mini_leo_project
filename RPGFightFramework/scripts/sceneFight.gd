@@ -21,16 +21,26 @@ func _init(var actionsFilePath, var map, var mapScriptPath, var turnScriptPath, 
 	if TURN_CLASS and MAP_CLASS and ACTIONS_CLASS:
 		m_actionsDico = ACTIONS_CLASS.new()
 		m_map = MAP_CLASS.new(map)
+		var overlayScene = load("res://RPGFightFramework/scenes/perso/overlay.tscn")
+		m_map.setOverlayMesh(overlayScene)
+		var cursorScene = load("res://RPGFightFramework/scenes/perso/cursor.tscn")
+		m_map.setCursorMesh(cursorScene)
 		m_selectables = selectables
 		
 		#Generation des selectables
+		var position
 		for selectable in m_selectables:
 			if selectable.isCategory("Objects"):
 				m_objects.append(selectable)
 			else:
 				if selectable.isCategory("Players"):
 					selectable.initMenu(m_actionsDico)
+					position = m_map.getNextPlayerInitPosition()
+				else:
+					position = m_map.getNextEnemiInitPosition()
 				m_characters.append(selectable)
+			print(position)
+			selectable.setPosition(position, m_map)
 		m_turnHandler = TURN_CLASS.new(m_characters, m_objects, m_actionsDico, m_map)
 	else:
 		print("Error : Impossible to load all the scripts")
@@ -57,7 +67,6 @@ func _ready():
 	var i = 0
 	var j = 0
 	for selectable in m_selectables:
-		selectable.setPosition(m_map)
 		#selectable.initMenu(get_node("."), m_actionsDico, viewportSize)
 		add_child(selectable)
 

@@ -22,16 +22,15 @@ func _init(var characters, var objects, var actionsDico, var map):
 		m_turns.push_back(i)
 	
 func play():
-	var turn = m_turns.front()
-	print(m_turns)
+	var turn = getCurrentTurn()
 	if m_characters[turn].isCategory("Players"):
 		#Players turn
 		if playerTurn(turn):
-			m_turns.push_back(m_turns.pop_front())
+			nextTurn()
 	elif m_characters[turn].isCategory("Enemis"):
 		#Enemis turn (IA)
 		if enemiTurn(turn):
-			m_turns.push_back(m_turns.pop_front())
+			nextTurn()
 			
 # @function : playerTurn
 # @description : Gestion du tour du joueur
@@ -48,9 +47,10 @@ func playerTurn(var turn):
 		if actionName != null :
 			#exec action
 			m_currentAction = m_actionsDico.getAction(actionName)
-			m_map.activeCases(m_currentAction.rangeCond, m_actionsDico.m_toolFunctions, m_characters, turn, m_objects)
+			m_map.activeOverlays(m_currentAction.rangeCond, m_actionsDico.m_toolFunctions, m_characters, turn, m_objects)
 			if(m_currentAction.type == 0 || m_currentAction.type == 1):
-				m_map.setCurrentPositionCursor(m_characters[turn].m_position)
+				m_map.setCursorVisible(true)
+				m_map.moveCursorTo(m_characters[turn].m_position)
 				m_state = TARGET
 			else:
 				#m_currentAction.process.call_func()
@@ -60,10 +60,9 @@ func playerTurn(var turn):
 	elif m_state == TARGET:
 		var pos = m_map.chooseTile()
 		if pos != null:
+			print(m_currentAction.type)
 			if m_currentAction.type == 0:
-				m_currentAction.process.call_func(m_characters[turn], pos)
-			elif m_currentAction.type == 1:
-				m_currentAction.process.call_func(m_characters[turn], getTargetCharacter(pos))
+				m_currentAction.process.call_func(self, pos)
 			m_state = END_TURN
 	elif m_state == END_TURN:
 		m_map.disableSelection()
@@ -79,6 +78,14 @@ func playerTurn(var turn):
 func enemiTurn(var turn):
 	return true
 	
+func currentPlayingCharacter():
+	return m_characters[getCurrentTurn()]
+func getMap():
+	return m_map
+func getCurrentTurn():
+	return m_turns.front()
+func nextTurn():
+	m_turns.push_back(m_turns.pop_front())
 # @function : getTargetCharacter
 # @description : Recherche quel personnage correspond à la position en entrée
 # @params :

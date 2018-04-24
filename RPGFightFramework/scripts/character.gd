@@ -15,5 +15,9 @@ func isCategory(var category):
 		return true
 	return false
 	
+func setPosition(var position, var map):
+	.setPosition(position)
+	m_graphics.set_translation(map.getObjectPosition(position))
+	
 func _ready():
 	self.add_child(m_graphics)
