@@ -10,8 +10,7 @@ const MENU_ATTACK_POSITION = Vector2(0.1, 0.15)
 #	int actionId
 #}
 
-const NORMAL_TEXTURE = 0
-const ACTIVE_TEXTURE = 1
+enum {NORMAL_TEXTURE = 0, ACTIVE_TEXTURE = 1, DISABLE_TEXTURE = 2}
 
 var m_buttons = []
 var m_currentButton = 0
@@ -74,10 +73,15 @@ func setActiveButton(var index, var indexTexture):
 	m_buttons[index].actionner.textureButton.set_normal_texture(m_buttons[index].actionner.textures[indexTexture])
 
 func enable(var boolean):
-	print(boolean)
 	set_visible(boolean)
 	if !boolean:
 		reinit()
+		
+func testActions(var game, var dicoActions):
+	pass
+#	for i in range(m_buttons.size()):
+#		if !dicoActions.getAction(m_buttons[i].name).rangeCond.call_func(game, false):
+#			setActiveButton(i, DISABLE_TEXTURE)
 		
 func _ready():
 	var viewportSize = get_viewport().get_size()

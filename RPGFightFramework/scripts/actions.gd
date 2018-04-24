@@ -15,17 +15,19 @@ func _init():
 func collectActions(var descrActions):
 	for descrAction in descrActions.values():
 		var s = descrAction.name + "Action"
-		var s2 = descrAction.name + "Range"
+		var s2 = descrAction.name + "Conditions"
+		var s3 = descrAction.name + "RangeConditions"
+		var s4 = descrAction.name + "GetInfo"
 		m_actions[descrAction.name] = {name = descrAction.name, 
 									   id = descrAction.id, 
 									   pathToTextures = descrAction.pathToTexture, 
 									   type = descrAction.type,
 									   target = descrAction.target, 
 									   effects = descrAction.effects,
-									   process = funcref(get_script(), s), 
-									   rangeCond = funcref(get_script(), s2)}
-	m_toolFunctions["is_something_there"] = funcref(get_script(), "is_something_there")
-	m_toolFunctions["is_enemi_there"] = funcref(get_script(), "is_enemi_there")
+#									   cond = funcref(get_script(), s2),
+									   getInfo = funcref(get_script(), s4),
+									   play = funcref(get_script(), s), 
+									   rangeCond = funcref(get_script(), s3)}
 	
 func getAction(var name):
 	return m_actions[name]

@@ -39,21 +39,11 @@ func _init(var actionsFilePath, var map, var mapScriptPath, var turnScriptPath, 
 				else:
 					position = m_map.getNextEnemiInitPosition()
 				m_characters.append(selectable)
-			print(position)
+			m_map.setSelectable(selectable, position)
 			selectable.setPosition(position, m_map)
 		m_turnHandler = TURN_CLASS.new(m_characters, m_objects, m_actionsDico, m_map)
 	else:
 		print("Error : Impossible to load all the scripts")
-	
-# @function : getTargetCharacter
-# @description : Recherche quel personnage correspond à la position en entrée
-# @params :
-# 	position : position recherchée
-func getTargetCharacter(var position):
-	for character in m_characters:
-		if character.m_position == position:
-			return character
-	return null
 	
 func getTileSize():
 	return m_tileSize

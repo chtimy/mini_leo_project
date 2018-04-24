@@ -3,14 +3,23 @@ extends "res://RPGFightFramework/scripts/mapMatrix.gd"
 func _init(var map).(map):
 	pass
 	
-func activeOverlays(var rangeCond, var toolFunctions, var characters, var currentCharacterIndex, var objects):
-	print("activeoverlay")
+#func activeOverlays(var rangeCond, var game):
+#	print("activeoverlay")
+#	var matrix = m_map.m_matrix
+#	for i in range(matrix.size()):
+#		for j in range(matrix[i].size()):
+#			for k in range(matrix[i][j].size()):
+#				if rangeCond.call_func(game, Vector3(i, j, k)):
+#					addOverlay(Vector3(i, j, k))
+	
+func testMatrixConditionFunction(var rangeCond, var game):
 	var matrix = m_map.m_matrix
 	for i in range(matrix.size()):
 		for j in range(matrix[i].size()):
 			for k in range(matrix[i][j].size()):
-				if rangeCond.call_func(characters, currentCharacterIndex, objects, self, Vector3(i, j, k), toolFunctions):
-					addOverlay(Vector3(i, j, k))
+				if rangeCond.call_func(game, Vector3(i, j, k)):
+					return true
+	return false
 
 func chooseTile():
 	if Input.is_action_just_released("ui_take"):
@@ -67,11 +76,11 @@ func insideMatrix(var position):
 # a completer au fur et a mesure des types de case
 #du moins à modifier et faire en fct des catégories
 func isfreeCase(var position):
-	if m_map.m_matrix[position.x][position.y][position.z].selectable == null:
+	if !m_map.m_matrix[position.x][position.y][position.z].has("selectable") || m_map.m_matrix[position.x][position.y][position.z].selectable == null:
 		return true
 	return false
 
-func addSelectable(var selectable, var position):
+func setSelectable(var selectable, var position):
 	m_map.m_matrix[position.x][position.y][position.z].selectable = selectable
 	
 #move the selectable to the new position . BE CAREFUL : don't move the graphics selectable
@@ -83,6 +92,11 @@ func moveSelectable(var position, var toPosition):
 		clearCase(m_map.m_matrix[position.x][position.y][position.z])
 		return true
 	return false
+	
+func getSelectable(var position):
+	if isfreeCase(position):
+		return null
+	return m_map.m_matrix[position.x][position.y][position.z].selectable
 	
 func getObjectPosition(var position):
 	var sizeElement = getSizeElement()

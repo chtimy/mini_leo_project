@@ -17,7 +17,8 @@ func _ready():
 	"strenght" : 0,
 	"state" : [],
 	"life" : 0,
-	"nbMoves" : 3
+	"nbMoves" : 3,
+	"orientation" : Vector3(1,0,0)
 	}
 
 	var characters = []
@@ -34,7 +35,8 @@ func _ready():
 	"strenght" : 0,
 	"state" : [],
 	"life" : 0,
-	"nbMoves" : 3
+	"nbMoves" : 3,
+	"orientation" : Vector3(1,0,0)
 	}
 	mesh = load("res://RPGFightFramework/scenes/perso/blond.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
@@ -48,7 +50,8 @@ func _ready():
 	"strenght" : 0,
 	"state" : [],
 	"life" : 0,
-	"nbMoves" : 3
+	"nbMoves" : 3,
+	"orientation" : Vector3(1,0,0)
 	}
 	mesh = load("res://RPGFightFramework/scenes/perso/mechant.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))

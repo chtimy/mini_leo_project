@@ -9,15 +9,15 @@ func getSizeElement():
 	return m_map.m_sizeElement
 	
 #abstract functions : 
-func getObjectPosition(var position):
-	pass
+#func getObjectPosition(var position):
+#	pass
 	
 #move the selectable to the new position . BE CAREFUL : don't move the graphics selectable
-func moveSelectable(var position, var toPosition):
-	pass
-
-func addSelectable(var selectable, var position):
-	pass
+#func moveSelectable(var position, var toPosition):
+#	pass
+#
+#func addSelectable(var selectable, var position):
+#	pass
 	
 func setOverlayMesh(var overlayScene):
 	m_overlayScene = overlayScene

@@ -10,8 +10,11 @@ var m_actionsDico
 var m_map
 var m_objects
 
+var m_values = []
+
+
 #during turn
-enum {INIT_TURN, CHOOSE_MENU, TARGET, END_TURN}
+enum {INIT_TURN, CHOOSE_MENU, GET_INFO, END_TURN}
 
 func _init(var characters, var objects, var actionsDico, var map):
 	m_actionsDico = actionsDico
@@ -39,33 +42,23 @@ func play():
 func playerTurn(var turn):
 	if m_state == INIT_TURN:
 		m_currentMenuAttack = m_characters[turn].getMenu()
+		m_currentMenuAttack.testActions(self, m_actionsDico)
 		m_currentMenuAttack.enable(true)
 		m_state = CHOOSE_MENU
 	elif m_state == CHOOSE_MENU:
 		#si menu retourne action
 		var actionName =  m_currentMenuAttack.getAction()
 		if actionName != null :
-			#exec action
 			m_currentAction = m_actionsDico.getAction(actionName)
-			m_map.activeOverlays(m_currentAction.rangeCond, m_actionsDico.m_toolFunctions, m_characters, turn, m_objects)
-			if(m_currentAction.type == 0 || m_currentAction.type == 1):
-				m_map.setCursorVisible(true)
-				m_map.moveCursorTo(m_characters[turn].m_position)
-				m_state = TARGET
-			else:
-				#m_currentAction.process.call_func()
-				m_state = END_TURN
+			if m_currentAction.rangeCond.call_func(self, true):
+				m_state = GET_INFO
 			#hide currentMenu 
 			m_currentMenuAttack.enable(false)
-	elif m_state == TARGET:
-		var pos = m_map.chooseTile()
-		if pos != null:
-			print(m_currentAction.type)
-			if m_currentAction.type == 0:
-				m_currentAction.process.call_func(self, pos)
+	elif m_state == GET_INFO:
+		if m_currentAction.getInfo.call_func(self):
+			m_currentAction.play.call_func(self)
 			m_state = END_TURN
 	elif m_state == END_TURN:
-		m_map.disableSelection()
 		#if pas mort alors on met le tour derriere
 		m_state = INIT_TURN
 		return true
@@ -95,3 +88,12 @@ func getTargetCharacter(var position):
 		if character.m_position == position:
 			return character
 	return null
+	
+func saveValue(var value):
+	m_values.append(value)
+func loadValue(var index):
+	var value = m_values[index]
+	m_values.remove(index)
+	return value
+func hasValue(var index):
+	return index < m_values.size()

@@ -11,6 +11,9 @@ func getNextPlayerInitPosition():
 
 func getNextEnemiInitPosition():
 	return m_map.m_initialPositionsEnemis.pop_front()
+	
+func getMatrix():
+	return m_map.m_matrix
 
 
 #func setCurrentPositionCursor(var position):
