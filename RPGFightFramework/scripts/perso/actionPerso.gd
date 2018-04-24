@@ -40,7 +40,7 @@ func posterizeCondition(var game):
 
 func crossAction(var character, var enemi):
 	print("crossAction")
-	enemi.applyEffect("stunt")
+	
 func crossRange(var characters, var currentCharacterIndex, var objects, var position, var toolFunctions):
 	#print("crossRange")
 	var character = characters[currentCharacterIndex]
