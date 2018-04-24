@@ -10,7 +10,7 @@ var m_actionsDico
 var m_map
 var m_objects
 
-var m_values = []
+var m_values = {}
 
 
 #during turn
@@ -42,8 +42,8 @@ func play():
 func playerTurn(var turn):
 	if m_state == INIT_TURN:
 		m_currentMenuAttack = m_characters[turn].getMenu()
-		m_currentMenuAttack.testActions(self, m_actionsDico)
 		m_currentMenuAttack.enable(true)
+		m_currentMenuAttack.testActions(self, m_actionsDico)
 		m_state = CHOOSE_MENU
 	elif m_state == CHOOSE_MENU:
 		#si menu retourne action
@@ -89,11 +89,15 @@ func getTargetCharacter(var position):
 			return character
 	return null
 	
-func saveValue(var value):
-	m_values.append(value)
-func loadValue(var index):
-	var value = m_values[index]
-	m_values.remove(index)
+func saveValue(var key, var value):
+	m_values[key] = value
+func getValue(var key):
+	return m_values[key]
+func loadValue(var key):
+	var value = m_values[key]
+	m_values[key] = null
 	return value
-func hasValue(var index):
-	return index < m_values.size()
+func hasValue(var key):
+	return m_values.has(key)
+func clearValues():
+	m_values.clear()

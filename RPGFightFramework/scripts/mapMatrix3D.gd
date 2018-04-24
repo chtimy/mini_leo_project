@@ -40,7 +40,7 @@ func chooseTile():
 	return null
 	
 func isCaseOverlayed(var position):
-	if m_map.m_matrix[position.x][position.y][position.z].overlay:
+	if m_map.m_matrix[position.x][position.y][position.z].has("overlay") && m_map.m_matrix[position.x][position.y][position.z].overlay:
 		return true
 	return false
 
@@ -86,12 +86,14 @@ func setSelectable(var selectable, var position):
 #move the selectable to the new position . BE CAREFUL : don't move the graphics selectable
 func moveSelectable(var position, var toPosition):
 	# don't check if the final position is busy by something or not
-	if !freeCase(position):
+	if !isfreeCase(position):
 		m_map.m_matrix[toPosition.x][toPosition.y][toPosition.z].selectable = m_map.m_matrix[position.x][position.y][position.z].selectable
-		m_map.m_matrix[toPosition.x][toPosition.y][toPosition.z].selectable.set_position(toPosition)
-		clearCase(m_map.m_matrix[position.x][position.y][position.z])
+		clearCase(position)
 		return true
 	return false
+	
+func clearCase(var position):
+	m_map.m_matrix[position.x][position.y][position.z].selectable = null
 	
 func getSelectable(var position):
 	if isfreeCase(position):

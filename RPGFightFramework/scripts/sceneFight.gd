@@ -38,9 +38,9 @@ func _init(var actionsFilePath, var map, var mapScriptPath, var turnScriptPath, 
 					position = m_map.getNextPlayerInitPosition()
 				else:
 					position = m_map.getNextEnemiInitPosition()
+				m_map.setSelectable(selectable, position)
+				selectable.setPosition(position, m_map)
 				m_characters.append(selectable)
-			m_map.setSelectable(selectable, position)
-			selectable.setPosition(position, m_map)
 		m_turnHandler = TURN_CLASS.new(m_characters, m_objects, m_actionsDico, m_map)
 	else:
 		print("Error : Impossible to load all the scripts")

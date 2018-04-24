@@ -32,7 +32,7 @@ func readActionsFile():
 			var action = {
 				name = nextLine(actionsFightFile),
 				id = nextLine(actionsFightFile).to_int(),
-				pathToTexture = [nextLine(actionsFightFile), nextLine(actionsFightFile)],
+				pathToTexture = [nextLine(actionsFightFile), nextLine(actionsFightFile), nextLine(actionsFightFile)],
 				type = nextLine(actionsFightFile).to_int(),
 				target = nextLine(actionsFightFile).to_int(),
 				functions = null,

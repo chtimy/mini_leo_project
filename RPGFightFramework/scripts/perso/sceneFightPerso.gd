@@ -18,14 +18,14 @@ func _ready():
 	"state" : [],
 	"life" : 0,
 	"nbMoves" : 3,
-	"orientation" : Vector3(1,0,0)
+	"orientation" : Vector3(0,0,1)
 	}
 
 	var characters = []
 	var mesh = load("res://RPGFightFramework/scenes/perso/leo.tscn").instance()
 	print(mesh)
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
-	var character = PLAYER_CLASS.new("leo", Vector2(0,0), ["cross", "steal", "deplacement", "passe"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
+	var character = PLAYER_CLASS.new("leo", Vector2(0,0), ["cross", "steal", "deplacement", "passe", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
 	characters.append(character)
 	
 	caracteristics = {
@@ -36,11 +36,11 @@ func _ready():
 	"state" : [],
 	"life" : 0,
 	"nbMoves" : 3,
-	"orientation" : Vector3(1,0,0)
+	"orientation" : Vector3(0,0,1)
 	}
 	mesh = load("res://RPGFightFramework/scenes/perso/blond.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
-	character = PLAYER_CLASS.new("blond", Vector2(0,0), ["steal", "deplacement", "passe", "block"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
+	character = PLAYER_CLASS.new("blond", Vector2(0,0), ["steal", "deplacement", "passe", "block", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
 	characters.append(character)
 	
 	caracteristics = {
@@ -51,11 +51,11 @@ func _ready():
 	"state" : [],
 	"life" : 0,
 	"nbMoves" : 3,
-	"orientation" : Vector3(1,0,0)
+	"orientation" : Vector3(0,0,1)
 	}
 	mesh = load("res://RPGFightFramework/scenes/perso/mechant.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
-	character = ENEMI_CLASS.new("ennemi", Vector2(0,0), ["attack", "cross"], "Enemis", caracteristics, mesh)
+	character = ENEMI_CLASS.new("ennemi", Vector2(0,0), ["attack", "cross", "passer"], "Enemis", caracteristics, mesh)
 	characters.append(character)
 	
 	var objects = []

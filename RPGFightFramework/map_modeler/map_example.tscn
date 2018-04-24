@@ -28,7 +28,7 @@ func _init():
 		for j in range(5):
 			m_matrix[i][0][j].type = 1
 	m_initialPositionsCharacters = [Vector3(0, 0, 0), Vector3(0, 0, 1)]
-	m_initialPositionsEnemis = [Vector3(4, 0, 4), Vector3(3, 0, 4)]
+	m_initialPositionsEnemis = [Vector3(2, 0, 2), Vector3(3, 0, 4)]
 
 func _process(delta):
 	controlCamera()

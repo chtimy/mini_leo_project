@@ -7,19 +7,19 @@ func _init(var name, var position, var actionNames, var category, var caracteris
 	randomize()
 	
 func getCaracteristic(var name):
-	return m_caracteristics.name
+	return m_caracteristics[name]
 
 func setCaracteristic(var name, var value):
-	m_caracteristics.name = value
+	m_caracteristics[name] = value
 	
 func addCaracteristic(name, value):
-	m_caracteristics.name.append(value)
+	m_caracteristics[name].append(value)
 	
 func increaseCaracteristic(var name, var value):
-	m_caracteristics.name += value
+	m_caracteristics[name] += value
 	
 func decreaseCaracteristic(var name, var value):
-	m_caracteristics.name -= value
+	m_caracteristics[name] -= value
 	
 func throwDiceForCaracteristic(var name):
 	var result = throwDice(100)

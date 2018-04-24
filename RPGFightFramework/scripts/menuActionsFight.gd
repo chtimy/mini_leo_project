@@ -10,7 +10,7 @@ const MENU_ATTACK_POSITION = Vector2(0.1, 0.15)
 #	int actionId
 #}
 
-enum {NORMAL_TEXTURE = 0, ACTIVE_TEXTURE = 1, DISABLE_TEXTURE = 2}
+enum {NORMAL_TEXTURE = 0, ACTIVE_TEXTURE = 1, DISABLED_TEXTURE = 2}
 
 var m_buttons = []
 var m_currentButton = 0
@@ -26,7 +26,7 @@ func _init(var i_listActionsDico, var i_actionsStringsCharacter):
 			#nom de l'action
 			name = action.name,
 			#assignation des textures
-			actionner = addItem(action.pathToTextures[0], action.pathToTextures[1]),
+			actionner = addItem(action.pathToTextures),
 			#id de l'action
 			actionId = action.id
 		}
@@ -37,18 +37,23 @@ func reinit():
 	var i = 0
 	for button in m_buttons:
 		setActiveButton(i, NORMAL_TEXTURE)
+		m_buttons[i].state = NORMAL_TEXTURE
 		i += 1
 	setActiveButton(0, ACTIVE_TEXTURE)
 	
 #Ajout d'un nouveau< TextureButton avec 
 #pathTexture (texture normale) et 
 #pathTexturePressed (texture press) en entrée
-func addItem(var pathTexture, var pathTexturePressed):
+func addItem(var pathTextures):
 	var choice = {
 		textureButton = TextureButton.new(),
-		textures = [load(pathTexture), load(pathTexturePressed)]
+		textures = [],
+		state = NORMAL_TEXTURE
 	}
-	choice.textureButton.set_normal_texture(load(pathTexture))
+	for pathTexture in pathTextures :
+		choice.textures.append(load(pathTexture))
+
+	choice.textureButton.set_normal_texture(choice.textures[0])
 	choice.textureButton.set_expand(true)
 	return choice
 
@@ -58,19 +63,29 @@ func getAction():
 	if Input.is_action_just_released("ui_take"):
 		action = m_buttons[m_currentButton].name
 	elif Input.is_action_just_released("ui_down"):
-		if m_currentButton < m_buttons.size() - 1:
-			m_currentButton = m_currentButton + 1
-			setActiveButton(m_currentButton - 1, NORMAL_TEXTURE)
+		var i = 1
+		while m_currentButton + i < m_buttons.size() && m_buttons[m_currentButton + i].actionner.state == DISABLED_TEXTURE:
+			i += 1
+		if m_currentButton + i < m_buttons.size():
+			var oldButton = m_currentButton
+			m_currentButton = m_currentButton + i
+			setActiveButton(oldButton, NORMAL_TEXTURE)
 			setActiveButton(m_currentButton, ACTIVE_TEXTURE)
 	elif Input.is_action_just_released("ui_up"):
-		if m_currentButton > 0:
-			m_currentButton = m_currentButton - 1
-			setActiveButton(m_currentButton + 1, NORMAL_TEXTURE)
+		var i = 1
+		while m_currentButton - i >= 0 && m_buttons[m_currentButton - i].actionner.state == DISABLED_TEXTURE:
+			i -= 1
+		if m_currentButton - i >= 0:
+			var oldButton = m_currentButton
+			m_currentButton = m_currentButton - i
+			setActiveButton(oldButton, NORMAL_TEXTURE)
 			setActiveButton(m_currentButton, ACTIVE_TEXTURE)
 	return action
 
 func setActiveButton(var index, var indexTexture):
-	m_buttons[index].actionner.textureButton.set_normal_texture(m_buttons[index].actionner.textures[indexTexture])
+	var actionner = m_buttons[index].actionner
+	actionner.textureButton.set_normal_texture(actionner.textures[indexTexture])
+	actionner.state = indexTexture
 
 func enable(var boolean):
 	set_visible(boolean)
@@ -78,11 +93,18 @@ func enable(var boolean):
 		reinit()
 		
 func testActions(var game, var dicoActions):
-	pass
-#	for i in range(m_buttons.size()):
-#		if !dicoActions.getAction(m_buttons[i].name).rangeCond.call_func(game, false):
-#			setActiveButton(i, DISABLE_TEXTURE)
-		
+	for i in range(m_buttons.size()):
+		if !dicoActions.getAction(m_buttons[i].name).rangeCond.call_func(game, false):
+			setActiveButton(i, DISABLED_TEXTURE)
+	var i = 0
+	while m_currentButton + i < m_buttons.size() && m_buttons[m_currentButton + i].actionner.state == DISABLED_TEXTURE:
+			i += 1
+	if i < m_buttons.size():
+		m_currentButton = i
+		setActiveButton(m_currentButton, ACTIVE_TEXTURE)
+		return true
+	return false
+
 func _ready():
 	var viewportSize = get_viewport().get_size()
 	var scroll = ScrollContainer.new()
