@@ -1,22 +1,30 @@
 extends "res://RPGFightFramework/scripts/character.gd"
 
 var m_caracteristics
-var m_state
-var m_life
 
-func _init(var name, var position, var actionNames, var category, var life, var caracteristics, var state, var graphics).(name, position, actionNames, category, graphics):
-	m_life = life
+func _init(var name, var position, var actionNames, var category, var caracteristics, var graphics).(name, position, actionNames, category, graphics):
 	m_caracteristics = caracteristics
-	m_state = "normal"
-#
-#func setPosition(var position):
-#	.setPosition(position)
-#	m_graphics.set_position(m_position * m_map.getSizeElement())
+	randomize()
+	
+func getCaracteristic(var name):
+	return m_caracteristics.name
 
-func applyEffect(var effect):
-	print(m_name, " recoit ", effect)
-	m_state = effect
-
-func takeDamages(var nbPoints):
-	print(m_name, " recoit ", nbPoints, " de dégats")
-	m_life -= nbPoints
+func setCaracteristic(var name, var value):
+	m_caracteristics.name = value
+	
+func addCaracteristic(name, value):
+	m_caracteristics.name.append(value)
+	
+func increaseCaracteristic(var name, var value):
+	m_caracteristics.name += value
+	
+func decreaseCaracteristic(var name, var value):
+	m_caracteristics.name -= value
+	
+func throwDiceForCaracteristic(var name):
+	var result = throwDice(100)
+	return result <= m_caracteristics.name
+	
+func throwDice(var maxNumber):
+	return randi() % maxNumber + 1
+	

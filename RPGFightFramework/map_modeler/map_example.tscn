@@ -8,6 +8,9 @@ script/source = "extends Spatial
 
 var m_matrix
 var m_sizeElement
+var m_camera
+
+const ZOOM_FACTOR = 0.1
 
 var m_initialPositionsCharacters
 var m_initialPositionsEnemis
@@ -23,11 +26,29 @@ func _init():
 				m_matrix[i][j].append({\"type\" : 0})
 	for i in range(5):
 		for j in range(5):
-			m_matrix[i][j][0].type = 1
-	m_initialPositionsCharacters = [Vector3(0, 0, 0), Vector3(0, 1, 0)]
-	m_initialPositionsEnemis = [Vector3(4, 4, 0), Vector3(3, 4, 0)]
+			m_matrix[i][0][j].type = 1
+	m_initialPositionsCharacters = [Vector3(0, 0, 0), Vector3(0, 0, 1)]
+	m_initialPositionsEnemis = [Vector3(4, 0, 4), Vector3(3, 0, 4)]
+
+func _process(delta):
+	controlCamera()
+	
+func controlCamera():
+	if Input.is_action_just_released(\"ui_control_camera_zoom_up\"):
+		var dir = -m_camera.get_translation().normalized() * ZOOM_FACTOR
+		m_camera.look_at_from_position(m_camera.get_translation() + dir, Vector3(2.5,0,2.5), Vector3(0,1,0))
+		return true
+	elif Input.is_action_just_released(\"ui_control_camera_zoom_down\"):
+		var dir = m_camera.get_translation().normalized() * ZOOM_FACTOR
+		m_camera.look_at_from_position(m_camera.get_translation() + dir, Vector3(2.5,0,2.5), Vector3(0,1,0))
+		return true
+	return false
 	
 func _ready():
+	m_camera = Camera.new()
+	m_camera.set_environment(get_node(\"environment\").get_environment())
+	m_camera.look_at_from_position(Vector3(12,12,12), Vector3(2.5,0,2.5), Vector3(0,1,0))
+	add_child(m_camera)
 	pass
 "
 
@@ -35,7 +56,7 @@ func _ready():
 
 background_mode = 1
 background_sky_custom_fov = 0.0
-background_color = Color( 1, 1, 1, 1 )
+background_color = Color( 0.363281, 0.363281, 0.363281, 1 )
 background_energy = 1.0
 background_canvas_max_layer = 0
 ambient_light_color = Color( 0, 0, 0, 1 )

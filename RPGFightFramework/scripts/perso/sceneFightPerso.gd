@@ -14,31 +14,45 @@ func _ready():
 	"perception" : 0,
 	"dexterity" : 0,
 	"agility" : 0,
+	"strenght" : 0,
+	"state" : [],
+	"life" : 0,
 	"nbMoves" : 3
 	}
 
 	var characters = []
-	var character = PLAYER_CLASS.new("leo", Vector2(0,0), ["cross", "steal", "deplacement", "passe"], "Players", 5, caracteristics, "normal", "res://RPGFightFramework/scripts/menuActionsFight.gd", load("res://RPGFightFramework/scenes/perso/leo.tscn").instance())
+	var mesh = load("res://RPGFightFramework/scenes/perso/leo.tscn").instance()
+	print(mesh)
+	mesh.set_scale(Vector3(0.5,0.5,0.5))
+	var character = PLAYER_CLASS.new("leo", Vector2(0,0), ["cross", "steal", "deplacement", "passe"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
 	characters.append(character)
 	
 	caracteristics = {
 	"perception" : 0,
 	"dexterity" : 0,
 	"agility" : 0,
+	"strenght" : 0,
+	"state" : [],
+	"life" : 0,
 	"nbMoves" : 3
 	}
-	
-	character = PLAYER_CLASS.new("blond", Vector2(0,0), ["steal", "deplacement", "passe", "block"], "Players", 5, caracteristics, "normal", "res://RPGFightFramework/scripts/menuActionsFight.gd", load("res://RPGFightFramework/scenes/perso/blond.tscn").instance())
+	mesh = load("res://RPGFightFramework/scenes/perso/blond.tscn").instance()
+	mesh.set_scale(Vector3(0.5,0.5,0.5))
+	character = PLAYER_CLASS.new("blond", Vector2(0,0), ["steal", "deplacement", "passe", "block"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
 	characters.append(character)
 	
 	caracteristics = {
 	"perception" : 0,
 	"dexterity" : 0,
 	"agility" : 0,
+	"strenght" : 0,
+	"state" : [],
+	"life" : 0,
 	"nbMoves" : 3
 	}
-	
-	character = ENEMI_CLASS.new("ennemi", Vector2(0,0), ["attack", "cross"], "Enemis", 2, caracteristics, "normal", load("res://RPGFightFramework/scenes/perso/mechant.tscn").instance())
+	mesh = load("res://RPGFightFramework/scenes/perso/mechant.tscn").instance()
+	mesh.set_scale(Vector3(0.5,0.5,0.5))
+	character = ENEMI_CLASS.new("ennemi", Vector2(0,0), ["attack", "cross"], "Enemis", caracteristics, mesh)
 	characters.append(character)
 	
 	var objects = []
@@ -48,7 +62,7 @@ func _ready():
 	for o in objects:
 		selectables.append(o)
 	var map = load("res://RPGFightFramework/map_modeler/map_example.tscn").instance()
-	var scene = SCENE_FIGHT_CLASS.new("res://RPGFightFramework/scripts/perso/actionPerso.gd", map, "res://RPGFightFramework/scripts/mapMatrix2D.gd", "res://RPGFightFramework/scripts/turn.gd", selectables)
+	var scene = SCENE_FIGHT_CLASS.new("res://RPGFightFramework/scripts/perso/actionPerso.gd", map, "res://RPGFightFramework/scripts/mapMatrix3D.gd", "res://RPGFightFramework/scripts/turn.gd", selectables)
 	add_child(scene)
 	#fin base de test
 	.set_process(true)
