@@ -13,12 +13,14 @@ func _ready():
 	#base de test : ( a supprimer )
 	
 	var caracteristics = {
+	"attack" : 3,
+	"defense" : 1,
 	"perception" : 0,
 	"dexterity" : 0,
 	"agility" : 0,
 	"strenght" : 0,
 	"state" : [],
-	"life" : 0,
+	"life" : 20,
 	"nbMoves" : 3,
 	"orientation" : Vector3(1,0,0)
 	}
@@ -26,7 +28,7 @@ func _ready():
 	var characters = []
 	var mesh = load("res://RPGFightFramework/scenes/perso/leo.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
-	var character = PLAYER_CLASS.new("leo", Vector2(0,0), ["cross", "steal", "deplacement", "passe", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
+	var character = PLAYER_CLASS.new("leo", Vector2(0,0), ["attack", "cross", "steal", "deplacement", "passe", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
 	
 	var caracteristicsMenu = CARACTERISTIC_MENU_CLASS.instance()
 	caracteristicsMenu.init(character, caracteristics)
@@ -35,18 +37,20 @@ func _ready():
 	characters.append(character)
 	
 	caracteristics = {
+	"attack" : 3,
+	"defense" : 1,
 	"perception" : 0,
 	"dexterity" : 0,
 	"agility" : 0,
 	"strenght" : 0,
 	"state" : [],
-	"life" : 0,
+	"life" : 20,
 	"nbMoves" : 3,
 	"orientation" : Vector3(1,0,0)
 	}
 	mesh = load("res://RPGFightFramework/scenes/perso/blond.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
-	character = PLAYER_CLASS.new("blond", Vector2(0,0), ["steal", "deplacement", "passe", "block", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
+	character = PLAYER_CLASS.new("blond", Vector2(0,0), ["attack", "steal", "deplacement", "passe", "block", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
 	
 	caracteristicsMenu = CARACTERISTIC_MENU_CLASS.instance()
 	caracteristicsMenu.init(character, caracteristics)
@@ -55,12 +59,14 @@ func _ready():
 	characters.append(character)
 	
 	caracteristics = {
+	"attack" : 3,
+	"defense" : 1,
 	"perception" : 0,
 	"dexterity" : 0,
 	"agility" : 0,
 	"strenght" : 0,
 	"state" : [],
-	"life" : 0,
+	"life" : 20,
 	"nbMoves" : 3,
 	"orientation" : Vector3(1,0,0)
 	}

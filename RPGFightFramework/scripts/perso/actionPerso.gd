@@ -75,13 +75,13 @@ static func attackGetInfo(var game):
 	var map = game.getMap()
 	var pos = map.chooseTile()
 	if pos:
-		game.saveValue(pos)
+		game.saveValue("pos", pos)
 		return true
 	return false
 static func attackAction(var game):
 	print("attackAction")
 	var character = game.currentPlayingCharacter()
-	var enemi = game.getMap().getSelectable(game.loadValue(0))
+	var enemi = game.getMap().getSelectable(game.loadValue("pos"))
 	enemi.decreaseCaracteristic("life", character.getCaracteristic("attack"))
 	game.clearValues()
 	game.getMap().disableAllOverlayCases()
@@ -95,7 +95,7 @@ static func attackRangeConditions(var game, var activeOverlay = false):
 		for j in range(matrix[i].size()):
 			for k in range(matrix[i][j].size()):
 				position = Vector3(i, j, k)
-				if ((character.m_position.x + 1 >= position.x && character.m_position.x - 1 <= position.x && character.m_position.z == position.z) || (character.m_position.z + 1 >= position.z && character.m_position.z - 1 <= position.z && character.m_position.z == position.x)) && game.getMap.on_surface(position):
+				if ((character.m_position.x + 1 >= position.x && character.m_position.x - 1 <= position.x && character.m_position.z == position.z) || (character.m_position.z + 1 >= position.z && character.m_position.z - 1 <= position.z && character.m_position.z == position.x)) && map.on_surface(position):
 					var selectable = game.getMap().getSelectable(position)
 					if selectable && (selectable.isCategory("Players") || selectable.isCategory("Enemis")) && selectable.category() != character.category():
 						if activeOverlay:

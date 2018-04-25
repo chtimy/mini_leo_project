@@ -10,7 +10,7 @@
 # si > 0 alors 
 	# nom de l'effet
 
-9
+10
 
 cross
 0
@@ -91,6 +91,15 @@ passer
 res://images/hud/menuFight/passer.png
 res://images/hud/menuFight/passerChecked.png
 res://images/hud/menuFight/passerDisabled.png
+1
+0
+0
+
+attack
+9
+res://images/hud/menuFight/attack.png
+res://images/hud/menuFight/attackChecked.png
+res://images/hud/menuFight/attackDisabled.png
 1
 0
 0
