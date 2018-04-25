@@ -53,8 +53,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497475"
-     inkscape:cx="818.99807"
-     inkscape:cy="-20.788341"
+     inkscape:cx="450.29239"
+     inkscape:cy="625.70928"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -773,5 +773,84 @@
              id="rect4653-7" /></flowRegion><flowPara
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
            id="flowPara4657-3">Passer</flowPara></flowRoot>    </g>
-  </g>
+    <rect
+       inkscape:export-ydpi="409"
+       inkscape:export-xdpi="409"
+       style="opacity:1;vector-effect:none;fill:#8ad462;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       id="rect973"
+       width="91.659233"
+       height="21.733627"
+       x="153.87605"
+       y="28.457693"
+       inkscape:export-filename="C:\Users\chtimy\Documents\Projet_Godot\mini_leo_project\images\hud\menuFight\attackChecked.png" />
+    <rect
+       y="28.457693"
+       x="280.12009"
+       height="21.733627"
+       width="91.659233"
+       id="rect983"
+       style="opacity:1;vector-effect:none;fill:#717175;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409"
+       inkscape:export-filename="C:\Users\chtimy\Documents\Projet_Godot\mini_leo_project\images\hud\menuFight\attackDisabled.png" />
+    <g
+       id="g1055"
+       inkscape:export-filename="C:\Users\chtimy\Documents\Projet_Godot\mini_leo_project\images\hud\menuFight\attack.png"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409">
+      <rect
+         style="opacity:1;vector-effect:none;fill:#ffffd3;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         id="rect963"
+         width="91.659233"
+         height="21.733627"
+         x="33.337498"
+         y="28.190424"
+         inkscape:export-xdpi="409"
+         inkscape:export-ydpi="409" />
+      <flowRoot
+         xml:space="preserve"
+         id="flowRoot971"
+         style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+         transform="matrix(0.26458333,0,0,0.26458333,14.013468,-31.438045)"
+         inkscape:export-xdpi="409"
+         inkscape:export-ydpi="409"><flowRegion
+           id="flowRegion967"><rect
+             id="rect965"
+             width="346.42859"
+             height="82.142845"
+             x="130"
+             y="231.80539" /></flowRegion><flowPara
+           id="flowPara969"
+           style="font-size:53.33333588px">Attaquer</flowPara></flowRoot>    </g>
+    <flowRoot
+       inkscape:export-ydpi="409"
+       inkscape:export-xdpi="409"
+       xml:space="preserve"
+       id="flowRoot981"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.26458333,0,0,0.26458333,134.55202,-31.170776)"
+       inkscape:export-filename="C:\Users\chtimy\Documents\Projet_Godot\mini_leo_project\images\hud\menuFight\attackChecked.png"><flowRegion
+         id="flowRegion977"><rect
+           id="rect975"
+           width="346.42859"
+           height="82.142845"
+           x="130"
+           y="231.80539" /></flowRegion><flowPara
+         id="flowPara979"
+         style="font-size:53.33333588px">Attaquer</flowPara></flowRoot>    <flowRoot
+       transform="matrix(0.26458333,0,0,0.26458333,260.79606,-31.170776)"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot991"
+       xml:space="preserve"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409"
+       inkscape:export-filename="C:\Users\chtimy\Documents\Projet_Godot\mini_leo_project\images\hud\menuFight\attackDisabled.png"><flowRegion
+         id="flowRegion987"><rect
+           y="231.80539"
+           x="130"
+           height="82.142845"
+           width="346.42859"
+           id="rect985" /></flowRegion><flowPara
+         style="font-size:53.33333588px"
+         id="flowPara989">Attaquer</flowPara></flowRoot>  </g>
 </svg>

@@ -8,6 +8,7 @@ var m_category
 
 func _init(var name, var position, var category):
 	m_name = name
+	set_name(name)
 	m_position = position
 	m_category = category
 	

@@ -29,7 +29,6 @@ func _ready():
 	var mesh = load("res://RPGFightFramework/scenes/perso/leo.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
 	var character = PLAYER_CLASS.new("leo", Vector2(0,0), ["attack", "cross", "steal", "deplacement", "passe", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
-	
 	var caracteristicsMenu = CARACTERISTIC_MENU_CLASS.instance()
 	caracteristicsMenu.init(character, caracteristics)
 	add_child(caracteristicsMenu)

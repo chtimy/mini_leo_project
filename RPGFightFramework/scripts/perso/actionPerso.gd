@@ -26,8 +26,6 @@ func _init().():
 # Bien faire la distinction entre ennemi et player
 
 
-#static func deplacementConditions(var game):
-#	return  game.getMap().testMatrixConditionFunction(funcref("res://RPGFightFramework/scripts/perso/actionPerso.gd", "deplacementRangeConditions"), game)
 static func deplacementGetInfo(var game):
 	var map = game.getMap()
 	var pos = map.chooseTile()
@@ -68,9 +66,6 @@ static func deplacementRangeConditions(var game, var activeOverlay = false):
 	return success
 
 
-#static func attackConditions(var game):
-#	var map = game.getMap()
-#	return  map.testMatrixConditionFunction(funcref("res://RPGFightFramework/scripts/perso/actionPerso.gd", "deplacementRangeConditions"))
 static func attackGetInfo(var game):
 	var map = game.getMap()
 	var pos = map.chooseTile()
@@ -80,11 +75,14 @@ static func attackGetInfo(var game):
 	return false
 static func attackAction(var game):
 	print("attackAction")
+	var map = game.getMap()
 	var character = game.currentPlayingCharacter()
-	var enemi = game.getMap().getSelectable(game.loadValue("pos"))
+	var enemi = map.getSelectable(game.loadValue("pos"))
 	enemi.decreaseCaracteristic("life", character.getCaracteristic("attack"))
+	character.setRotationToTarget(enemi.m_position)
 	game.clearValues()
-	game.getMap().disableAllOverlayCases()
+	map.disableAllOverlayCases()
+	map.setCursorVisible(false)
 static func attackRangeConditions(var game, var activeOverlay = false):
 	var map = game.getMap()
 	var matrix = map.getMatrix()
@@ -108,9 +106,7 @@ static func attackRangeConditions(var game, var activeOverlay = false):
 		map.setCursorVisible(true)
 	return success
 
-#static func posterizeConditions(var game):
-#	var map = game.getMap()
-#	return  map.testMatrixConditionFunction(funcref("res://RPGFightFramework/scripts/perso/actionPerso.gd", "deplacementRangeConditions"))
+
 static func posterizeGetInfo(var game):
 	var map = game.getMap()
 	var pos = map.chooseTile()
@@ -125,6 +121,7 @@ static func posterizeAction(var game):
 	enemi.decreaseCaracteristic("life", character.getCaracteristic("attack"))
 	if character.throwDiceForCaracteristic("strength"):
 		enemi.addCaracteristic("state", {"stunt": 1})
+	character.setRotationToTarget(enemi.m_position)
 	game.clearValues()
 	game.getMap().disableAllOverlayCases()
 static func posterizeRangeConditions(var game, var activeOverlay = false):
@@ -152,9 +149,6 @@ static func posterizeRangeConditions(var game, var activeOverlay = false):
 
 
 
-#static func crossConditions(var game):
-#	var map = game.getMap()
-#	return  map.testMatrixConditionFunction(funcref("res://RPGFightFramework/scripts/perso/actionPerso.gd", "deplacementRangeConditions"))
 static func crossGetInfo(var game):
 	var map = game.getMap()
 	var tour = game.getValue("tour")
@@ -200,13 +194,14 @@ static func crossAction(var game):
 	#si block
 	var selectable = map.getSelectable(enemiPosition + enemi.getCaracteristic("orientation"))
 	#a ameliorer
-	if (selectable.isCategory("Player") and character.isCategory("Enemis")) or (character.isCategory("Player") and enemi.isCategory("Enemis")):
+	if (selectable.isCategory("Players") && character.isCategory("Enemis")) || (character.isCategory("Players") && enemi.isCategory("Enemis")):
 		var state = selectable.getCaracteristic("state")
-		if state.has("block") and state.block > 0:
+		if state.has("block") && state.block > 0:
 			if !enemi.throwDiceForCaracteristics("perception"):
 				enemi.decreaseCaracteristic("life", enemi.getCaracteristic("attack"))
 		else:
 			selectable.decreaseCaracteristic("life", enemi.getCaracteristic("attack"))
+	character.setRotationToTarget(enemiPosition)
 	game.clearValues()
 	game.getMap().disableAllOverlayCases()
 #fonction qui établit la range possible en fonction des caractéristiques également
@@ -293,12 +288,7 @@ static func stealRangeConditions(var game, var activeOverlay = false):
 #static func blockConditions(var game):
 #	return true
 static func blockGetInfo(var game):
-	var map = game.getMap()
-	var pos = map.chooseTile()
-	if pos:
-		game.saveValue(pos)
-		return true
-	return false
+	return true
 static func blockAction(var game):
 	print("blockAction")
 	var character = game.currentPlayingCharacter()
