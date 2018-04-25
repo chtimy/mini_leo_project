@@ -2,7 +2,7 @@
 
 [ext_resource path="res://RPGFightFramework/scripts/perso/sceneFightPerso.gd" type="Script" id=1]
 
-[node name="fightScene" type="Node"]
+[node name="fightScene" type="Node" index="0"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause", "Transform", "Z Index" ]
