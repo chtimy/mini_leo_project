@@ -4,8 +4,10 @@ const TILESIZE = 0.1
 const PLAYER_CLASS = preload("res://RPGFightFramework/scripts/perso/player.gd")
 const ENEMI_CLASS = preload("res://RPGFightFramework/scripts/perso/enemi.gd")
 const SCENE_FIGHT_CLASS = preload("res://RPGFightFramework/scripts/sceneFight.gd")
+var CARACTERISTIC_MENU_CLASS = preload("res://RPGFightFramework/perso/scenes/caracteristicsMenu.tscn")
 
 func _ready():
+	set_name("scene_figh_ perso")
 	#Taille de la tile de la map en fonction de la taille de du viewport
 	var tileSize = get_viewport().get_size().y * TILESIZE
 	#base de test : ( a supprimer )
@@ -18,14 +20,18 @@ func _ready():
 	"state" : [],
 	"life" : 0,
 	"nbMoves" : 3,
-	"orientation" : Vector3(0,0,1)
+	"orientation" : Vector3(1,0,0)
 	}
 
 	var characters = []
 	var mesh = load("res://RPGFightFramework/scenes/perso/leo.tscn").instance()
-	print(mesh)
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
 	var character = PLAYER_CLASS.new("leo", Vector2(0,0), ["cross", "steal", "deplacement", "passe", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
+	
+	var caracteristicsMenu = CARACTERISTIC_MENU_CLASS.instance()
+	caracteristicsMenu.init(character, caracteristics)
+	add_child(caracteristicsMenu)
+	
 	characters.append(character)
 	
 	caracteristics = {
@@ -36,11 +42,16 @@ func _ready():
 	"state" : [],
 	"life" : 0,
 	"nbMoves" : 3,
-	"orientation" : Vector3(0,0,1)
+	"orientation" : Vector3(1,0,0)
 	}
 	mesh = load("res://RPGFightFramework/scenes/perso/blond.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
 	character = PLAYER_CLASS.new("blond", Vector2(0,0), ["steal", "deplacement", "passe", "block", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
+	
+	caracteristicsMenu = CARACTERISTIC_MENU_CLASS.instance()
+	caracteristicsMenu.init(character, caracteristics)
+	add_child(caracteristicsMenu)
+	
 	characters.append(character)
 	
 	caracteristics = {
@@ -51,11 +62,16 @@ func _ready():
 	"state" : [],
 	"life" : 0,
 	"nbMoves" : 3,
-	"orientation" : Vector3(0,0,1)
+	"orientation" : Vector3(1,0,0)
 	}
 	mesh = load("res://RPGFightFramework/scenes/perso/mechant.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
 	character = ENEMI_CLASS.new("ennemi", Vector2(0,0), ["attack", "cross", "passer"], "Enemis", caracteristics, mesh)
+	
+	caracteristicsMenu = CARACTERISTIC_MENU_CLASS.instance()
+	caracteristicsMenu.init(character, caracteristics)
+	add_child(caracteristicsMenu)
+	
 	characters.append(character)
 	
 	var objects = []

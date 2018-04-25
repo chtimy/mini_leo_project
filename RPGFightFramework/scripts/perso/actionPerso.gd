@@ -158,18 +158,30 @@ static func posterizeRangeConditions(var game, var activeOverlay = false):
 static func crossGetInfo(var game):
 	var map = game.getMap()
 	var tour = game.getValue("tour")
-	var listPositions = game.getValue("listPosition")
-	if listPositions[tour]:
-		for position in listPositions[tour]:
-			map.addOverlay(position)
-		listPositions[tour] = null
+	if !tour.treated:
+		tour.treated = true
+		var pos = game.getValue("posEnemi")
+		var casesTo = []
+		var characterPosition = game.currentPlayingCharacter().m_position
+		var enemi = map.getSelectable(pos)
+		var orientation = enemi.getCaracteristic("orientation")
+		orientation = Vector3(abs(orientation.x) - 1, 0, abs(orientation.z) - 1)
+		casesTo.push_back(characterPosition + orientation)
+		casesTo.push_back(characterPosition - orientation)
+		casesTo.push_back(enemi.m_position + orientation)
+		casesTo.push_back(enemi.m_position - orientation)
+		for caseTo in casesTo:
+			var selectable = map.getSelectable(caseTo)
+			if !selectable || !selectable.isCategory("Players") && !selectable.isCategory("Enemis"):
+				map.addOverlay(caseTo)
 	var pos = map.chooseTile()
 	if pos:
-		if tour == 1:
-			game.saveValue("pos", pos)
-			game.saveValue("tour", 2)
+		if tour.number < 2:
+			game.saveValue("posEnemi", pos)
+			game.saveValue("tour", {"treated" : false, "number" : tour.number+1})
 			map.disableAllOverlayCases()
 		else:
+			game.saveValue("posTo", pos)
 			game.getMap().setCursorVisible(false)
 			map.disableAllOverlayCases()
 			return true
@@ -179,12 +191,12 @@ static func crossAction(var game):
 	print("crossAction")
 	var map = game.getMap()
 	var character = game.currentPlayingCharacter()
-	var enemiPosition = game.loadValue(0)
+	var enemiPosition = game.loadValue("posEnemi")
 	var enemi = map.getSelectable(enemiPosition)
-	var characterPosition = game.loadValue(1)
+	var characterPosition = game.loadValue("posTo")
 	#cross
 	character.setPosition(characterPosition, map)
-	enemi.setCharacteristic("orientation", enemiPosition - characterPosition)
+	enemi.setCaracteristic("orientation", enemiPosition - characterPosition)
 	#si block
 	var selectable = map.getSelectable(enemiPosition + enemi.getCaracteristic("orientation"))
 	#a ameliorer
@@ -213,25 +225,31 @@ static func crossRangeConditions(var game, var activeOverlay = false):
 				if ((character.m_position.x + 1 >= position.x && character.m_position.x - 1 <= position.x && character.m_position.z == position.z) || (character.m_position.z + 1 >= position.z && character.m_position.z - 1 <= position.z && character.m_position.x == position.x)) && map.on_surface(position):
 					var selectable = map.getSelectable(position)
 					if selectable && (selectable.isCategory("Players") || selectable.isCategory("Enemis")) && selectable.category() != character.category():
-						print(selectable.getCaracteristic("orientation"))
-						print(character.m_position - selectable.m_position)
 						if selectable.getCaracteristic("orientation") == character.m_position - selectable.m_position:
-							if activeOverlay:
-								listPositions.append(position)
-								success = true
-								var positionCharacter = character.m_position
+							if !success:
+								#espace autour du joueur
+								var casesTo = []
+								var characterPosition = character.m_position
+								var enemiPosition = selectable.m_position
 								var orientation = selectable.getCaracteristic("orientation")
 								orientation = Vector3(abs(orientation.x) - 1, 0, abs(orientation.z) - 1)
-								var caseTo = map.getSelectable(positionCharacter + orientation)
-								if caseTo && !caseTo.isCategory("Players") && !caseTo.isCategory("Enemis"):
-									listPositions2.append(positionCharacter)
-								else:
+								casesTo.push_back(map.getSelectable(characterPosition + orientation))
+								casesTo.push_back(map.getSelectable(characterPosition - orientation))
+								casesTo.push_back(map.getSelectable(enemiPosition + orientation))
+								casesTo.push_back(map.getSelectable(enemiPosition - orientation))
+								for caseTo in casesTo:
+									if !caseTo || !caseTo.isCategory("Players") && !caseTo.isCategory("Enemis"):
+										success = true
+							if activeOverlay:
+								listPositions.append(position)
+							elif success:
 									return true
 	if success && activeOverlay:
 		map.moveCursorTo(character.m_position)
 		map.setCursorVisible(true)
-		game.saveValue("listPositions", [listPositions, listPositions2])
-		game.saveValue("setOverlay", listPositions)
+		for pos in listPositions:
+			map.addOverlay(pos)
+		game.saveValue("tour", {"treated" : true, "number" : 1})
 	return success
 
 #static func stealConditions(var game):

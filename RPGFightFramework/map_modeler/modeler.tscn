@@ -378,7 +378,7 @@ size = Vector2( 2, 2 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[node name="Modelleur" type="Spatial"]
+[node name="Modelleur" type="Spatial" index="0"]
 
 script = SubResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]
