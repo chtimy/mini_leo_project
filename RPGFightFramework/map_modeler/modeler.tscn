@@ -4,9 +4,6 @@
 
 script/source = "extends Spatial
 
-var m_currentSelect = {}
-var m_map
-var m_camera
 const NOTHING = 0
 const CUBE = 1
 const MODELING = 0
@@ -14,23 +11,24 @@ const VALIDATING = 1
 const CUBE_SIZE = Vector3(1,1,1)
 const SURFACE_TILE_SCALE = Vector3(1,0.2,1)
 const ZOOM_FACTOR = 0.1
+const CUBE_MATERIAL = preload(\"res://materials/elementMaterial.tres\")
+const VALIDATOR_MATERIAL = preload(\"res://materials/overlay.tres\")
+
+var m_currentSelect = {}
+
+var m_map
+
+var m_camera
 
 var m_positionInMatrix = Vector3(0,0,0)
 
-var minPoint
-var maxPoint
+var m_minPoint
+var m_maxPoint
 
 var m_state = MODELING
 
-var m_cubeMaterial = preload(\"res://materials/elementMaterial.tres\")
-var m_validatorMaterial = preload(\"res://materials/overlay.tres\")
-
 func _ready():
 	m_camera = Camera.new()
-#	var env = Environment.new()
-#	env.set_background(Environment.BG_COLOR)
-#	env.set_bg_color(Color(0.7,0.7,0.7,1.0))
-#	env.set_ambient_light_color(Color(1.0,1.0,1.0,1.0))
 	m_camera.set_environment(get_node(\"environment\").get_environment())
 	m_camera.look_at_from_position(Vector3(10,10,10), Vector3(0,0,0), Vector3(0,1,0))
 	add_child(m_camera)
@@ -266,31 +264,6 @@ func drawGrid(var minPoint, var maxPoint, var intervalDistance):
 	material.set_albedo(Color(0.5,0.5,0.5,0.2))
 	grid.set_material_override(material)
 	add_child(grid)
-
-func drawScene(var minPoint, var maxPoint):
-	var scene = ImmediateGeometry.new()
-	scene.begin(Mesh.PRIMITIVE_TRIANGLES)
-#	scene.add_vertex(Vector3(-5,-5,-5))
-#	scene.add_vertex(Vector3(5,-5,-5))
-#	scene.add_vertex(Vector3(5,-5, 5))
-	scene.add_vertex(minPoint)
-	scene.add_vertex(Vector3(maxPoint.x, minPoint.y, minPoint.z))
-	scene.add_vertex(Vector3(maxPoint.x, minPoint.y, maxPoint.z))
-	scene.end()
-	scene.begin(Mesh.PRIMITIVE_TRIANGLES)
-	scene.add_vertex(Vector3(0,0,0))
-	scene.add_vertex(Vector3(-10,0,-10))
-	scene.add_vertex(Vector3(10,0,10))
-	#scene.add_vertex(Vector3(minPoint.x, minPoint.y, maxPoint.z))
-	scene.end()
-	var material = SpatialMaterial.new()
-	material.set_flag(SpatialMaterial.FLAG_ALBEDO_FROM_VERTEX_COLOR, true)
-	material.set_flag(SpatialMaterial.FLAG_UNSHADED, true)
-	material.set_albedo(Color(0.5,0.5,0.5,1))
-
-	scene.set_material_override(material)
-	add_child(scene)
-	
 "
 
 [sub_resource type="Environment" id=2]
@@ -378,7 +351,7 @@ size = Vector2( 2, 2 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[node name="Modelleur" type="Spatial" index="0"]
+[node name="MapModeller" type="Spatial" index="0"]
 
 script = SubResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]

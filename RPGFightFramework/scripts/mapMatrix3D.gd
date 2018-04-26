@@ -115,7 +115,7 @@ func on_surface(position):
 	return false
 
 func _ready():
-	add_child(m_cursor.mesh)
+	#add_child(m_cursor.mesh)
 	add_child(m_map)
 #	#cursor to choose the tile
 #	m_cursor = Sprite.new()

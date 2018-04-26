@@ -1,0 +1,141 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Control
+
+const MAP_SCENE = preload(\"res://RPGFightFramework/map_modeler/map_example.tscn\")
+const MAP3D_CLASS = preload(\"res://RPGFightFramework/scripts/mapMatrix3D.gd\")
+
+var m_map
+
+func _init():
+	m_map = MAP3D_CLASS.new(MAP_SCENE.instance())
+	
+func _ready():
+	var menuButtons = get_node(\"GridContainer/VBoxContainer/MenuButton\")
+	var popup = menuButtons.get_popup()
+	popup.add_item(\"Carte\")
+	popup.add_item(\"Personnage\")
+	popup.connect(\"id_pressed\", self, \"on_id_pressed\")
+	get_node(\"GridContainer/VBoxContainer/ViewportContainer\").add_child(m_map)
+	m_map.get_node(\"Modelleur\").set_visible(false)
+	
+func on_id_pressed(var id):
+	if id == 0:
+		m_map.get_node(\"Modelleur\").set_visible(true)
+	print(id)"
+
+[node name="action_modeler" type="Control" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+script = SubResource( 1 )
+
+[node name="GridContainer" type="GridContainer" parent="." index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 655.0
+margin_bottom = 823.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+columns = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 134.0
+margin_bottom = 48.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 1
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+alignment = 0
+
+[node name="Button" type="Button" parent="GridContainer/VBoxContainer" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 134.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "Nouveau"
+flat = false
+align = 1
+
+[node name="MenuButton" type="MenuButton" parent="GridContainer/VBoxContainer" index="1"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 24.0
+margin_right = 134.0
+margin_bottom = 44.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 0
+shortcut = null
+group = null
+text = "Liste de conditions"
+flat = true
+align = 1
+items = [  ]
+
+[node name="ViewportContainer" type="ViewportContainer" parent="GridContainer/VBoxContainer" index="2"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 48.0
+margin_right = 134.0
+margin_bottom = 48.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+stretch = false
+stretch_shrink = 1
+
+
