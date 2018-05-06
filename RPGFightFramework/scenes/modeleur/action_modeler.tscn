@@ -9,6 +9,8 @@ signal changeMapLayout
 
 const MAP_LAYOUT_SCENE = preload(\"res://RPGFightFramework/scenes/modeleur/map_layout.tscn\")
 var m_mapLayout
+
+var m_mapLayouts = []
 	
 func _ready():
 	m_mapLayout = MAP_LAYOUT_SCENE.instance()
@@ -39,6 +41,19 @@ func on_changeMapLayout(var scene):
 	m_mapLayout = scene
 	m_mapLayout.init(self)
 	get_node(\"VBoxContainer\").add_child(m_mapLayout)
+	
+func addMapLayout():
+	var sprite = TextureRect.new()
+	sprite.set_texture(get_node(\"../../ViewportContainer/Viewport\").get_texture())
+	sprite.set_expand(true)
+	scene.get_node(\"..\").set_custom_minimum_size(viewport * Vector2(0.1, 0.1))
+	sprite.set_custom_minimum_size(viewport * Vector2(0.1, 0.1))
+	sprite.set_script(load(PARENT_SCRIPT))
+	sprite.m_parent = self
+	sprite.connect(\"sprite_input\", self, \"on_sprite_input\")
+	m_mapLayouts.append(sprite)
+	
+
 #func test2(var index):
 #	var tree = get_node(\"VBoxContainer/SelectionModeLayout/Tree\")
 #	var child = tree.create_item(tree.get_root())
@@ -55,7 +70,7 @@ func on_changeMapLayout(var scene):
 "
 _sections_unfolded = [ "Resource" ]
 
-[node name="action_modeler" type="Control"]
+[node name="action_modeler" type="Control" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0

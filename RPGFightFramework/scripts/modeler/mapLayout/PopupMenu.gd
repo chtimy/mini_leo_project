@@ -9,7 +9,6 @@ enum {CHOOSE_BY_PLAYER = 0, SELECTABLE = 2, ADD_CONDITION_LEVEL = 1}
 
 func _ready():
 	m_mapLayout = get_node("..")
-	
 	add_item("Set as selection mode")
 	add_item("Add condition other level")
 	m_subMenuGroup = PopupMenu.new()
@@ -35,22 +34,9 @@ func _on_PopupMenu_index_pressed(index):
 	var tree = m_mapLayout.get_node("VBoxContainer/Tree")
 	match index:
 		CHOOSE_BY_PLAYER:
-			map.addCellCaracteristic(indexCell, "chooseByPlayer")
-			var node = tree.searchChildInTree(tree.get_root(), 0, String(indexCell))
-			if node:
-				var carac = tree.create_item(node)
-				carac.set_cell_mode(0, TreeItem.CELL_MODE_STRING)
-				carac.set_cell_mode(0, TreeItem.CELL_MODE_CHECK)
-				carac.set_text(0, "Choose by player")
-				carac.set_checked(0,true)
-			print("choose by player")
-		SELECTABLE:
-			map.addCellCaracteristic(indexCell, "selectable")
-			var node = tree.searchChildInTree(tree.get_root(), 0, String(indexCell))
-			if node:
-				var carac = tree.create_item(node)
-				carac.set_text(0, "Selectable")
+			tree.addSelectedCellsCaracteristic("chooseByPlayer")
 		ADD_CONDITION_LEVEL:
+#			tree.addSelectedCellsButton("Condition level 1", "res://images/symboles/eye2.png")
 			map.addCellCaracteristic(indexCell, "conditionOtherLevel")
 			var node = tree.searchChildInTree(tree.get_root(), 0, String(indexCell))
 			if node:
@@ -66,14 +52,16 @@ func _on_popupSubMenu_index_pressed(var index):
 	var map = m_mapLayout.m_map
 	var tree = m_mapLayout.get_node("VBoxContainer/Tree")
 	var nbNewItem = m_subMenuGroup.get_item_count() - 1
+	var indexCell = map.positionToIndex(map.getIntersectionPoint(m_mapLayout.m_lastClickPositionInMap))
 	match index:
 		nbNewItem:
-			var indexCell = map.positionToIndex(map.getIntersectionPoint(m_mapLayout.m_lastClickPositionInMap))
-			var node = tree.searchChildInTree(tree.get_root(), 0, String(indexCell))
 			var askForNamePopup = m_mapLayout.get_node("AskForNameSelectPopUpable")
 			askForNamePopup.set_position(get_viewport().get_mouse_position())
 			askForNamePopup.show()
+			
 			yield(askForNamePopup,"confirmed")
+			
+			var node = tree.searchChildInTree(tree.get_root(), 0, String(indexCell))
 			var group = tree.searchChildInTree(node, 0, "group")
 			if !group:
 				group = tree.create_item(node)
@@ -83,4 +71,6 @@ func _on_popupSubMenu_index_pressed(var index):
 			askForNamePopup.get_node("VBoxContainer/LineEdit").clear()
 			addGroupName(groupName)
 			item.set_text(0, groupName)
+		_:
+			tree.addCellCaracteristic(indexCell, get_item_text(index))
 	m_mapLayout.set_process_input(true)

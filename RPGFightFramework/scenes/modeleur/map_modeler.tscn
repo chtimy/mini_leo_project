@@ -22,9 +22,10 @@ var m_listPositions = []
 func addOverlaySelection(var index):
 	if isInsideMatrixBounds(index):
 		if addOverlayCellByIndex(index):
-			return true
 			m_listPositions.push_back(index)
-	return false
+			return 1
+		return 0
+	return -1
 			
 func saveOverlaySelection():
 	removeAllOverlayCells()
@@ -203,7 +204,7 @@ size = Vector2( 1, 1 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[node name="Modeleur" type="Spatial"]
+[node name="Modeleur" type="Spatial" index="0"]
 
 script = SubResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]
