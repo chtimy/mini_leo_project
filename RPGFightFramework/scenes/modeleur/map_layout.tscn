@@ -1,8 +1,10 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/PopupMenu.gd" type="Script" id=1]
-[ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/viewport.gd" type="Script" id=2]
-[ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/Tree.gd" type="Script" id=3]
+[ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/menu.gd" type="Script" id=2]
+[ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/viewport.gd" type="Script" id=3]
+[ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/libraryMaps.gd" type="Script" id=4]
+[ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/Tree.gd" type="Script" id=5]
 
 [sub_resource type="GDScript" id=1]
 
@@ -13,8 +15,6 @@ signal changeMapLayout
 
 const MAP_SCENE = preload(\"res://RPGFightFramework/scenes/modeleur/map_modeler.tscn\")
 const PARENT_SCRIPT = \"res://RPGFightFramework/scripts/modeler/mapLayout/parentScene.gd\"
-
-enum {SAVE_MAP_MENU = 1, NEW_MAP_MENU = 0}
 
 var m_map
 var m_lastClickPositionInMap
@@ -28,12 +28,6 @@ func _ready():
 	m_map = MAP_SCENE.instance()
 	get_node(\"VBoxContainer/HBoxContainer/ViewportContainer/Viewport\").add_child(m_map)
 	m_map.set_process(true)
-	
-	var menu = get_node(\"VBoxContainer/MenuContainer/MenuButton\")
-	var popup = menu.get_popup()
-	popup.add_item(\"New map...\")
-	popup.add_item(\"Save map...\")
-	popup.connect(\"id_pressed\", self, \"on_id_pressed\")
 	
 	m_viewportSize = get_viewport().get_size()
 	
@@ -103,38 +97,8 @@ func on_sprite_input(var sprite):
 		var spriteToDelete = parent.get_child(positionOrder - i)
 		parent.remove_child(spriteToDelete)
 		spriteToDelete.queue_free()
-	emit_signal(\"changeMapLayout\", sprite.m_parent)
-	
-func on_id_pressed(var id):
-	match id:
-		SAVE_MAP_MENU:
-			m_map.saveOverlaySelection()
-		NEW_MAP_MENU:
-			var map = MAP_SCENE.instance()
-			get_node(\"VBoxContainer/HBoxContainer/LevelMapsScrollContainer/GridContainer\").addMap(map)
-			pass"
+	emit_signal(\"changeMapLayout\", sprite.m_parent)"
 _sections_unfolded = [ "Resource" ]
-
-[sub_resource type="GDScript" id=2]
-
-script/source = "extends GridContainer
-
-const PARENT_SCRIPT = \"res://RPGFightFramework/scripts/modeler/mapLayout/parentScene.gd\"
-
-func addMap(var mapLayout, var viewport):
-	var sprite = TextureRect.new()
-	sprite.set_texture(get_node(\"../../ViewportContainer/Viewport\").get_texture())
-	sprite.set_expand(true)
-	scene.get_node(\"..\").set_custom_minimum_size(viewport * Vector2(0.1, 0.1))
-	sprite.set_custom_minimum_size(viewport * Vector2(0.1, 0.1))
-	sprite.set_script(load(PARENT_SCRIPT))
-	sprite.m_parent = self
-	sprite.connect(\"sprite_input\", self, \"on_sprite_input\")
-	scene.get_node(\"VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer\").add_child(sprite)
-	scene.addParentLevelSprites(get_node(\"VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer\"))
-	
-func on_sprite_input():
-	pass"
 
 [node name="SelectionModeLayout" type="Control" index="0"]
 
@@ -196,7 +160,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 902.0
+margin_right = 926.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -229,6 +193,7 @@ text = "File"
 flat = true
 align = 1
 items = [  ]
+script = ExtResource( 2 )
 
 [node name="VSeparator" type="VSeparator" parent="VBoxContainer/MenuContainer" index="1"]
 
@@ -253,7 +218,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 24.0
-margin_right = 902.0
+margin_right = 926.0
 margin_bottom = 524.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -341,7 +306,7 @@ shadow_atlas_quad_0 = 2
 shadow_atlas_quad_1 = 2
 shadow_atlas_quad_2 = 3
 shadow_atlas_quad_3 = 4
-script = ExtResource( 2 )
+script = ExtResource( 3 )
 _sections_unfolded = [ "Render Target", "Rendering" ]
 
 [node name="LevelMapsScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer" index="2"]
@@ -378,7 +343,7 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 columns = 2
-script = SubResource( 2 )
+script = ExtResource( 4 )
 
 [node name="Tree" type="Tree" parent="VBoxContainer" index="2"]
 
@@ -387,7 +352,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 528.0
-margin_right = 902.0
+margin_right = 926.0
 margin_bottom = 529.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = true
@@ -403,7 +368,7 @@ hide_folding = false
 hide_root = true
 drop_mode_flags = 0
 select_mode = 2
-script = ExtResource( 3 )
+script = ExtResource( 5 )
 _sections_unfolded = [ "Anchor", "Rect" ]
 
 [node name="AskForNameSelectPopUpable" type="AcceptDialog" parent="." index="2"]
