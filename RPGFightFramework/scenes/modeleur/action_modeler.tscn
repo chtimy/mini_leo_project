@@ -2,42 +2,60 @@
 
 [sub_resource type="GDScript" id=1]
 
+resource_name = "action_modeller_script"
 script/source = "extends Control
 
-const MAP_SCENE = preload(\"res://RPGFightFramework/map_modeler/map_modeller.tscn\")
-const MAP3D_CLASS = preload(\"res://RPGFightFramework/scripts/mapMatrix3D.gd\")
+signal changeMapLayout
 
-var m_map
-
-func _init():
-	m_map = MAP3D_CLASS.new(MAP_SCENE.instance())
+const MAP_LAYOUT_SCENE = preload(\"res://RPGFightFramework/scenes/modeleur/map_layout.tscn\")
+var m_mapLayout
 	
 func _ready():
+	m_mapLayout = MAP_LAYOUT_SCENE.instance()
+	m_mapLayout.init(self)
+	get_node(\"VBoxContainer\").add_child(m_mapLayout)
+	m_mapLayout.set_visible(false)
+	m_mapLayout.set_process_input(false)
+	m_mapLayout.get_node(\"VBoxContainer/Tree\").connect(\"changeMapLayout\", self, \"on_changeMapLayout\")
+	
 	var menuButtons = get_node(\"VBoxContainer/MenuButton\")
 	var popup = menuButtons.get_popup()
 	popup.add_item(\"Carte\")
 	popup.add_item(\"Personnage\")
 	popup.connect(\"id_pressed\", self, \"on_id_pressed\")
-	get_node(\"VBoxContainer/ViewportContainer/Viewport\").add_child(m_map)
-	m_map.get_node(\"Modelleur\").set_visible(false)
-	m_map.set_process(false)
+	
+	set_process(true)
+	
+func _process(var delta):
+	pass
 	
 func on_id_pressed(var id):
 	if id == 0:
-		m_map.get_node(\"Modelleur\").set_visible(true)
-		get_node(\"VBoxContainer/ViewportContainer/Viewport\").connect(\"mouse_entered\", self, \"on_viewportEntered\")
-		get_node(\"VBoxContainer/ViewportContainer/Viewport\").connect(\"mouse_exited\", self, \"on_viewportExited\")
+		m_mapLayout.set_visible(true)
+		m_mapLayout.set_process_input(true)
 		
-#ne marche pas
-func on_viewportEntered():
-	print(\"test\")
-	m_map.set_process(true)
-	
-func on_viewportExited():
-	print(\"exit\")
-	m_map.set_process(false)"
+func on_changeMapLayout(var scene):
+	get_node(\"VBoxContainer\").remove_child(m_mapLayout)
+	m_mapLayout = scene
+	m_mapLayout.init(self)
+	get_node(\"VBoxContainer\").add_child(m_mapLayout)
+#func test2(var index):
+#	var tree = get_node(\"VBoxContainer/SelectionModeLayout/Tree\")
+#	var child = tree.create_item(tree.get_root())
+#	child.set_text(0, String(index))
+#func test():
+#	print(\"click\")
+#	var popupMenu = get_node(\"PopupMenu\")
+#	popupMenu.set_position(get_viewport().get_mouse_position())
+#	popupMenu.set_visible(true)
 
-[node name="action_modeler" type="Control" index="0"]
+#func _on_AskForNameSelectPopUpable_confirmed():
+#	print(get_node(\"AskForNameSelectPopUpable/VBoxContainer/LineEdit\").get_text())
+#	get_node(\"AskForNameSelectPopUpable/VBoxContainer/LineEdit\").clear()
+"
+_sections_unfolded = [ "Resource" ]
+
+[node name="action_modeler" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -114,51 +132,5 @@ text = "Liste de conditions"
 flat = true
 align = 1
 items = [  ]
-
-[node name="ViewportContainer" type="ViewportContainer" parent="VBoxContainer" index="2"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 48.0
-margin_right = 894.0
-margin_bottom = 548.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-stretch = false
-stretch_shrink = 1
-_sections_unfolded = [ "Anchor", "Margin" ]
-
-[node name="Viewport" type="Viewport" parent="VBoxContainer/ViewportContainer" index="0"]
-
-arvr = false
-size = Vector2( 894, 500 )
-own_world = false
-world = null
-transparent_bg = false
-msaa = 0
-hdr = true
-disable_3d = false
-usage = 2
-debug_draw = 0
-render_target_v_flip = false
-render_target_clear_mode = 0
-render_target_update_mode = 3
-audio_listener_enable_2d = false
-audio_listener_enable_3d = false
-physics_object_picking = false
-gui_disable_input = false
-gui_snap_controls_to_pixels = true
-shadow_atlas_size = 0
-shadow_atlas_quad_0 = 2
-shadow_atlas_quad_1 = 2
-shadow_atlas_quad_2 = 3
-shadow_atlas_quad_3 = 4
-_sections_unfolded = [ "Rendering" ]
 
 

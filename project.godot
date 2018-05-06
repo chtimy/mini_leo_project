@@ -11,7 +11,7 @@ config_version=3
 [application]
 
 config/name="mini_leo"
-run/main_scene="res://RPGFightFramework/scenes/fightScene.tscn"
+run/main_scene="res://RPGFightFramework/scenes/modeleur/action_modeler.tscn"
 config/icon="res://icon.png"
 
 [display]

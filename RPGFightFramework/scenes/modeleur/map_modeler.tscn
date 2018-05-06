@@ -1,48 +1,60 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://materials/elementMaterial.tres" type="Material" id=1]
-[ext_resource path="res://RPGFightFramework/scenes/perso/overlayMultiMesh.tscn" type="PackedScene" id=2]
 
 [sub_resource type="GDScript" id=1]
 
-script/source = "extends Spatial
+resource_name = "map_modeler_script"
+script/source = "extends \"res://RPGFightFramework/scripts/mapMatrix3D.gd\"
 
-var m_matrix
-var m_sizeElement
 var m_camera
 
 const HEIGHT = 20
+const DEEP = 20
 const WIDTH = 20
 
 const ZOOM_FACTOR = 0.1
 
 var m_plan
 
-var m_initialPositionsCharacters
-var m_initialPositionsEnemis
+var m_listPositions = []
 
-func _init():
-	m_sizeElement = 2
+func addOverlaySelection(var index):
+	if isInsideMatrixBounds(index):
+		if addOverlayCellByIndex(index):
+			return true
+			m_listPositions.push_back(index)
+	return false
+			
+func saveOverlaySelection():
+	removeAllOverlayCells()
+	
+func addLevel(var index, map_layout):
+	m_matrix[index.x][index.y][index.z][\"levelDown\"] = map_layout
+
+func _init().():
+	m_origin = Vector3(-WIDTH*0.5, 0, -DEEP*0.5)
+	m_sizeCell = Vector3(1,1,1)
 	m_matrix = []
-	for i in range(5):
+	for i in range(WIDTH):
 		m_matrix.append([])
-		for j in range(5):
+		for j in range(DEEP):
 			m_matrix[i].append([])
-			for k in range(5):
+			for k in range(HEIGHT):
 				m_matrix[i][j].append({\"type\" : 0})
-	for i in range(5):
-		for j in range(5):
+	for i in range(WIDTH):
+		for j in range(DEEP):
 			m_matrix[i][0][j].type = 1
 	m_initialPositionsCharacters = [Vector3(0, 0, 0), Vector3(0, 0, 1)]
 	m_initialPositionsEnemis = [Vector3(2, 0, 2), Vector3(3, 0, 4)]
-
+	
 func _process(delta):
 	controlCamera()
 	
-func getIntersectionPoint():
-	var mousePosition = get_viewport().get_mouse_position()
+func getIntersectionPoint(var mousePosition):
 	return m_plan.intersects_ray(m_camera.project_ray_origin(mousePosition), m_camera.project_ray_normal(mousePosition)) 
-	
+func getMousePosition():
+	return get_viewport().get_mouse_position()
 func controlCamera():
 	if Input.is_action_just_released(\"ui_control_camera_zoom_up\"):
 		var dir = -m_camera.get_translation().normalized() * ZOOM_FACTOR
@@ -60,15 +72,51 @@ func _ready():
 	m_camera.look_at_from_position(Vector3(12,12,12), Vector3(2.5,0,2.5), Vector3(0,1,0))
 	add_child(m_camera)
 	
+	var player = load(\"res://RPGFightFramework/scenes/perso/leo.tscn\").instance()
+	player.set_scale(Vector3(0.5,0.5,0.5))
+	player.set_translation(Vector3(0, 0.5, 0))
+	add_child(player)
+	
 	var meshInstance = get_node(\"MeshInstance\")
 	meshInstance.set_scale(Vector3(WIDTH, 1, HEIGHT))
 	
-	var multiMesh = get_node(\"MultiMeshInstance\")
-	multiMesh.get_multimesh().set_instance_count(1)
+	m_overlayCells = MultiMeshInstance.new()
+	m_overlayCells.set_name(\"Overlays\")
+	var multimesh = MultiMesh.new()
+	multimesh.set_color_format(MultiMesh.COLOR_FLOAT)
+	multimesh.set_mesh(load(\"res://RPGFightFramework/scenes/perso/overlay.tscn\").instance().get_mesh())
+	#A report : Bug de chez Godot ?? Si on met à la main dans l'instanciation de la scène çà ne marche pas
+	multimesh.set_transform_format(MultiMesh.TRANSFORM_3D)
+	multimesh.set_instance_count(WIDTH * DEEP)
+	var material = SpatialMaterial.new()
+	m_overlayCells.set_multimesh(multimesh)
+	m_overlayCells.set_material_override(material)
+	material.set_flag(SpatialMaterial.FLAG_ALBEDO_FROM_VERTEX_COLOR, true)
+	for i in range(WIDTH * DEEP):
+		var t = Transform(Basis(), Vector3(-1000, -1000, -1000))
+		m_overlayCells.get_multimesh().set_instance_transform(i, t)
+		m_overlayCells.get_multimesh().set_instance_color(i, Color(0, 1, 1))
+	add_child(m_overlayCells)
 	
 	m_plan = Plane(Vector3(0,1,0), 0)
 	
-	set_process(true)"
+	set_process(true)
+	
+func getNextPlayerInitPosition():
+	return m_initialPositionsCharacters.pop_front()
+
+func getNextEnemiInitPosition():
+	return m_initialPositionsEnemis.pop_front()
+	
+func addCellCaracteristic(var index, var carac):
+	m_matrix[index.x][index.y][index.z][carac] = true
+
+func selectOverlay(var vec):
+	setColorOverlayMeshInstance(vec, Color(1, 0, 0))
+	
+func deselectOverlay(var vec):
+	setColorOverlayMeshInstance(vec, Color(0, 1, 1))"
+_sections_unfolded = [ "Resource" ]
 
 [sub_resource type="Environment" id=2]
 
@@ -151,11 +199,11 @@ _sections_unfolded = [ "Ambient Light", "Background" ]
 
 [sub_resource type="PlaneMesh" id=3]
 
-size = Vector2( 2, 2 )
+size = Vector2( 1, 1 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[node name="Modelleur" type="Spatial"]
+[node name="Modeleur" type="Spatial"]
 
 script = SubResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]
@@ -207,8 +255,6 @@ lod_max_hysteresis = 0.0
 mesh = SubResource( 3 )
 skeleton = NodePath("..")
 material/0 = ExtResource( 1 )
-_sections_unfolded = [ "material" ]
-
-[node name="MultiMeshInstance" parent="." index="3" instance=ExtResource( 2 )]
+_sections_unfolded = [ "Transform", "material" ]
 
 
