@@ -1,4 +1,32 @@
-[gd_scene format=2]
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Control
+
+var m_map
+
+func init(var map, var name):
+	set_name(name)
+	get_node(\"VBoxContainer/Label\").set_text(name)
+	var sprite = get_node(\"VBoxContainer/TextureRect\")
+	sprite.set_texture(map.get_parent().get_texture())
+	
+	var viewportSize = get_viewport().get_size()
+	sprite.set_expand(true)
+	sprite.set_custom_minimum_size(viewportSize * Vector2(0.1, 0.1))
+	set_custom_minimum_size(viewportSize * Vector2(0.1, 0.1) + Vector2(0, get_node(\"VBoxContainer/Label\").get_minimum_size().y))
+	
+func refresh():
+	var viewport = get_viewport()
+	if viewport:
+		get_node(\"VBoxContainer/TextureRect\").set_texture(viewport.get_texture())
+	else:
+		viewport = Viewport.new()
+		viewport.add_child(m_map)
+		get_node(\"VBoxContainer/TextureRect\").set_texture(viewport.get_texture())
+		viewport.remove_child(m_map)
+		viewport.queue_free()"
 
 [node name="MapMiniature" type="Control" index="0"]
 
@@ -14,6 +42,8 @@ mouse_filter = 0
 mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
+script = SubResource( 1 )
+_sections_unfolded = [ "Rect" ]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." index="0"]
 

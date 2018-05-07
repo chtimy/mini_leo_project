@@ -11,7 +11,10 @@
 resource_name = "map_layout_modeler"
 script/source = "extends Control
 
-signal changeMapLayout
+#signal changeMapLayout
+
+signal newMapSignal
+signal saveMapSignal
 
 const MAP_SCENE = preload(\"res://RPGFightFramework/scenes/modeleur/map_modeler.tscn\")
 const PARENT_SCRIPT = \"res://RPGFightFramework/scripts/modeler/mapLayout/parentScene.gd\"
@@ -25,25 +28,40 @@ func init(var modeler):
 	m_modeler = modeler
 
 func _ready():
-	m_map = MAP_SCENE.instance()
-	get_node(\"VBoxContainer/HBoxContainer/ViewportContainer/Viewport\").add_child(m_map)
-	m_map.set_process(true)
-	
-	m_viewportSize = get_viewport().get_size()
 	
 	get_node(\"VBoxContainer/HBoxContainer/ViewportContainer\").connect(\"mouse_entered\", self, \"on_viewportEntered\")
 	get_node(\"VBoxContainer/HBoxContainer/ViewportContainer\").connect(\"mouse_exited\", self, \"on_viewportExited\")
-	
 	get_node(\"VBoxContainer/Tree\").connect(\"changeMapLayout\", self, \"on_changeMapLayout\")
-	self.connect(\"changeMapLayout\", m_modeler, \"on_changeMapLayout\")
-	print(\"connect : \", self)
+	get_node(\"VBoxContainer/MenuContainer/MenuButton\").connect(\"newMapSignal\", self, \"on_newMap\")
+	connect(\"newMapSignal\", get_node(\"VBoxContainer/HBoxContainer/LevelMapsScrollContainer/GridContainer\"), \"addMap\")
+	connect(\"newMapSignal\", get_node(\"VBoxContainer/HBoxContainer/ViewportContainer/Viewport\"), \"changeMap\")
+	get_node(\"VBoxContainer/MenuContainer/MenuButton\").connect(\"saveMapSignal\", self, \"on_saveMap\")
+	
+	m_map = MAP_SCENE.instance()
+	emit_signal(\"newMapSignal\", m_map)
+#	get_node(\"VBoxContainer/HBoxContainer/ViewportContainer/Viewport\").add_child(m_map)
+	m_map.set_process(true)
+	print(m_map)
+	
+	m_viewportSize = get_viewport().get_size()
+
+#	connect(\"saveMapSignal\", get_node(\"\"))
+#	connect(\"changeMapLayout\", get_node(\"VBoxContainer/HBoxContainer/ViewportContainer/Viewport\"), \"on_changeMapLayout\")
+#	self.connect(\"changeMapLayout\", m_modeler, \"on_changeMapLayout\")
 	
 func on_viewportEntered():
 	m_map.set_process(true)
 	
 func on_viewportExited():
 	m_map.set_process(false)
-
+	
+func on_newMap(var map):
+	m_map = map
+	emit_signal(\"newMapSignal\", map)
+	
+func on_saveMap():
+	emit_signal(\"saveMapSignal\")
+	
 func _input(event):
 	if event is InputEventMouseButton:
 		if event.get_button_index() == BUTTON_LEFT && event.pressed == false:
@@ -83,7 +101,7 @@ func on_changeMapLayout(var scene):
 	sprite.connect(\"sprite_input\", self, \"on_sprite_input\")
 	scene.get_node(\"VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer\").add_child(sprite)
 	scene.addParentLevelSprites(get_node(\"VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer\"))
-	emit_signal(\"changeMapLayout\", scene)
+#	emit_signal(\"changeMapLayout\", scene)
 
 func addParentLevelSprites(var node):
 	var children = node.get_children()
@@ -97,10 +115,10 @@ func on_sprite_input(var sprite):
 		var spriteToDelete = parent.get_child(positionOrder - i)
 		parent.remove_child(spriteToDelete)
 		spriteToDelete.queue_free()
-	emit_signal(\"changeMapLayout\", sprite.m_parent)"
+#	emit_signal(\"changeMapLayout\", sprite.m_parent)"
 _sections_unfolded = [ "Resource" ]
 
-[node name="SelectionModeLayout" type="Control" index="0"]
+[node name="SelectionModeLayout" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -160,7 +178,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 926.0
+margin_right = 902.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -218,7 +236,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 24.0
-margin_right = 926.0
+margin_right = 902.0
 margin_bottom = 524.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -352,7 +370,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 528.0
-margin_right = 926.0
+margin_right = 902.0
 margin_bottom = 529.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = true

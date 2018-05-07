@@ -1,28 +1,30 @@
 extends GridContainer
 
 const PARENT_SCRIPT = "res://RPGFightFramework/scripts/modeler/mapLayout/parentScene.gd"
-const MINIATURE_MAP_PATH = 
+const MINIATURE_MAP_PATH = "res://RPGFightFramework/scenes/modeleur/MapMiniature.tscn"
 
 var m_maps = []
 
-func addMap(var map):
-	
-	var viewport = Viewport.new()
-	viewport.add_child(map)
-	var sprite = TextureRect.new()
-	sprite.set_texture(viewport.get_texture())
-	viewport.remove_child(map)
-	viewport.queue_free()
-	
+func _ready():
 	var viewportSize = get_viewport().get_size()
-	sprite.set_expand(true)
-	scene.get_node("..").set_custom_minimum_size(viewportSize * Vector2(0.1, 0.1))
-	sprite.set_custom_minimum_size(viewportSize * Vector2(0.1, 0.1))
-#	sprite.set_script(load(PARENT_SCRIPT))
-#	sprite.m_parent = self
-	sprite.connect("sprite_input", self, "on_sprite_input")
-	add_child(sprite)
-	scene.addParentLevelSprites(get_node("VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"))
+	set_custom_minimum_size(viewportSize * Vector2(0.1, 0.1))
+	get_node("..").set_custom_minimum_size(viewportSize * Vector2(0.1, 0.1))
 	
-func on_sprite_input():
+func addMap(var map, var nameMap = ""):
+	var miniature = load(MINIATURE_MAP_PATH).instance()
+	add_child(miniature)
+	if nameMap == "":
+		nameMap = "defaut"
+	miniature.init(map, nameMap)
+	miniature.get_node("VBoxContainer/TextureRect").connect("gui_input", self, "on_sprite_input")
+#	scene.addParentLevelSprites(get_node("VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer"))
+
+func refreshMiniature(var nameMap):
+	var children = get_children()
+	for child in children:
+		if child.get_name() == nameMap:
+			child.refresh()
+	
+func on_sprite_input(ev):
+	print(ev)
 	pass
