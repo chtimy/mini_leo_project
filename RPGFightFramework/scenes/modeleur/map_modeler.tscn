@@ -24,7 +24,8 @@ const TOOLS = preload(\"res://RPGFightFramework/scripts/modeler/tools.gd\")
 var m_lastClickPositionInMap
 var m_camera
 var m_plan
-var m_listPositions = []
+var m_orientationModeler = Vector3(1,0,0)
+var m_originModeler = Vector3(WIDTH*0.5,0,DEEP*0.5)
 
 ########################################################################################################################################
 ###################################################		METHODS	########################################################################
@@ -104,7 +105,7 @@ func _input(event):
 func addOverlaySelection(var index):
 	if isInsideMatrixBounds(index):
 		if addOverlayCellByIndex(index):
-			m_listPositions.push_back(index)
+#			m_listPositions.push_back(index)
 			return 1
 		return 0
 	return -1
@@ -112,9 +113,11 @@ func addOverlaySelection(var index):
 func saveOverlaySelection():
 	removeAllOverlayCells()
 	
+#TODO : a gérer mieu que çà surtout pour la 2D
 func controlCamera():
 	if Input.is_action_just_released(\"ui_control_camera_zoom_up\"):
 		var dir = -m_camera.get_translation().normalized() * ZOOM_FACTOR
+#		var up = m_camera.get_camera_transform().
 		m_camera.look_at_from_position(m_camera.get_translation() + dir, Vector3(2.5,0,2.5), Vector3(0,1,0))
 		return true
 	elif Input.is_action_just_released(\"ui_control_camera_zoom_down\"):
@@ -141,10 +144,15 @@ func selectOverlay(var vec):
 func deselectOverlay(var vec):
 	setColorOverlayMeshInstance(vec, Color(0, 1, 1))
 	
+func to2DPlan(var camera):
+	camera.look_at_from_position(Vector3(0,20,0), Vector3(0, 0, 0), Vector3(0,0,1))
+func to3DPlan(var camera):
+	camera.look_at_from_position(Vector3(12,12,12), Vector3(2.5,0,2.5), Vector3(0,1,0))
+	
 ########################################################################################################################################
 ###################################################		SLOTS	########################################################################
 ########################################################################################################################################
-func on_addCaracteristic(var carac, var cellIndex):
+func on_addCaracteristic(var cellIndex, var carac):
 	var cell = m_matrix[cellIndex.x][cellIndex.y][cellIndex.z]
 	if !cell.has(\"modeler\"):
 		cell[\"modeler\"] = {}
@@ -158,13 +166,21 @@ func on_addMapLevelDown(var cellIndex, var map):
 		cell[\"modeler\"] = {}
 	cell[\"modeler\"][\"levelDown\"] = map
 	
-func on_addGroup(var group, var cellIndex):
+func on_addGroup(var cellIndex, var group):
 	var cell = m_matrix[cellIndex.x][cellIndex.y][cellIndex.z]
 	if !cell.has(\"modeler\"):
 		cell[\"modeler\"] = {}
 	if !cell[\"modeler\"].has(\"group\"):
 		cell[\"modeler\"][\"group\"] = []
-	cell[\"modeler\"][\"group\"].append(group)"
+	cell[\"modeler\"][\"group\"].append(group)
+
+func _on_OptionButton_item_selected(ID):
+	print(ID)
+	if ID == 1:
+		to2DPlan(m_camera)
+	if ID == 0:
+		to3DPlan(m_camera)
+"
 _sections_unfolded = [ "Resource" ]
 
 [sub_resource type="Environment" id=2]
@@ -252,7 +268,7 @@ size = Vector2( 1, 1 )
 subdivide_width = 0
 subdivide_depth = 0
 
-[node name="Modeleur" type="Spatial"]
+[node name="Modeleur" type="Spatial" index="0"]
 
 script = SubResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]
@@ -305,5 +321,33 @@ mesh = SubResource( 3 )
 skeleton = NodePath("..")
 material/0 = ExtResource( 1 )
 _sections_unfolded = [ "Transform", "material" ]
+
+[node name="OptionButton" type="OptionButton" parent="." index="3"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 87.0
+margin_bottom = 20.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+focus_mode = 2
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+toggle_mode = false
+action_mode = 0
+enabled_focus_mode = 2
+shortcut = null
+group = null
+text = "3D"
+flat = false
+align = 0
+items = [ "3D", null, false, 0, null, "2D", null, false, 1, null ]
+selected = 0
+
+[connection signal="item_selected" from="OptionButton" to="." method="_on_OptionButton_item_selected"]
 
 

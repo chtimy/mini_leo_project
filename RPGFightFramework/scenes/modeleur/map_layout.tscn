@@ -4,7 +4,7 @@
 [ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/menu.gd" type="Script" id=2]
 [ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/viewport.gd" type="Script" id=3]
 [ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/libraryMaps.gd" type="Script" id=4]
-[ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/Tree.gd" type="Script" id=5]
+[ext_resource path="res://RPGFightFramework/scenes/modeleur/Tree.tscn" type="PackedScene" id=5]
 
 [sub_resource type="GDScript" id=1]
 
@@ -17,7 +17,6 @@ script/source = "extends Control
 signal newMapSignal
 signal changeMapSignal
 signal refreshMiniaturesSignal
-signal saveMapSignal
 signal addCaracteristicSignal
 signal addMapLevelDownSignal
 signal addGroupSignal
@@ -29,6 +28,7 @@ signal selectCell
 ###################################################		MEMBERS	########################################################################
 ########################################################################################################################################
 var m_map
+var m_mapRoot
 var m_viewportSize
 
 ########################################################################################################################################
@@ -135,6 +135,8 @@ func on_newMap(var map):
 		tex.create_from_image(img)
 		viewport.set_clear_mode(Viewport.CLEAR_MODE_ALWAYS)
 		emit_signal(\"refreshMiniaturesSignal\", m_map, tex)
+	else:
+		m_mapRoot = map
 	emit_signal(\"changeMapSignal\", map)
 	emit_signal(\"newMapSignal\", map)
 	m_map = map
@@ -155,16 +157,18 @@ func on_changeMap(var map):
 	m_map = map
 	
 func on_saveMap():
-	emit_signal(\"saveMapSignal\")
+	on_changeMap(m_mapRoot)
+	var informations = get_node(\"VBoxContainer/Tree\").getInformation()
+	print(informations)
 	
-func on_addCaracteristic(var carac, var cellIndex):
-	emit_signal(\"addCaracteristicSignal\", carac, cellIndex)
+func on_addCaracteristic(var carac):
+	emit_signal(\"addCaracteristicSignal\", carac)
 	
-func on_addMapLevelDown(var cellIndex, var nameMap):
-	emit_signal(\"addMapLevelDownSignal\", cellIndex, nameMap)
+func on_addMapLevelDown(var nameMap):
+	emit_signal(\"addMapLevelDownSignal\", nameMap)
 	
-func on_addGroup(var group, var cellIndex):
-	emit_signal(\"addGroupSignal\", group, cellIndex)
+func on_addGroup(var group):
+	emit_signal(\"addGroupSignal\", group)
 	
 func on_clickRightMap(var index):
 	var result = m_map.addOverlaySelection(index)
@@ -201,7 +205,7 @@ func init():
 func on_indexPressed(var index):
 	m_index = index"
 
-[node name="SelectionModeLayout" type="Control" index="0"]
+[node name="SelectionModeLayout" type="Control"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -238,6 +242,7 @@ popup_exclusive = false
 items = [  ]
 hide_on_state_item_selection = false
 script = ExtResource( 1 )
+_sections_unfolded = [ "Popup" ]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." index="1"]
 
@@ -258,7 +263,6 @@ _sections_unfolded = [ "Anchor", "Grow Direction", "Hint", "Margin", "Rect" ]
 
 [node name="MenuContainer" type="HBoxContainer" parent="VBoxContainer" index="0"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -415,7 +419,6 @@ _sections_unfolded = [ "Render Target", "Rendering" ]
 
 [node name="LevelMapsScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer" index="2"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
@@ -451,31 +454,7 @@ columns = 2
 script = ExtResource( 4 )
 _sections_unfolded = [ "Anchor", "Focus", "Grow Direction", "Hint", "Margin", "Material", "Mouse", "Rect", "Size Flags" ]
 
-[node name="Tree" type="Tree" parent="VBoxContainer" index="2"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 528.0
-margin_right = 1920.0
-margin_bottom = 529.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = true
-focus_mode = 2
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-columns = 1
-allow_reselect = false
-allow_rmb_select = false
-hide_folding = false
-hide_root = true
-drop_mode_flags = 0
-select_mode = 2
-script = ExtResource( 5 )
-_sections_unfolded = [ "Anchor", "Focus", "Grow Direction", "Hint", "Margin", "Rect", "custom_icons" ]
+[node name="Tree" parent="VBoxContainer" index="2" instance=ExtResource( 5 )]
 
 [node name="AskForNameSelectPopUpable" type="AcceptDialog" parent="." index="2"]
 
@@ -646,11 +625,5 @@ items = [  ]
 [connection signal="mouse_entered" from="VBoxContainer/HBoxContainer/ViewportContainer" to="VBoxContainer/HBoxContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
 
 [connection signal="mouse_exited" from="VBoxContainer/HBoxContainer/ViewportContainer" to="VBoxContainer/HBoxContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_exited"]
-
-[connection signal="button_pressed" from="VBoxContainer/Tree" to="VBoxContainer/Tree" method="_on_Tree_button_pressed"]
-
-[connection signal="cell_selected" from="VBoxContainer/Tree" to="VBoxContainer/Tree" method="_on_Tree_cell_selected"]
-
-[connection signal="multi_selected" from="VBoxContainer/Tree" to="VBoxContainer/Tree" method="_on_Tree_multi_selected"]
 
 

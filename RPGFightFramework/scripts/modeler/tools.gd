@@ -16,6 +16,21 @@ static func isVector3(var string):
 		return true
 	return false
 	
+static func isLevelDown(var string):
+	var regex = RegEx.new()
+	regex.compile("Level down :")
+	if regex.search(string):
+		print(string)
+		return true
+	return false
+
+static func getPathLevelDown(var string):
+	var regex = RegEx.new()
+	regex.compile("Level down : (?<path>[0-9a-zA-Z_]+)")
+	var result = regex.search(string)
+	print(result.get_string("path"))
+	return result.get_string("path")
+	
 static func searchParentNodeRecursive(var node, var name):
 	var parent = node
 	while parent.get_parent() != node.get_tree().get_root() && parent.get_name() != name:

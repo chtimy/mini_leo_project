@@ -52,7 +52,7 @@ func _on_PopupMenu_index_pressed(index):
 	var tree = m_mapLayout.get_node("VBoxContainer/Tree")
 	match index:
 		CHOOSE_BY_PLAYER:
-			emit_signal("addCaracteristic", "chooseByPlayer", indexCell)
+			emit_signal("addCaracteristic", "chooseByPlayer")
 #			tree.addSelectedCellsCaracteristic("chooseByPlayer")
 		ADD_CONDITION_LEVEL:
 			var askForMapPopup = get_node("../AskForMapPopUp")
@@ -62,7 +62,7 @@ func _on_PopupMenu_index_pressed(index):
 			yield(askForMapPopup, "confirmed")
 			var indexMenu = askForMapPopup.m_index
 			var nameMap = askForMapPopup.get_node("VBoxContainer/MenuButton").get_popup().get_item_text(indexMenu)
-			emit_signal("addMapLevelDown", indexCell, nameMap)
+			emit_signal("addMapLevelDown", nameMap)
 			
 #			tree.addSelectedCellsButton("Condition level 1", "res://images/symboles/eye2.png")
 #			map.addCellCaracteristic(indexCell, "conditionOtherLevel")
@@ -80,25 +80,17 @@ func _on_popupSubMenu_index_pressed(var index):
 	var map = m_mapLayout.m_map
 	var tree = m_mapLayout.get_node("VBoxContainer/Tree")
 	var nbNewItem = m_subMenuGroup.get_item_count() - 1
-	var indexCell = map.positionToIndex(map.getIntersectionPoint(m_mapLayout.m_lastClickPositionInMap))
+	var indexCell = map.positionToIndex(map.getIntersectionPoint(map.m_lastClickPositionInMap))
 	match index:
 		nbNewItem:
 			var askForNamePopup = m_mapLayout.get_node("AskForNameSelectPopUpable")
 			askForNamePopup.set_position(get_viewport().get_mouse_position())
 			askForNamePopup.show()
 			yield(askForNamePopup,"confirmed")
-			emit_signal("addGroup", askForNamePopup.get_node("VBoxContainer/LineEdit").get_text(), indexCell)
-			
-#			var node = tree.searchChildInTree(tree.get_root(), 0, String(indexCell))
-#			var group = tree.searchChildInTree(node, 0, "group")
-#			if !group:
-#				group = tree.create_item(node)
-#				group.set_text(0, "group")
-#			var item = tree.create_item(group)
-#			var groupName = askForNamePopup.get_node("VBoxContainer/LineEdit").get_text()
-			askForNamePopup.get_node("VBoxContainer/LineEdit").clear()
-#			addGroupName(groupName)
-#			item.set_text(0, groupName)
-#		_:
-#			tree.addCellCaracteristic(indexCell, get_item_text(index))
+			var lineEdit = askForNamePopup.get_node("VBoxContainer/LineEdit")
+			emit_signal("addGroup", lineEdit.get_text())
+			addGroupName(lineEdit.get_text())
+			lineEdit.clear()
+		_:
+			emit_signal("addGroup", m_subMenuGroup.get_item_text(index))
 	m_mapLayout.set_process_input(true)

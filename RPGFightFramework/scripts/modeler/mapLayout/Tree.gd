@@ -4,6 +4,9 @@ extends Tree
 ###################################################		SIGNALS	########################################################################
 ########################################################################################################################################
 signal changeMap
+signal addGroupSignal
+signal addLevelDownSignal
+signal addCaracteristicSignal
 
 ########################################################################################################################################
 ###################################################		MEMBERS	########################################################################
@@ -48,8 +51,6 @@ func getNameChildrenTreeItem(var item, var column):
 	
 func addCellItem(var vec):
 	var child = create_item(get_root())
-	print(get_root())
-	print(child)
 	child.set_text(0, String(vec))
 	return child
 	
@@ -73,24 +74,28 @@ func updateTreeSelected(var item, var selected, var vec):
 		if m_selected.find(item) == -1:
 			m_selected.append(item)
 
-func addCaracteristic(var cell, var carac):
-	var cellChild = create_item(cell)
-	cellChild.set_text(0, String(carac))
+func addCaracteristic(var item, var carac):
+	var itemChild = create_item(item)
+	itemChild.set_text(0, String(carac))
 	
-func addMapLevelDown(var cell, var mapName):
-		var cellChild = create_item(cell)
-		cellChild.set_text(0, mapName)
-		cellChild.add_button(0, load("res://images/symboles/eye2.png"))
+func addMapLevelDown(var item, var mapName):
+		var itemChild = create_item(item)
+		itemChild.set_text(0, "Level down : " + mapName)
+		itemChild.add_button(0, load("res://images/symboles/eye2.png"))
 		
-func addGroup(var cell, var group):
+func addGroup(var item, var group):
 	var child = null
-	for cellChild in cell:
-		if cellChild.get_text(0) == "group":
-			child = cellChild
+	var itemChild = item.get_children()
+	while itemChild:
+		if itemChild.get_text(0) == "group":
+			child = itemChild
 			break
-	if child:
-		var node = create_item(child)
-		node.set_text(0, String(group))
+		itemChild = itemChild.get_next()
+	if !child:
+		child = create_item(item)
+		child.set_text(0, "group")
+	var node = create_item(child)
+	node.set_text(0, String(group))
 		
 func clearTree():
 	unselectAll()
@@ -104,6 +109,54 @@ func unselectAll():
 		map.deselectOverlay(TOOLS.stringToVector3(m_selected[j].get_text(0)))
 		m_selected[j].deselect(0)
 		m_selected.remove(j)
+		
+func getInformation(var informations = [], var node = get_root()):
+	var map = m_mapLayout.m_map 
+	var child = node.get_children()
+	while child:
+		var coords = TOOLS.stringToVector3(child.get_text(0))
+		coords = coords - map.m_originModeler
+		informations.append({"coords" : coords})
+		var index = informations.size() - 1
+		var childchild = child.get_children()
+		while childchild:
+			if childchild.get_text(0) == "group":
+				informations[index]["group"] = []
+				var group = childchild.get_children()
+				while group:
+					informations[index].group.append(group.get_text(0))
+					group = group.get_next()
+			elif TOOLS.isLevelDown(childchild.get_text(0)):
+				var tree = load("res://RPGFightFramework/scenes/modeleur/Tree.tscn").instance()
+				tree.create_item()
+				tree.loadMap(get_node("../HBoxContainer/LevelMapsScrollContainer/GridContainer").getMap(TOOLS.getPathLevelDown(childchild.get_text(0))))
+				informations[index]["levelDown"] = getInformation([], tree.get_root())
+				tree.queue_free()
+			else :
+				if !informations[index].has("carac"):
+					informations[index]["carac"] = []
+				informations[index].carac.append(childchild.get_text(0))
+			childchild = childchild.get_next()
+		child = child.get_next()
+	return informations
+				
+func loadMap(var map):
+	var matrix = map.m_matrix
+	for i in range(matrix.size()):
+		for j in (matrix[i].size()):
+			for k in range(matrix[i][j].size()):
+				var cell = matrix[i][j][k]
+				if cell.has("overlay") && cell.overlay:
+					var item = addCellItem(Vector3(i, j, k))
+					if cell.has("modeler"):
+						if cell.modeler.has("carac"):
+							for c in cell.modeler.carac:
+								addCaracteristic(item, c)
+						if cell.modeler.has("group"):
+							for g in cell.modeler.group:
+								addGroup(item, g)
+						if cell.modeler.has("levelDown"):
+							addMapLevelDown(item, cell.modeler.levelDown)
 
 #func addSelectedCellsButton(var buttons):
 #	var map = m_mapLayout.m_map
@@ -121,23 +174,19 @@ func on_loadMap(var map):
 	clearTree()
 	create_item()
 	set_hide_root(true)
-	var matrix = map.m_matrix
-	for i in range(matrix.size()):
-		for j in (matrix[i].size()):
-			for k in range(matrix[i][j].size()):
-				var cell = matrix[i][j][k]
-				if cell.has("overlay") && cell.overlay:
-					var item = addCellItem(Vector3(i, j, k))
-					if cell.has("modeler"):
-						print(cell)
-						if cell.modeler.has("carac"):
-							for c in cell.modeler.carac:
-								addCaracteristic(item, c)
-						if cell.modeler.has("group"):
-							for g in cell.modeler.group:
-								addGroup(item, g)
-						if cell.modeler.has("levelDown"):
-							addMapLevelDown(item, cell.modeler.levelDown)
+	loadMap(map)
+	var signals = get_signal_connection_list("addGroupSignal")
+	for sig in signals:
+		sig.source.disconnect(sig.signal, sig.target, sig.method)
+	signals = get_signal_connection_list("addLevelDownSignal")
+	for sig in signals:
+		sig.source.disconnect(sig.signal, sig.target, sig.method)
+	signals = get_signal_connection_list("addCaracteristicSignal")
+	for sig in signals:
+		sig.source.disconnect(sig.signal, sig.target, sig.method)
+	connect("addGroupSignal", map, "on_addGroup")
+	connect("addLevelDownSignal", map, "on_addMapLevelDown")
+	connect("addCaracteristicSignal", map, "on_addCaracteristic")
 
 func _on_Tree_multi_selected(item, column, selected):
 	var breakLoop = false
@@ -163,17 +212,20 @@ func _on_Tree_button_pressed(item, column, id):
 			var map = get_node("../HBoxContainer/LevelMapsScrollContainer/GridContainer").getMap(matrix[index.x][index.y][index.z].levelDown)
 			emit_signal("changeMap", map)
 			
-func on_addCaracteristic(var carac, var cellIndex):
-	for cell in m_selected:
-		addCaracteristic(cell, carac)
+func on_addCaracteristic(var carac):
+	for item in m_selected:
+		addCaracteristic(item, carac)
+		emit_signal("addCaracteristicSignal", TOOLS.stringToVector3(item.get_text(0)), carac)
 
-func on_addMapLevelDown(var cellIndex, var mapName):
-	for cell in m_selected:
-		addMapLevelDown(cell, mapName)
+func on_addMapLevelDown(var mapName):
+	for item in m_selected:
+		addMapLevelDown(item, mapName)
+		emit_signal("addLevelDownSignal", TOOLS.stringToVector3(item.get_text(0)), mapName)
 	
-func on_addGroup(var group, var cellIndex):
-	for cell in m_selected:
-		addGroup(cell, group)
+func on_addGroup(var group):
+	for item in m_selected:
+		addGroup(item, group)
+		emit_signal("addGroupSignal", TOOLS.stringToVector3(item.get_text(0)), group)
 
 	
 #func removeChildTreeItem(var item):
