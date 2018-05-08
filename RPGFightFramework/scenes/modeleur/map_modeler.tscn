@@ -7,65 +7,41 @@
 resource_name = "map_modeler_script"
 script/source = "extends \"res://RPGFightFramework/scripts/mapMatrix3D.gd\"
 
-var m_camera
+########################################################################################################################################
+###################################################		SIGNALS	########################################################################
+########################################################################################################################################
+signal clickRightMap
+signal clickLeftCellMap
 
+########################################################################################################################################
+###################################################		MEMBERS	########################################################################
+########################################################################################################################################
 const HEIGHT = 20
 const DEEP = 20
 const WIDTH = 20
-
 const ZOOM_FACTOR = 0.1
-
+const TOOLS = preload(\"res://RPGFightFramework/scripts/modeler/tools.gd\")
+var m_lastClickPositionInMap
+var m_camera
 var m_plan
-
 var m_listPositions = []
 
-func addOverlaySelection(var index):
-	if isInsideMatrixBounds(index):
-		if addOverlayCellByIndex(index):
-			m_listPositions.push_back(index)
-			return 1
-		return 0
-	return -1
-			
-func saveOverlaySelection():
-	removeAllOverlayCells()
-	
-func addLevel(var index, map_layout):
-	m_matrix[index.x][index.y][index.z][\"levelDown\"] = map_layout
-
+########################################################################################################################################
+###################################################		METHODS	########################################################################
+########################################################################################################################################
 func _init().():
 	m_origin = Vector3(-WIDTH*0.5, 0, -DEEP*0.5)
 	m_sizeCell = Vector3(1,1,1)
 	m_matrix = []
 	for i in range(WIDTH):
 		m_matrix.append([])
-		for j in range(DEEP):
+		for j in range(HEIGHT):
 			m_matrix[i].append([])
-			for k in range(HEIGHT):
-				m_matrix[i][j].append({\"type\" : 0})
-	for i in range(WIDTH):
-		for j in range(DEEP):
-			m_matrix[i][0][j].type = 1
+			for k in range(DEEP):
+				m_matrix[i][j].append([])
+				m_matrix[i][j][k] = {}
 	m_initialPositionsCharacters = [Vector3(0, 0, 0), Vector3(0, 0, 1)]
 	m_initialPositionsEnemis = [Vector3(2, 0, 2), Vector3(3, 0, 4)]
-	
-func _process(delta):
-	controlCamera()
-	
-func getIntersectionPoint(var mousePosition):
-	return m_plan.intersects_ray(m_camera.project_ray_origin(mousePosition), m_camera.project_ray_normal(mousePosition)) 
-func getMousePosition():
-	return get_viewport().get_mouse_position()
-func controlCamera():
-	if Input.is_action_just_released(\"ui_control_camera_zoom_up\"):
-		var dir = -m_camera.get_translation().normalized() * ZOOM_FACTOR
-		m_camera.look_at_from_position(m_camera.get_translation() + dir, Vector3(2.5,0,2.5), Vector3(0,1,0))
-		return true
-	elif Input.is_action_just_released(\"ui_control_camera_zoom_down\"):
-		var dir = m_camera.get_translation().normalized() * ZOOM_FACTOR
-		m_camera.look_at_from_position(m_camera.get_translation() + dir, Vector3(2.5,0,2.5), Vector3(0,1,0))
-		return true
-	return false
 	
 func _ready():
 	m_camera = Camera.new()
@@ -101,22 +77,94 @@ func _ready():
 	
 	m_plan = Plane(Vector3(0,1,0), 0)
 	
+	var mapLayout = TOOLS.searchParentNodeRecursive(self, \"SelectionModeLayout\")
+	#signals
+	mapLayout.connect(\"addCaracteristicSignal\", self, \"on_addCaracteristic\")
+	mapLayout.connect(\"addMapLevelDownSignal\", self, \"on_addMapLevelDown\")
+	mapLayout.connect(\"addGroupSignal\", self, \"on_addGroup\")
+	connect(\"clickRightMap\", mapLayout, \"on_clickRightMap\")
+	connect(\"clickLeftCellMap\", mapLayout, \"on_clickLeftCellMap\")
+	
 	set_process(true)
+	
+func _process(delta):
+	controlCamera()
+	
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.get_button_index() == BUTTON_LEFT && event.pressed == false:
+			var index = positionToIndex(getIntersectionPoint(getMousePosition())).abs()
+			emit_signal(\"clickRightMap\", index)
+		elif event.get_button_index() == BUTTON_RIGHT && event.pressed== false:
+			m_lastClickPositionInMap = getMousePosition()
+			if isOverlayCellAtIndex(positionToIndex(getIntersectionPoint(m_lastClickPositionInMap))):
+				emit_signal(\"clickLeftCellMap\", positionToIndex(getIntersectionPoint(m_lastClickPositionInMap)))
+				set_process_input(false)
+	
+func addOverlaySelection(var index):
+	if isInsideMatrixBounds(index):
+		if addOverlayCellByIndex(index):
+			m_listPositions.push_back(index)
+			return 1
+		return 0
+	return -1
+			
+func saveOverlaySelection():
+	removeAllOverlayCells()
+	
+func controlCamera():
+	if Input.is_action_just_released(\"ui_control_camera_zoom_up\"):
+		var dir = -m_camera.get_translation().normalized() * ZOOM_FACTOR
+		m_camera.look_at_from_position(m_camera.get_translation() + dir, Vector3(2.5,0,2.5), Vector3(0,1,0))
+		return true
+	elif Input.is_action_just_released(\"ui_control_camera_zoom_down\"):
+		var dir = m_camera.get_translation().normalized() * ZOOM_FACTOR
+		m_camera.look_at_from_position(m_camera.get_translation() + dir, Vector3(2.5,0,2.5), Vector3(0,1,0))
+		return true
+	return false
+	
+func getIntersectionPoint(var mousePosition):
+	return m_plan.intersects_ray(m_camera.project_ray_origin(mousePosition), m_camera.project_ray_normal(mousePosition)) 
+	
+func getMousePosition():
+	return get_viewport().get_mouse_position()
 	
 func getNextPlayerInitPosition():
 	return m_initialPositionsCharacters.pop_front()
 
 func getNextEnemiInitPosition():
 	return m_initialPositionsEnemis.pop_front()
-	
-func addCellCaracteristic(var index, var carac):
-	m_matrix[index.x][index.y][index.z][carac] = true
 
 func selectOverlay(var vec):
 	setColorOverlayMeshInstance(vec, Color(1, 0, 0))
 	
 func deselectOverlay(var vec):
-	setColorOverlayMeshInstance(vec, Color(0, 1, 1))"
+	setColorOverlayMeshInstance(vec, Color(0, 1, 1))
+	
+########################################################################################################################################
+###################################################		SLOTS	########################################################################
+########################################################################################################################################
+func on_addCaracteristic(var carac, var cellIndex):
+	var cell = m_matrix[cellIndex.x][cellIndex.y][cellIndex.z]
+	if !cell.has(\"modeler\"):
+		cell[\"modeler\"] = {}
+	if !cell[\"modeler\"].has(\"carac\"):
+		cell[\"modeler\"][\"carac\"] = []
+	cell[\"modeler\"][\"carac\"].append(carac)
+	
+func on_addMapLevelDown(var cellIndex, var map):
+	var cell = m_matrix[cellIndex.x][cellIndex.y][cellIndex.z]
+	if !cell.has(\"modeler\"):
+		cell[\"modeler\"] = {}
+	cell[\"modeler\"][\"levelDown\"] = map
+	
+func on_addGroup(var group, var cellIndex):
+	var cell = m_matrix[cellIndex.x][cellIndex.y][cellIndex.z]
+	if !cell.has(\"modeler\"):
+		cell[\"modeler\"] = {}
+	if !cell[\"modeler\"].has(\"group\"):
+		cell[\"modeler\"][\"group\"] = []
+	cell[\"modeler\"][\"group\"].append(group)"
 _sections_unfolded = [ "Resource" ]
 
 [sub_resource type="Environment" id=2]

@@ -1,12 +1,23 @@
 extends PopupMenu
 
+########################################################################################################################################
+###################################################		SIGNALS	########################################################################
+########################################################################################################################################
+signal addCaracteristic
+signal addMapLevelDown
+signal addGroup
+
+########################################################################################################################################
+###################################################		MEMBERS	########################################################################
+########################################################################################################################################
 var m_mapLayout
 var m_subMenuGroup
-
 var m_groupNames = []
-
 enum {CHOOSE_BY_PLAYER = 0, SELECTABLE = 2, ADD_CONDITION_LEVEL = 1}
 
+########################################################################################################################################
+###################################################		METHODS	########################################################################
+########################################################################################################################################
 func _ready():
 	m_mapLayout = get_node("..")
 	add_item("Set as selection mode")
@@ -17,6 +28,9 @@ func _ready():
 	add_child(m_subMenuGroup)
 	add_submenu_item("Set condition group...", "Set condition group")
 	m_subMenuGroup.connect("index_pressed", self, "_on_popupSubMenu_index_pressed")
+	connect("addCaracteristic", m_mapLayout, "on_addCaracteristic")
+	connect("addMapLevelDown", m_mapLayout, "on_addMapLevelDown")
+	connect("addGroup", m_mapLayout, "on_addGroup")
 	
 func buildSubMenuGroup(var cellIndex):
 	m_subMenuGroup.clear()
@@ -27,25 +41,39 @@ func buildSubMenuGroup(var cellIndex):
 func addGroupName(var name):
 	if m_groupNames.find(name) == -1:
 		m_groupNames.append(name)
+		
 
+########################################################################################################################################
+###################################################		SLOTS	########################################################################
+########################################################################################################################################
 func _on_PopupMenu_index_pressed(index):
 	var map = m_mapLayout.m_map
-	var indexCell = map.positionToIndex(map.getIntersectionPoint(m_mapLayout.m_lastClickPositionInMap))
+	var indexCell = map.positionToIndex(map.getIntersectionPoint(map.m_lastClickPositionInMap))
 	var tree = m_mapLayout.get_node("VBoxContainer/Tree")
 	match index:
 		CHOOSE_BY_PLAYER:
-			tree.addSelectedCellsCaracteristic("chooseByPlayer")
+			emit_signal("addCaracteristic", "chooseByPlayer", indexCell)
+#			tree.addSelectedCellsCaracteristic("chooseByPlayer")
 		ADD_CONDITION_LEVEL:
+			var askForMapPopup = get_node("../AskForMapPopUp")
+			askForMapPopup.set_position(get_viewport().get_mouse_position())
+			askForMapPopup.init()
+			askForMapPopup.show()
+			yield(askForMapPopup, "confirmed")
+			var indexMenu = askForMapPopup.m_index
+			var nameMap = askForMapPopup.get_node("VBoxContainer/MenuButton").get_popup().get_item_text(indexMenu)
+			emit_signal("addMapLevelDown", indexCell, nameMap)
+			
 #			tree.addSelectedCellsButton("Condition level 1", "res://images/symboles/eye2.png")
-			map.addCellCaracteristic(indexCell, "conditionOtherLevel")
-			var node = tree.searchChildInTree(tree.get_root(), 0, String(indexCell))
-			if node:
-				var carac = tree.create_item(node)
-				carac.add_button(1, load("res://images/symboles/eye2.png"))
-				carac.set_text(0, "Condition level 1")
-				var mapLayout = load("res://RPGFightFramework/scenes/modeleur/map_layout.tscn").instance()
-				mapLayout.init(self)
-				map.addLevel(indexCell, mapLayout)
+#			map.addCellCaracteristic(indexCell, "conditionOtherLevel")
+#			var node = tree.searchChildInTree(tree.get_root(), 0, String(indexCell))
+#			if node:
+#				var carac = tree.create_item(node)
+#				carac.add_button(1, load("res://images/symboles/eye2.png"))
+#				carac.set_text(0, "Condition level 1")
+#				var mapLayout = load("res://RPGFightFramework/scenes/modeleur/map_layout.tscn").instance()
+#				mapLayout.init(self)
+#				map.addLevel(indexCell, mapLayout)
 	m_mapLayout.set_process_input(true)
 	
 func _on_popupSubMenu_index_pressed(var index):
@@ -58,19 +86,19 @@ func _on_popupSubMenu_index_pressed(var index):
 			var askForNamePopup = m_mapLayout.get_node("AskForNameSelectPopUpable")
 			askForNamePopup.set_position(get_viewport().get_mouse_position())
 			askForNamePopup.show()
-			
 			yield(askForNamePopup,"confirmed")
+			emit_signal("addGroup", askForNamePopup.get_node("VBoxContainer/LineEdit").get_text(), indexCell)
 			
-			var node = tree.searchChildInTree(tree.get_root(), 0, String(indexCell))
-			var group = tree.searchChildInTree(node, 0, "group")
-			if !group:
-				group = tree.create_item(node)
-				group.set_text(0, "group")
-			var item = tree.create_item(group)
-			var groupName = askForNamePopup.get_node("VBoxContainer/LineEdit").get_text()
+#			var node = tree.searchChildInTree(tree.get_root(), 0, String(indexCell))
+#			var group = tree.searchChildInTree(node, 0, "group")
+#			if !group:
+#				group = tree.create_item(node)
+#				group.set_text(0, "group")
+#			var item = tree.create_item(group)
+#			var groupName = askForNamePopup.get_node("VBoxContainer/LineEdit").get_text()
 			askForNamePopup.get_node("VBoxContainer/LineEdit").clear()
-			addGroupName(groupName)
-			item.set_text(0, groupName)
-		_:
-			tree.addCellCaracteristic(indexCell, get_item_text(index))
+#			addGroupName(groupName)
+#			item.set_text(0, groupName)
+#		_:
+#			tree.addCellCaracteristic(indexCell, get_item_text(index))
 	m_mapLayout.set_process_input(true)

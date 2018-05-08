@@ -15,3 +15,9 @@ static func isVector3(var string):
 	if regex.search(string):
 		return true
 	return false
+	
+static func searchParentNodeRecursive(var node, var name):
+	var parent = node
+	while parent.get_parent() != node.get_tree().get_root() && parent.get_name() != name:
+		parent = parent.get_parent()
+	return parent

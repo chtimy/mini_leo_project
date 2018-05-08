@@ -88,13 +88,14 @@ func addOverlayCellByIndex(var index):
 		# ATTENTION ici à l'offset de déplacement
 #		transform.origin = indexToPosition(index)
 		setTransformOverlayMeshInstance(index3DToindex1D(index), transform)
-#		print(m_overlayCells.get_multimesh().get_instance_transform(0))
 		m_matrix[index.x][index.y][index.z].overlay = true
 		return true
 	return false
 #	add_child(overlay)
+
 func index3DToindex1D(var index3D):
 	return index3D.y * m_matrix[0].size() * m_matrix[0][0].size() + index3D.x * m_matrix[0][0].size() + index3D.z
+	
 # @function : func addOverlayCellByPosition(var position):
 # @Description : Add overlay cell to the input position destination (position is normalized to the center of the cell). 
 #	No verification if the index in in the bound of the matrix
