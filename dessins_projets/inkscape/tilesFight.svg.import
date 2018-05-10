@@ -7,7 +7,7 @@ path="res://.import/tilesFight.svg-742a507fe32e56e738b10ae0706385c9.stex"
 [deps]
 
 source_file="res://dessins_projets/inkscape/tilesFight.svg"
-source_md5="7627232b7c8cec49320e7ee84a1ddee2"
+source_md5="189a6e80deda49b562679969344de9ed"
 
 dest_files=[ "res://.import/tilesFight.svg-742a507fe32e56e738b10ae0706385c9.stex" ]
 dest_md5="875501679e92f2e6419dc2fa326241c0"
