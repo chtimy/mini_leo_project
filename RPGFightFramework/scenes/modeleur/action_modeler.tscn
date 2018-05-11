@@ -68,7 +68,7 @@ func on_changeMapLayout(var scene):
 "
 _sections_unfolded = [ "Resource" ]
 
-[node name="action_modeler" type="Control"]
+[node name="action_modeler" type="Control" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
