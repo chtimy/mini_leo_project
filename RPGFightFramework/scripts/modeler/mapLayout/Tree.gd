@@ -13,15 +13,12 @@ signal addCaracteristicSignal
 ########################################################################################################################################
 var m_selected = []
 const TOOLS = preload("res://RPGFightFramework/scripts/modeler/tools.gd")
-var m_mapLayout
 
 ########################################################################################################################################
 ###################################################		METHODS	########################################################################
 ########################################################################################################################################
 func _ready():
-	m_mapLayout = get_node("../..")
 	set_columns(1)
-	set_custom_minimum_size(Vector2(0,200))
 	var root = create_item()
 	set_hide_root(true)
 	
@@ -61,7 +58,7 @@ func selectCellItem(var vec):
 		updateTreeSelected(child, true, vec)
 		
 func updateTreeSelected(var item, var selected, var vec):
-	var map = m_mapLayout.m_map
+	var map = get_parent().m_map
 	# Check if the precedents item are still item
 	var size = m_selected.size()
 	for i in range(size):
@@ -102,7 +99,7 @@ func clearTree():
 	clear()
 	
 func unselectAll():
-	var map = m_mapLayout.m_map
+	var map = get_parent().m_map
 	var size = m_selected.size()
 	for i in range(size):
 		var j = size - i - 1
@@ -111,7 +108,7 @@ func unselectAll():
 		m_selected.remove(j)
 		
 func getInformation(var informations = [], var node = get_root()):
-	var map = m_mapLayout.m_map 
+	var map = get_parent().m_mapRoot
 	var child = node.get_children()
 	while child:
 		var coords = TOOLS.stringToVector3(child.get_text(0))
@@ -158,18 +155,6 @@ func loadMap(var map):
 						if cell.modeler.has("levelDown"):
 							addMapLevelDown(item, cell.modeler.levelDown)
 
-#func addSelectedCellsButton(var buttons):
-#	var map = m_mapLayout.m_map
-#	for cell in m_selected:
-#		var carac = create_item(cell)
-#		carac.set_cell_mode(0, TreeItem.CELL_MODE_STRING)
-#		carac.set_text(0, String(buttons))
-#		map.addCellCaracteristic(TOOLS.stringToVector3(cell.get_text(0)), caracteristic)
-
-
-########################################################################################################################################
-###################################################		SLOTS	########################################################################
-########################################################################################################################################
 func on_loadMap(var map):
 	clearTree()
 	create_item()
@@ -206,7 +191,7 @@ func _on_Tree_multi_selected(item, column, selected):
 
 func _on_Tree_button_pressed(item, column, id):
 	var index = TOOLS.stringToVector3(item.get_parent().get_text(0))
-	var matrix = m_mapLayout.m_map.m_matrix
+	var matrix = get_parent().m_map.m_matrix
 	if id%2 == 0 && index != null:
 		if matrix[index.x][index.y][index.z].has("levelDown") && matrix[index.x][index.y][index.z].levelDown:
 			var map = get_node("../HBoxContainer/LevelMapsScrollContainer/GridContainer").getMap(matrix[index.x][index.y][index.z].levelDown)

@@ -1,70 +1,25 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://RPGFightFramework/scenes/modeleur/map_layout.tscn" type="PackedScene" id=1]
 
 [sub_resource type="GDScript" id=1]
 
 resource_name = "action_modeller_script"
 script/source = "extends Control
 
-signal changeMapLayout
-
-const MAP_LAYOUT_SCENE = preload(\"res://RPGFightFramework/scenes/modeleur/map_layout.tscn\")
-var m_mapLayout
-	
+########################################################################################################################################
+###################################################		METHODS	########################################################################
+########################################################################################################################################
 func _ready():
-	get_node(\"VBoxContainer\").set_size(get_viewport().get_size())
-	
-	m_mapLayout = MAP_LAYOUT_SCENE.instance()
-	get_node(\"VBoxContainer\").add_child(m_mapLayout)
-	m_mapLayout.set_visible(false)
-	m_mapLayout.set_process_input(false)
-	
-	var menuButtons = get_node(\"VBoxContainer/MenuButton\")
-	var popup = menuButtons.get_popup()
-	popup.add_item(\"Carte\")
-	popup.add_item(\"Personnage\")
-	popup.connect(\"id_pressed\", self, \"on_id_pressed\")
-	
-	set_process(true)
-	
-func _process(var delta):
-	pass
+	var mapLayout = $VBoxContainer/MapLayout
+	mapLayout.set_visible(false)
+	mapLayout.set_process_input(false)
+	$VBoxContainer/MenuButton.get_popup().connect(\"id_pressed\", self, \"on_id_pressed\")
 	
 func on_id_pressed(var id):
 	if id == 0:
-		m_mapLayout.set_visible(true)
-		m_mapLayout.set_process_input(true)
-		
-func on_changeMapLayout(var scene):
-	get_node(\"VBoxContainer\").remove_child(m_mapLayout)
-	m_mapLayout = scene
-	m_mapLayout.init(self)
-	get_node(\"VBoxContainer\").add_child(m_mapLayout)
-	
-#func addMapLayout():
-#	var sprite = TextureRect.new()
-#	sprite.set_texture(get_node(\"../../ViewportContainer/Viewport\").get_texture())
-#	sprite.set_expand(true)
-#	scene.get_node(\"..\").set_custom_minimum_size(viewport * Vector2(0.1, 0.1))
-#	sprite.set_custom_minimum_size(viewport * Vector2(0.1, 0.1))
-#	sprite.set_script(load(PARENT_SCRIPT))
-#	sprite.m_parent = self
-#	sprite.connect(\"sprite_input\", self, \"on_sprite_input\")
-#	m_mapLayouts.append(sprite)
-	
-
-#func test2(var index):
-#	var tree = get_node(\"VBoxContainer/SelectionModeLayout/Tree\")
-#	var child = tree.create_item(tree.get_root())
-#	child.set_text(0, String(index))
-#func test():
-#	print(\"click\")
-#	var popupMenu = get_node(\"PopupMenu\")
-#	popupMenu.set_position(get_viewport().get_mouse_position())
-#	popupMenu.set_visible(true)
-
-#func _on_AskForNameSelectPopUpable_confirmed():
-#	print(get_node(\"AskForNameSelectPopUpable/VBoxContainer/LineEdit\").get_text())
-#	get_node(\"AskForNameSelectPopUpable/VBoxContainer/LineEdit\").clear()
+		$VBoxContainer/MapLayout.set_visible(true)
+		$VBoxContainer/MapLayout.set_process_input(true)
 "
 _sections_unfolded = [ "Resource" ]
 
@@ -72,8 +27,8 @@ _sections_unfolded = [ "Resource" ]
 
 anchor_left = 0.0
 anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
@@ -81,16 +36,14 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 script = SubResource( 1 )
+_sections_unfolded = [ "Margin", "Rect" ]
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_left = -1.0
-margin_right = 1918.0
-margin_bottom = 1069.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -106,7 +59,7 @@ anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 1919.0
+margin_right = 1024.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -130,7 +83,7 @@ anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
 margin_top = 24.0
-margin_right = 1919.0
+margin_right = 1024.0
 margin_bottom = 44.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -146,6 +99,18 @@ group = null
 text = "Liste de conditions"
 flat = true
 align = 1
-items = [  ]
+items = [ "Carte", null, false, false, false, 0, 0, null, "", false, "Personnage", null, false, false, false, 1, 0, null, "", false ]
+_sections_unfolded = [ "Margin" ]
+
+[node name="MapLayout" parent="VBoxContainer" index="2" instance=ExtResource( 1 )]
+
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_top = 48.0
+margin_right = 1024.0
+margin_bottom = 48.0
+_sections_unfolded = [ "Anchor", "Margin", "Rect" ]
+
+[connection signal="unselectAll" from="VBoxContainer/MapLayout" to="VBoxContainer/MapLayout/Tree" method="unselectAll"]
 
 

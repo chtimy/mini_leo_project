@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/PopupMenu.gd" type="Script" id=1]
 [ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/menu.gd" type="Script" id=2]
 [ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/viewport.gd" type="Script" id=3]
 [ext_resource path="res://RPGFightFramework/scripts/modeler/mapLayout/libraryMaps.gd" type="Script" id=4]
-[ext_resource path="res://RPGFightFramework/scenes/modeleur/Tree.tscn" type="PackedScene" id=5]
+[ext_resource path="res://RPGFightFramework/scenes/modeleur/MapMiniature.tscn" type="PackedScene" id=5]
+[ext_resource path="res://RPGFightFramework/scenes/modeleur/Tree.tscn" type="PackedScene" id=6]
 
 [sub_resource type="GDScript" id=1]
 
@@ -29,91 +30,9 @@ signal selectCell
 ########################################################################################################################################
 var m_map
 var m_mapRoot
-var m_viewportSize
 
 ########################################################################################################################################
 ###################################################		METHODS	########################################################################
-########################################################################################################################################
-func _ready():
-	m_viewportSize = get_viewport().get_size()
-	get_node(\"VBoxContainer\").set_custom_minimum_size(m_viewportSize)
-	get_node(\"VBoxContainer/MenuContainer\").set_custom_minimum_size(Vector2(m_viewportSize.x, m_viewportSize.y * 0.05))
-	get_node(\"VBoxContainer/HBoxContainer\").set_custom_minimum_size(Vector2(m_viewportSize.x, m_viewportSize.y * 0.65))
-	get_node(\"VBoxContainer/Tree\").set_custom_minimum_size(Vector2(m_viewportSize.x, m_viewportSize.y * 0.4))
-	
-	var parentSize = get_node(\"VBoxContainer/HBoxContainer\").get_custom_minimum_size()
-	get_node(\"VBoxContainer/HBoxContainer/ScrollContainer\").set_custom_minimum_size(Vector2(0.1 * parentSize.x,  parentSize.y))
-	get_node(\"VBoxContainer/HBoxContainer/ViewportContainer\").set_custom_minimum_size(Vector2(0.65 * parentSize.x,  parentSize.y))
-	get_node(\"VBoxContainer/HBoxContainer/LevelMapsScrollContainer\").set_custom_minimum_size(Vector2(0.25 * parentSize.x,  parentSize.y))
-	
-	get_node(\"VBoxContainer/HBoxContainer/ViewportContainer/Viewport\").set_size(get_node(\"VBoxContainer/HBoxContainer/ViewportContainer\").get_custom_minimum_size())
-	get_node(\"VBoxContainer/HBoxContainer/LevelMapsScrollContainer/GridContainer\").set_custom_minimum_size(get_node(\"VBoxContainer/HBoxContainer/LevelMapsScrollContainer\").get_custom_minimum_size())
-	
-	
-	#signals
-	get_node(\"VBoxContainer/Tree\").connect(\"changeMap\", self, \"on_changeMap\")
-	get_node(\"VBoxContainer/MenuContainer/MenuButton\").connect(\"newMapSignal\", self, \"on_newMap\")
-	connect(\"newMapSignal\", get_node(\"VBoxContainer/HBoxContainer/LevelMapsScrollContainer/GridContainer\"), \"addMap\")
-	connect(\"changeMapSignal\", get_node(\"VBoxContainer/Tree\"), \"on_loadMap\")
-	connect(\"changeMapSignal\", get_node(\"VBoxContainer/HBoxContainer/ViewportContainer/Viewport\"), \"changeMap\")
-	connect(\"refreshMiniaturesSignal\", get_node(\"VBoxContainer/HBoxContainer/LevelMapsScrollContainer/GridContainer\"), \"refreshMiniature\")
-	get_node(\"VBoxContainer/MenuContainer/MenuButton\").connect(\"saveMapSignal\", self, \"on_saveMap\")
-	connect(\"addCaracteristicSignal\", get_node(\"VBoxContainer/Tree\"), \"on_addCaracteristic\")
-	connect(\"addMapLevelDownSignal\", get_node(\"VBoxContainer/Tree\"), \"on_addMapLevelDown\")
-	connect(\"addGroupSignal\", get_node(\"VBoxContainer/Tree\"), \"on_addGroup\")
-	connect(\"unselectAll\", get_node(\"VBoxContainer/Tree\"), \"unselectAll\")
-	connect(\"addCell\", get_node(\"VBoxContainer/Tree\"), \"addCellItem\")
-	connect(\"selectCell\", get_node(\"VBoxContainer/Tree\"), \"selectCellItem\")
-
-#func _input(event):
-#	if m_map && event is InputEventMouseButton:
-#		if event.get_button_index() == BUTTON_LEFT && event.pressed == false:
-#			var index = m_map.positionToIndex(m_map.getIntersectionPoint(m_map.getMousePosition())).abs()
-#			var result = m_map.addOverlaySelection(index)
-#			if result == 0 || result == 1:
-#				var tree = get_node(\"VBoxContainer/Tree\")
-#				if result == 1:
-#					tree.addCellItem(index)
-#				tree.selectCellItem(index)
-#				accept_event()
-#			else:
-#				emit_signal(\"unselectAll\")
-#				accept_event()
-#		elif event.get_button_index() == BUTTON_RIGHT && event.pressed== false:
-#			m_lastClickPositionInMap = m_map.getMousePosition()
-#			if m_map.isOverlayCellAtIndex(m_map.positionToIndex(m_map.getIntersectionPoint(m_lastClickPositionInMap))):
-#				var popupMenu = get_node(\"PopupMenu\")
-#				popupMenu.set_position(get_viewport().get_mouse_position())
-#				# Modification of the submenu group, add existent group
-#				var tree = get_node(\"VBoxContainer/Tree\")
-#				var indexCell = m_map.positionToIndex(m_map.getIntersectionPoint(m_lastClickPositionInMap))
-#				popupMenu.buildSubMenuGroup(indexCell.abs())
-#
-#				popupMenu.set_visible(true)
-#				set_process_input(false)
-##				accept_event()
-
-#func on_changeMapLayout(var scene):
-#	# get the screenshot of the viewport
-#	var viewport = get_node(\"VBoxContainer/HBoxContainer/ViewportContainer/Viewport\")
-#	var sprite = TextureRect.new()
-#	sprite.set_texture(viewport.get_texture())
-#	sprite.set_expand(true)
-#	scene.get_node(\"VBoxContainer/HBoxContainer/ScrollContainer\").set_custom_minimum_size(m_viewportSize * Vector2(0.1, 0.1))
-#	sprite.set_custom_minimum_size(m_viewportSize * Vector2(0.1, 0.1))
-#	sprite.set_script(load(PARENT_SCRIPT))
-#	sprite.m_parent = self
-#	sprite.connect(\"sprite_input\", self, \"on_sprite_input\")
-#	scene.get_node(\"VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer\").add_child(sprite)
-#	scene.addParentLevelSprites(get_node(\"VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer\"))
-#
-#func addParentLevelSprites(var node):
-#	var children = node.get_children()
-#	for i in range(children.size()):
-#		get_node(\"VBoxContainer/HBoxContainer/ScrollContainer/VBoxContainer\").add_child(children[children.size() - i - 1].duplicate())
-		
-########################################################################################################################################
-###################################################		SLOTS	########################################################################
 ########################################################################################################################################
 func on_sprite_input(var sprite):
 	var positionOrder = sprite.get_position_in_parent()
@@ -123,7 +42,7 @@ func on_sprite_input(var sprite):
 		parent.remove_child(spriteToDelete)
 		spriteToDelete.queue_free()
 	
-func on_newMap(var map):
+func _on_newMap(var map):
 	if(m_map):
 		var viewport = m_map.get_parent()
 		viewport.set_clear_mode(Viewport.CLEAR_MODE_ONLY_NEXT_FRAME)
@@ -141,7 +60,7 @@ func on_newMap(var map):
 	emit_signal(\"newMapSignal\", map)
 	m_map = map
 
-func on_changeMap(var map):
+func _on_changeMap(var map):
 	if(m_map):
 		var viewport = m_map.get_parent()
 		viewport.set_clear_mode(Viewport.CLEAR_MODE_ONLY_NEXT_FRAME)
@@ -157,8 +76,8 @@ func on_changeMap(var map):
 	m_map = map
 	
 func on_saveMap():
-	on_changeMap(m_mapRoot)
-	var informations = get_node(\"VBoxContainer/Tree\").getInformation()
+	_on_changeMap(m_mapRoot)
+	var informations = $Tree.getInformation()
 	print(informations)
 	
 func on_addCaracteristic(var carac):
@@ -181,7 +100,7 @@ func on_clickRightMap(var index):
 
 func on_clickLeftCellMap(var index):
 	if m_map.isOverlayCellAtIndex(index):
-		var popupMenu = get_node(\"PopupMenu\")
+		var popupMenu = $PopupMenu
 		popupMenu.set_position(get_viewport().get_mouse_position())
 		# Modification of the submenu group, add existent group
 		popupMenu.buildSubMenuGroup(index)
@@ -205,15 +124,12 @@ func init():
 func on_indexPressed(var index):
 	m_index = index"
 
-[node name="SelectionModeLayout" type="Control"]
+[node name="MapLayout" type="Control" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_top = 48.0
-margin_right = 1922.0
-margin_bottom = 1076.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
@@ -239,35 +155,18 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 popup_exclusive = false
-items = [  ]
+items = [ "Set as selection mode", null, false, false, false, 0, 0, null, "", false, "Add condition other level", null, false, false, false, 1, 0, null, "", false ]
 hide_on_state_item_selection = false
 script = ExtResource( 1 )
 _sections_unfolded = [ "Popup" ]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="." index="1"]
+[node name="MenuContainer" type="HBoxContainer" parent="." index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_right = 1920.0
-margin_bottom = 529.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-alignment = 0
-_sections_unfolded = [ "Anchor", "Grow Direction", "Hint", "Margin", "Rect" ]
-
-[node name="MenuContainer" type="HBoxContainer" parent="VBoxContainer" index="0"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 1920.0
+margin_right = 1024.0
 margin_bottom = 20.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
@@ -276,8 +175,9 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 alignment = 0
+_sections_unfolded = [ "Margin", "Rect" ]
 
-[node name="MenuButton" type="MenuButton" parent="VBoxContainer/MenuContainer" index="0"]
+[node name="MenuButton" type="MenuButton" parent="MenuContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -299,10 +199,10 @@ group = null
 text = "File"
 flat = true
 align = 1
-items = [  ]
+items = [ "New map...", null, false, false, false, 0, 0, null, "", false, "Save map...", null, false, false, false, 1, 0, null, "", false ]
 script = ExtResource( 2 )
 
-[node name="VSeparator" type="VSeparator" parent="VBoxContainer/MenuContainer" index="1"]
+[node name="VSeparator" type="VSeparator" parent="MenuContainer" index="1"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -318,44 +218,42 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" index="1"]
+[node name="Historic" type="Control" parent="." index="2"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_top = 24.0
-margin_right = 1920.0
-margin_bottom = 524.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 1
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-alignment = 0
-
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer" index="0"]
-
-editor/display_folded = true
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
+margin_top = 20.0
+margin_right = 102.0
 margin_bottom = 500.0
 rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = true
+rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
+_sections_unfolded = [ "Anchor", "Margin", "Size Flags", "Theme" ]
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Historic" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
 size_flags_vertical = 1
 scroll_horizontal_enabled = false
 scroll_horizontal = 0
 scroll_vertical_enabled = true
 scroll_vertical = 0
-_sections_unfolded = [ "Scroll" ]
+_sections_unfolded = [ "Rect", "Scroll", "Size Flags" ]
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/HBoxContainer/ScrollContainer" index="0"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Historic/ScrollContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
@@ -368,31 +266,32 @@ mouse_default_cursor_shape = 0
 size_flags_horizontal = 1
 size_flags_vertical = 1
 alignment = 0
+_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Rect", "Size Flags" ]
 
-[node name="ViewportContainer" type="ViewportContainer" parent="VBoxContainer/HBoxContainer" index="1"]
+[node name="ViewportContainer" type="ViewportContainer" parent="." index="3"]
 
-editor/display_folded = true
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 4.0
-margin_right = 898.0
-margin_bottom = 500.0
+margin_left = 102.0
+margin_top = 20.0
+margin_right = 818.0
+margin_bottom = 557.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 0
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
+size_flags_horizontal = 2
+size_flags_vertical = 2
 stretch = false
 stretch_shrink = 1
-_sections_unfolded = [ "Anchor", "Margin" ]
+_sections_unfolded = [ "Anchor", "Grow Direction", "Margin", "Rect", "Size Flags", "Theme" ]
 
-[node name="Viewport" type="Viewport" parent="VBoxContainer/HBoxContainer/ViewportContainer" index="0"]
+[node name="Viewport" type="Viewport" parent="ViewportContainer" index="0"]
 
 arvr = false
-size = Vector2( 894, 500 )
+size = Vector2( 716, 537 )
 own_world = false
 world = null
 transparent_bg = false
@@ -415,48 +314,71 @@ shadow_atlas_quad_1 = 2
 shadow_atlas_quad_2 = 3
 shadow_atlas_quad_3 = 4
 script = ExtResource( 3 )
-_sections_unfolded = [ "Render Target", "Rendering" ]
+_sections_unfolded = [ "GUI", "Physics", "Render Target", "Rendering", "Shadow Atlas" ]
 
-[node name="LevelMapsScrollContainer" type="ScrollContainer" parent="VBoxContainer/HBoxContainer" index="2"]
+[node name="MapsLibrary" type="Control" parent="." index="4"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
-margin_left = 902.0
-margin_right = 902.0
-margin_bottom = 500.0
+margin_left = 818.0
+margin_top = 20.0
+margin_right = 1024.0
+margin_bottom = 557.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+_sections_unfolded = [ "Anchor", "Margin", "Size Flags" ]
+
+[node name="LevelMapsScrollContainer" type="ScrollContainer" parent="MapsLibrary" index="0"]
+
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 1.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = true
 mouse_filter = 0
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
-scroll_horizontal_enabled = true
+size_flags_horizontal = 3
+size_flags_vertical = 3
+scroll_horizontal_enabled = false
 scroll_horizontal = 0
 scroll_vertical_enabled = true
 scroll_vertical = 0
-_sections_unfolded = [ "Scroll" ]
+_sections_unfolded = [ "Scroll", "Size Flags", "Theme" ]
 
-[node name="GridContainer" type="GridContainer" parent="VBoxContainer/HBoxContainer/LevelMapsScrollContainer" index="0"]
+[node name="GridContainer" type="GridContainer" parent="MapsLibrary/LevelMapsScrollContainer" index="0"]
 
 anchor_left = 0.0
 anchor_top = 0.0
 anchor_right = 0.0
 anchor_bottom = 0.0
+margin_right = 206.0
+margin_bottom = 537.0
 rect_pivot_offset = Vector2( 0, 0 )
 rect_clip_content = false
 mouse_filter = 1
 mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
+size_flags_horizontal = 3
+size_flags_vertical = 3
 columns = 2
 script = ExtResource( 4 )
 _sections_unfolded = [ "Anchor", "Focus", "Grow Direction", "Hint", "Margin", "Material", "Mouse", "Rect", "Size Flags" ]
+MINIATURE_MAP_SCENE = ExtResource( 5 )
+m_defaultNumber = 0
 
-[node name="Tree" parent="VBoxContainer" index="2" instance=ExtResource( 5 )]
+[node name="Tree" parent="." index="5" instance=ExtResource( 6 )]
 
-[node name="AskForNameSelectPopUpable" type="AcceptDialog" parent="." index="2"]
+margin_top = 557.0
+margin_right = 1024.0
+margin_bottom = 768.0
+
+[node name="AskForNameSelectPopUpable" type="AcceptDialog" parent="." index="6"]
 
 editor/display_folded = true
 visible = false
@@ -536,7 +458,7 @@ caret_blink = false
 caret_blink_speed = 0.65
 caret_position = 0
 
-[node name="AskForMapPopUp" type="AcceptDialog" parent="." index="3"]
+[node name="AskForMapPopUp" type="AcceptDialog" parent="." index="7"]
 
 editor/display_folded = true
 visible = false
@@ -620,10 +542,42 @@ flat = true
 align = 1
 items = [  ]
 
+[connection signal="addCaracteristicSignal" from="." to="Tree" method="on_addCaracteristic"]
+
+[connection signal="addCell" from="." to="Tree" method="addCellItem"]
+
+[connection signal="addGroupSignal" from="." to="Tree" method="on_addGroup"]
+
+[connection signal="addMapLevelDownSignal" from="." to="Tree" method="on_addMapLevelDown"]
+
+[connection signal="changeMapSignal" from="." to="Tree" method="on_loadMap"]
+
+[connection signal="changeMapSignal" from="." to="ViewportContainer/Viewport" method="changeMap"]
+
+[connection signal="newMapSignal" from="." to="MapsLibrary/LevelMapsScrollContainer/GridContainer" method="addMap"]
+
+[connection signal="refreshMiniaturesSignal" from="." to="MapsLibrary/LevelMapsScrollContainer/GridContainer" method="refreshMiniature"]
+
+[connection signal="selectCell" from="." to="Tree" method="selectCellItem"]
+
+[connection signal="unselectAll" from="." to="Tree" method="unselectAll"]
+
+[connection signal="addCaracteristic" from="PopupMenu" to="." method="on_addCaracteristic"]
+
+[connection signal="addGroup" from="PopupMenu" to="." method="on_addGroup"]
+
+[connection signal="addMapLevelDown" from="PopupMenu" to="." method="on_addMapLevelDown"]
+
 [connection signal="index_pressed" from="PopupMenu" to="PopupMenu" method="_on_PopupMenu_index_pressed"]
 
-[connection signal="mouse_entered" from="VBoxContainer/HBoxContainer/ViewportContainer" to="VBoxContainer/HBoxContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
+[connection signal="newMapSignal" from="MenuContainer/MenuButton" to="." method="_on_newMap"]
 
-[connection signal="mouse_exited" from="VBoxContainer/HBoxContainer/ViewportContainer" to="VBoxContainer/HBoxContainer/ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_exited"]
+[connection signal="saveMapSignal" from="MenuContainer/MenuButton" to="." method="on_saveMap"]
+
+[connection signal="mouse_entered" from="ViewportContainer" to="ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_entered"]
+
+[connection signal="mouse_exited" from="ViewportContainer" to="ViewportContainer/Viewport" method="_on_ViewportContainer_mouse_exited"]
+
+[connection signal="changeMap" from="Tree" to="." method="_on_changeMap"]
 
 
