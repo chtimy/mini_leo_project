@@ -4,9 +4,9 @@ var m_state = INIT_TURN
 #order of turns
 var m_turns = []
 var m_characters
-var m_currentMenuAttack
-var m_currentAction
-var m_actionsDico
+var m_current_menu_attack
+var m_current_action
+var m_actions_dico
 var m_map
 var m_objects
 
@@ -16,8 +16,8 @@ var m_values = {}
 #during turn
 enum {INIT_TURN, CHOOSE_MENU, GET_INFO, END_TURN}
 
-func _init(var characters, var objects, var actionsDico, var map):
-	m_actionsDico = actionsDico
+func _init(var characters, var objects, var actions_dico, var map):
+	m_actions_dico = actions_dico
 	m_characters = characters
 	m_map = map
 	m_objects = objects
@@ -25,38 +25,38 @@ func _init(var characters, var objects, var actionsDico, var map):
 		m_turns.push_back(i)
 	
 func play():
-	var turn = getCurrentTurn()
-	if m_characters[turn].isCategory("Players"):
+	var turn = get_current_turn()
+	if m_characters[turn].is_in_group("Players"):
 		#Players turn
-		if playerTurn(turn):
-			nextTurn()
-	elif m_characters[turn].isCategory("Enemis"):
+		if player_turn(turn):
+			next_turn()
+	elif m_characters[turn].is_in_group("Enemis"):
 		#Enemis turn (IA)
-		if enemiTurn(turn):
-			nextTurn()
+		if enemi_turn(turn):
+			next_turn()
 			
 # @function : playerTurn
 # @description : Gestion du tour du joueur
 # @params :
 #	turn : Numéro de tour courant
-func playerTurn(var turn):
+func player_turn(var turn):
 	if m_state == INIT_TURN:
-		m_currentMenuAttack = m_characters[turn].getMenu()
-		m_currentMenuAttack.enable(true)
-		m_currentMenuAttack.testActions(self, m_actionsDico)
+		m_current_menu_attack = m_characters[turn].menu
+		m_current_menu_attack.enable(true)
+		m_current_menu_attack.test_actions(self, m_actions_dico)
 		m_state = CHOOSE_MENU
 	elif m_state == CHOOSE_MENU:
 		#si menu retourne action
-		var actionName =  m_currentMenuAttack.getAction()
-		if actionName != null :
-			m_currentAction = m_actionsDico.getAction(actionName)
-			if m_currentAction.rangeCond.call_func(self, true):
+		var action_name =  m_current_menu_attack.get_action()
+		if action_name != null :
+			m_current_action = m_actions_dico.get_action(action_name)
+			if m_current_action.range_cond.call_func(self, true):
 				m_state = GET_INFO
 			#hide currentMenu 
-			m_currentMenuAttack.enable(false)
+			m_current_menu_attack.enable(false)
 	elif m_state == GET_INFO:
-		if m_currentAction.getInfo.call_func(self):
-			m_currentAction.play.call_func(self)
+		if m_current_action.getInfo.call_func(self):
+			m_current_action.play.call_func(self)
 			m_state = END_TURN
 	elif m_state == END_TURN:
 		#if pas mort alors on met le tour derriere
@@ -68,36 +68,36 @@ func playerTurn(var turn):
 # @description : Gestion du tour de l'ennemi
 # @params :
 # 	turn : tour courant
-func enemiTurn(var turn):
+func enemi_turn(var turn):
 	return true
 	
-func currentPlayingCharacter():
-	return m_characters[getCurrentTurn()]
-func getMap():
+func current_playing_character():
+	return m_characters[get_current_turn()]
+func get_map():
 	return m_map
-func getCurrentTurn():
+func get_current_turn():
 	return m_turns.front()
-func nextTurn():
+func next_turn():
 	m_turns.push_back(m_turns.pop_front())
 # @function : getTargetCharacter
 # @description : Recherche quel personnage correspond à la position en entrée
 # @params :
 # 	position : position recherchée
-func getTargetCharacter(var position):
+func get_target_character(var position):
 	for character in m_characters:
 		if character.m_position == position:
 			return character
 	return null
 	
-func saveValue(var key, var value):
+func save_value(var key, var value):
 	m_values[key] = value
-func getValue(var key):
+func get_value(var key):
 	return m_values[key]
-func loadValue(var key):
+func load_value(var key):
 	var value = m_values[key]
 	m_values[key] = null
 	return value
-func hasValue(var key):
+func has_value(var key):
 	return m_values.has(key)
-func clearValues():
+func clear_values():
 	m_values.clear()

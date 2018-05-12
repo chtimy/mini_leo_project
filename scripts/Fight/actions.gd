@@ -1,4 +1,4 @@
-const READER_CLASS = preload("res://RPGFightFramework/scripts/reader.gd")
+const READER_CLASS = preload("res://scripts/Fight/reader.gd")
 
 var m_actions = {
 	}

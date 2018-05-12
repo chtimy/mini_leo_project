@@ -1,4 +1,4 @@
-extends "res://RPGFightFramework/scripts/actions.gd"
+extends "res://scripts/Fight/actions.gd"
 
 func _init().():
 	pass
@@ -84,18 +84,18 @@ static func attackAction(var game):
 	map.disableAllOverlayCases()
 	map.setCursorVisible(false)
 static func attackRangeConditions(var game, var activeOverlay = false):
-	var map = game.getMap()
-	var matrix = map.getMatrix()
+	var map = game.get_map()
+	var matrix = map.m_matrix
 	var success = false
-	var character = game.currentPlayingCharacter()
+	var character = game.current_playing_character()
 	var position
 	for i in range(matrix.size()):
 		for j in range(matrix[i].size()):
 			for k in range(matrix[i][j].size()):
 				position = Vector3(i, j, k)
 				if ((character.m_position.x + 1 >= position.x && character.m_position.x - 1 <= position.x && character.m_position.z == position.z) || (character.m_position.z + 1 >= position.z && character.m_position.z - 1 <= position.z && character.m_position.z == position.x)) && map.on_surface(position):
-					var selectable = game.getMap().getSelectable(position)
-					if selectable && (selectable.isCategory("Players") || selectable.isCategory("Enemis")) && selectable.category() != character.category():
+					var selectable = game.get_map().get_selectable(position)
+					if selectable && (selectable.is_in_group("Players") || selectable.is_in_group("Enemis")) && selectable.get_groups() != character.get_groups():
 						if activeOverlay:
 							map.addOverlay(position)
 							success = true

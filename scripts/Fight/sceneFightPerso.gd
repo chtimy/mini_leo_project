@@ -1,15 +1,15 @@
 extends Node
 
-const TILESIZE = 0.1
-const PLAYER_CLASS = preload("res://RPGFightFramework/scripts/perso/player.gd")
-const ENEMI_CLASS = preload("res://RPGFightFramework/scripts/perso/enemi.gd")
-const SCENE_FIGHT_CLASS = preload("res://RPGFightFramework/scripts/sceneFight.gd")
-var CARACTERISTIC_MENU_CLASS = preload("res://RPGFightFramework/perso/scenes/caracteristicsMenu.tscn")
+export (float) var TILE_SIZE = 0.1
+const PLAYER_CLASS = preload("res://scripts/Fight/player.gd")
+const ENEMI_CLASS = preload("res://scripts/Fight/enemi.gd")
+const SCENE_FIGHT_CLASS = preload("res://scripts/Fight/sceneFight.gd")
+export (PackedScene) var CARACTERISTIC_MENU_CLASS
 
 func _ready():
-	set_name("scene_figh_ perso")
+	set_name("scene_fight_perso")
 	#Taille de la tile de la map en fonction de la taille de du viewport
-	var tileSize = get_viewport().get_size().y * TILESIZE
+	var tile_size = get_viewport().get_size().y * TILE_SIZE
 	#base de test : ( a supprimer )
 	
 	var caracteristics = {
@@ -26,9 +26,9 @@ func _ready():
 	}
 
 	var characters = []
-	var mesh = load("res://RPGFightFramework/scenes/perso/leo.tscn").instance()
+	var mesh = load("res://scenes/Fight/leo.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
-	var character = PLAYER_CLASS.new("leo", Vector2(0,0), ["attack", "cross", "steal", "deplacement", "passe", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
+	var character = PLAYER_CLASS.new("leo", Vector2(0,0), ["attack", "cross", "steal", "deplacement", "passe", "passer"], "Players", caracteristics, "res://scripts/Fight/menuActionsFight.gd", mesh)
 	var caracteristicsMenu = CARACTERISTIC_MENU_CLASS.instance()
 	caracteristicsMenu.init(character, caracteristics)
 	add_child(caracteristicsMenu)
@@ -47,9 +47,9 @@ func _ready():
 	"nbMoves" : 3,
 	"orientation" : Vector3(1,0,0)
 	}
-	mesh = load("res://RPGFightFramework/scenes/perso/blond.tscn").instance()
+	mesh = load("res://scenes/Fight/blond.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
-	character = PLAYER_CLASS.new("blond", Vector2(0,0), ["attack", "steal", "deplacement", "passe", "block", "passer"], "Players", caracteristics, "res://RPGFightFramework/scripts/menuActionsFight.gd", mesh)
+	character = PLAYER_CLASS.new("blond", Vector2(0,0), ["attack", "steal", "deplacement", "passe", "block", "passer"], "Players", caracteristics, "res://scripts/Fight/menuActionsFight.gd", mesh)
 	
 	caracteristicsMenu = CARACTERISTIC_MENU_CLASS.instance()
 	caracteristicsMenu.init(character, caracteristics)
@@ -69,7 +69,7 @@ func _ready():
 	"nbMoves" : 3,
 	"orientation" : Vector3(1,0,0)
 	}
-	mesh = load("res://RPGFightFramework/scenes/perso/mechant.tscn").instance()
+	mesh = load("res://scenes/Fight/mechant.tscn").instance()
 	mesh.set_scale(Vector3(0.5,0.5,0.5))
 	character = ENEMI_CLASS.new("ennemi", Vector2(0,0), ["attack", "cross", "passer"], "Enemis", caracteristics, mesh)
 	
@@ -85,8 +85,8 @@ func _ready():
 		selectables.append(c)
 	for o in objects:
 		selectables.append(o)
-	var map = load("res://RPGFightFramework/map_modeler/map_example.tscn").instance()
-	var scene = SCENE_FIGHT_CLASS.new("res://RPGFightFramework/scripts/perso/actionPerso.gd", map, "res://RPGFightFramework/scripts/mapMatrix3D.gd", "res://RPGFightFramework/scripts/turn.gd", selectables)
+	var map = load("res://scenes/Fight/map_example2.tscn").instance()
+	var scene = SCENE_FIGHT_CLASS.new("res://scripts/Fight/actionPerso.gd", map, "res://scripts/Fight/turn.gd", selectables)
 	add_child(scene)
 	#fin base de test
 	.set_process(true)
