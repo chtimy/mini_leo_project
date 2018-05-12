@@ -18,25 +18,6 @@ func test_matrix_condition_function(var range_cond, var game):
 					return true
 	return false
 
-func choose_tile():
-	pass
-#	if Input.is_action_just_released("ui_take"):
-#		if is_case_overlayed(m_cursor.position):
-#			return m_cursor.position
-#	elif Input.is_action_just_released("ui_down"):
-#		if inside_matrix(m_cursor.position + Vector3(0,0,1)):
-#			move_cursor_to(m_cursor.position + Vector3(0,0,1))
-#	elif Input.is_action_just_released("ui_up"):
-#		if inside_matrix(m_cursor.position + Vector3(0,0,-1)):
-#			move_cursor_to(m_cursor.position + Vector3(0,0,-1))
-#	elif Input.is_action_just_released("ui_right"):
-#		if inside_matrix(m_cursor.position + Vector3(1,0,0)):
-#			move_cursor_to(m_cursor.position+ Vector3(1,0,0))
-#	elif Input.is_action_just_released("ui_left"):
-#		if inside_matrix(m_cursor.position + Vector3(-1,0,0)):
-#			move_cursor_to(m_cursor.position+ Vector3(-1,0,0))
-#	return null
-
 # @function : is_overlay_cell_at_index
 # @Description : Check whether the cell is overlayed
 # @params :
@@ -50,15 +31,14 @@ func is_overlay_cell_at_index(var index):
 # @function : disable_selection
 # @Description : Remove all the overlay cells and hide the cursor
 func disable_selection():
-#	set_cursor_visible(false)
 	remove_all_overlay_cells()
 
 # @function : remove_all_overlay_cells
 # @Description : Remove all the overlay cells in the map
 func remove_all_overlay_cells():
-	for i in range(self.matrix.size() * self.matrix[0].size() * self.matrix[0][0].size()):
-		var t = Transform(Basis(), Vector3(-1000, -1000, -1000))
-		m_overlay_cells.get_multimesh().set_instance_transform(i, t)
+	var t = Transform(Basis(), Vector3(-1000, -1000, -1000))
+	while !self.list_active_overlays.empty():
+		set_transform_overlay_mesh_instance(self.list_active_overlays.pop_back(), t)
 
 # @function : add_overlay_cell_by_index
 # @Description : Add overlay cell to the input index destination. 
@@ -72,6 +52,7 @@ func add_overlay_cell_by_index(var index):
 		# ATTENTION ici à l'offset de déplacement
 #		transform.origin = indexToPosition(index)
 		set_transform_overlay_mesh_instance(index3D_to_index1D(index), transform)
+		self.list_active_overlays.append(index3D_to_index1D(index))
 		self.matrix[index.x][index.y][index.z].overlay = true
 		return true
 	return false

@@ -3,7 +3,7 @@ extends "res://scripts/Fight/actions.gd"
 func _init().():
 	pass
 
-#here write all [name of the action] + [_get_info] | [Action] | [_range_conditions]
+#here write all [name of the action] + [Action] | [_range_conditions]
 
 #static func [name of the action]_get_info(var game):
 #	Get all informations you need for the action
@@ -22,7 +22,7 @@ func _init().():
 #	Write all the conditions to make your action work
 #	Need to return true if the action can be executed
 
-# attentin pour les attaques passives c'est pas bon
+# attention pour les attaques passives c'est pas bon
 # Bien faire la distinction entre ennemi et player
 
 
@@ -32,16 +32,8 @@ static func deplacement_action(var game):
 	var map = game.get_map()
 	map.move_selectable_to(game.current_playing_character().position, pos)
 	game.current_playing_character().set_position_in_matrix(pos, map)
+	map.disable_selection()
 	game.end_turn()
-#static func deplacement_action(var game):
-#	print("deplacerAction")
-#	var map = game.get_map()
-#	map.disable_all_overlay_cases()
-##	game.getMap().setCursorVisible(false)
-#	var position = game.loadValue("finalPos")
-#	map.move_selectable(game.current_playing_character().m_position, position)
-#	game.current_playing_character().set_position(position, map)
-#	game.clear_values()
 static func deplacement_range_conditions(var game, var activeOverlay = false):
 	var map = game.map
 	var matrix = map.matrix
