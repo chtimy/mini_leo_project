@@ -93,9 +93,6 @@ subdivide_depth = 0
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform", "Visibility" ]
-HEIGHT = 20
-DEEP = 20
-WIDTH = 20
 ZOOM_FACTOR = 0.1
 OVERLAY_SCENE = ExtResource( 2 )
 
@@ -106,7 +103,7 @@ _sections_unfolded = [ "Pause" ]
 
 [node name="DirectionalLight" type="DirectionalLight" parent="." index="1"]
 
-transform = Transform( 0.740606, -0.558191, 0.374067, 0, 0.556698, 0.830715, -0.67194, -0.615232, 0.412293, 10, 4.61357, 10 )
+transform = Transform( 0.0218291, -0.830517, 0.556564, 0.251331, 0.543379, 0.800982, -0.967655, 0.122398, 0.220596, -13.4563, 20, -11.5339 )
 layers = 1
 light_color = Color( 1, 1, 1, 1 )
 light_energy = 1.0

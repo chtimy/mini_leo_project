@@ -2,7 +2,7 @@ extends "res://scripts/Fight/map.gd"
 
 var m_overlay_cells
 var m_size_cell
-var m_matrix
+var matrix
 
 func _init().():
 	pass

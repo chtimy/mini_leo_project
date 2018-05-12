@@ -12,121 +12,112 @@ const MENU_ATTACK_POSITION = Vector2(0.1, 0.15)
 
 enum {NORMAL_TEXTURE = 0, ACTIVE_TEXTURE = 1, DISABLED_TEXTURE = 2}
 
-var m_buttons = []
-var m_currentButton = 0
+var buttons = []
+var current_button = 0
 
 #attention il y a redondance des informations #pour que ce soit plus clair
 #listActions : liste d'actions dans le fichier texte d'actions (dictionnaire)
 #actions : liste d'actions lié aux personnages (strings)
-func _init(var i_listActionsDico, var i_actionsStringsCharacter):
-	for actionStringCharacter in i_actionsStringsCharacter:
-		var action = i_listActionsDico.m_actions[actionStringCharacter]
+func init(var list_actions_dico, var actions_strings_character):
+	for action_string_character in actions_strings_character:
+		var action = list_actions_dico.m_actions[action_string_character]
 		#nouveau bouton pour l'action
 		var button = {
 			#nom de l'action
-			name = action.name,
+			"name" : action.name,
 			#assignation des textures
-			actionner = addItem(action.pathToTextures),
+			"actionner" : add_item(action.path_to_textures),
 			#id de l'action
-			actionId = action.id
+			"action_id" : action.id
 		}
-		m_buttons.append(button)
+		self.buttons.append(button)
 
 func reinit():
-	m_currentButton = 0
+	self.current_button = 0
 	var i = 0
-	for button in m_buttons:
-		setActiveButton(i, NORMAL_TEXTURE)
-		m_buttons[i].state = NORMAL_TEXTURE
+	for button in self.buttons:
+		set_active_button(i, NORMAL_TEXTURE)
+		self.buttons[i].state = NORMAL_TEXTURE
 		i += 1
-	setActiveButton(0, ACTIVE_TEXTURE)
+	set_active_button(0, ACTIVE_TEXTURE)
 	
 #Ajout d'un nouveau< TextureButton avec 
 #pathTexture (texture normale) et 
 #pathTexturePressed (texture press) en entrée
-func addItem(var pathTextures):
+func add_item(var path_textures):
 	var choice = {
-		textureButton = TextureButton.new(),
+		texture_button = TextureButton.new(),
 		textures = [],
 		state = NORMAL_TEXTURE
 	}
-	for pathTexture in pathTextures :
-		choice.textures.append(load(pathTexture))
+	for path_texture in path_textures :
+		choice.textures.append(load(path_texture))
 
-	choice.textureButton.set_normal_texture(choice.textures[0])
-	choice.textureButton.set_expand(true)
+	choice.texture_button.set_normal_texture(choice.textures[0])
+	choice.texture_button.set_expand(true)
 	return choice
 
 # On gère le control du menu courant
-func getAction():
+func get_action():
 	var action
 	if Input.is_action_just_released("ui_take"):
-		action = m_buttons[m_currentButton].name
+		action = self.buttons[self.current_button].name
 	elif Input.is_action_just_released("ui_down"):
 		var i = 1
-		while m_currentButton + i < m_buttons.size() && m_buttons[m_currentButton + i].actionner.state == DISABLED_TEXTURE:
+		while self.current_button + i < self.buttons.size() && self.buttons[self.current_button + i].actionner.state == DISABLED_TEXTURE:
 			i += 1
-		if m_currentButton + i < m_buttons.size():
-			var oldButton = m_currentButton
-			m_currentButton = m_currentButton + i
-			setActiveButton(oldButton, NORMAL_TEXTURE)
-			setActiveButton(m_currentButton, ACTIVE_TEXTURE)
+		if self.current_button + i < self.buttons.size():
+			var old_button = self.current_button
+			self.current_button = self.current_button + i
+			set_active_button(old_button, NORMAL_TEXTURE)
+			set_active_button(self.current_button, ACTIVE_TEXTURE)
 	elif Input.is_action_just_released("ui_up"):
 		var i = 1
-		while m_currentButton - i >= 0 && m_buttons[m_currentButton - i].actionner.state == DISABLED_TEXTURE:
+		while self.current_button - i >= 0 && self.buttons[self.current_button - i].actionner.state == DISABLED_TEXTURE:
 			i -= 1
-		if m_currentButton - i >= 0:
-			var oldButton = m_currentButton
-			m_currentButton = m_currentButton - i
-			setActiveButton(oldButton, NORMAL_TEXTURE)
-			setActiveButton(m_currentButton, ACTIVE_TEXTURE)
+		if self.current_button - i >= 0:
+			var old_button = self.current_button
+			self.current_button = self.current_button - i
+			set_active_button(old_button, NORMAL_TEXTURE)
+			set_active_button(self.current_button, ACTIVE_TEXTURE)
 	return action
 
-func setActiveButton(var index, var indexTexture):
-	var actionner = m_buttons[index].actionner
-	actionner.textureButton.set_normal_texture(actionner.textures[indexTexture])
-	actionner.state = indexTexture
+func set_active_button(var index, var index_texture):
+	var actionner = self.buttons[index].actionner
+	actionner.texture_button.set_normal_texture(actionner.textures[index_texture])
+	actionner.state = index_texture
 
 func enable(var boolean):
 	set_visible(boolean)
 	if !boolean:
 		reinit()
 		
-func testActions(var game, var dicoActions):
-	for i in range(m_buttons.size()):
-		if !dicoActions.getAction(m_buttons[i].name).rangeCond.call_func(game, false):
-			setActiveButton(i, DISABLED_TEXTURE)
+func test_actions(var game, var dico_actions):
+	for i in range(self.buttons.size()):
+		if !dico_actions.get_action(self.buttons[i].name).range_cond.call_func(game, false):
+			set_active_button(i, DISABLED_TEXTURE)
 	var i = 0
-	while m_currentButton + i < m_buttons.size() && m_buttons[m_currentButton + i].actionner.state == DISABLED_TEXTURE:
+	while self.current_button + i < self.buttons.size() && self.buttons[self.current_button + i].actionner.state == DISABLED_TEXTURE:
 			i += 1
-	if i < m_buttons.size():
-		m_currentButton = i
-		setActiveButton(m_currentButton, ACTIVE_TEXTURE)
+	if i < self.buttons.size():
+		self.current_button = i
+		set_active_button(self.current_button, ACTIVE_TEXTURE)
 		return true
 	return false
 
 func _ready():
-	var viewportSize = get_viewport().get_size()
-	var scroll = ScrollContainer.new()
-	scroll.set_name("ScrollContainer")
-	var vbox = VBoxContainer.new()
-	vbox.set_name("VBoxContainer")
-	add_child(scroll)
-	scroll.add_child(vbox)
-	scroll.set_custom_minimum_size(MENU_ATTACK_SIZE * viewportSize)
-	scroll.set_size(MENU_ATTACK_SIZE * viewportSize)
-	set_position(MENU_ATTACK_POSITION * viewportSize)
-	
-	var sizeMenu = MENU_ATTACK_SIZE * viewportSize
-	for button in m_buttons:
-		vbox.add_child(button.actionner.textureButton)
+	var viewport_size = get_viewport().get_size()
+	set_position(MENU_ATTACK_POSITION * viewport_size)
+	var vbox = $ScrollContainer/VBoxContainer
+	var size_menu = MENU_ATTACK_SIZE * viewport_size
+	for button in self.buttons:
+		vbox.add_child(button.actionner.texture_button)
 		#on essaye de scaler le bouton pour le case dans le layout à la bonne taille
-		var scaleButton = (sizeMenu.y * 0.2) / button.actionner.textureButton.texture_normal.get_size().y
-		button.actionner.textureButton.set_custom_minimum_size(button.actionner.textureButton.texture_normal.get_size() * scaleButton)
+		var scale_button = (size_menu.y * 0.2) / button.actionner.texture_button.texture_normal.get_size().y
+		button.actionner.texture_button.set_custom_minimum_size(button.actionner.texture_button.texture_normal.get_size() * scale_button)
 		#utile??
-		button.actionner.textureButton.set_size(button.actionner.textureButton.texture_normal.get_size() * scaleButton)
+		button.actionner.texture_button.set_size(button.actionner.texture_button.texture_normal.get_size() * scale_button)
 	
-	
-		#if first option -> active the button
-	if m_buttons.size() > 0:
-		setActiveButton(0, ACTIVE_TEXTURE)
+	#if first option -> active the button
+	if self.buttons.size() > 0:
+		set_active_button(0, ACTIVE_TEXTURE)

@@ -3,8 +3,6 @@ extends Control
 var m_lastPosition
 
 func _ready():
-	self.set_custom_minimum_size(get_viewport().get_size() * Vector2(0.1, 0.3))
-	self.set_size(get_viewport().get_size() * Vector2(0.1, 0.3))
 	self.set_position(get_viewport().get_size() * Vector2(0.8, 0.3))
 	
 func init(var selectable, var listCaracteristics):
@@ -20,7 +18,7 @@ func init(var selectable, var listCaracteristics):
 		label.set_text(String(listCaracteristics[caracteristic]))
 		gridContainer.add_child(label)
 	
-	selectable.connect("changeCaracteristic", self, "onChangeCaracteristic")
+#	selectable.connect("changeCaracteristic", self, "onChangeCaracteristic")
 	selectable.m_graphics.get_node("RigidBody").connect("mouse_entered", self, "onMouseEnteredCharacter")
 	selectable.m_graphics.get_node("RigidBody").connect("mouse_exited", self, "onMouseExitedCharacter")
 	

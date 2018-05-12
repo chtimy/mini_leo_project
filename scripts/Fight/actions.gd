@@ -14,20 +14,20 @@ func _init():
 	
 func collectActions(var descrActions):
 	for descrAction in descrActions.values():
-		var s = descrAction.name + "Action"
-		var s2 = descrAction.name + "Conditions"
-		var s3 = descrAction.name + "RangeConditions"
-		var s4 = descrAction.name + "GetInfo"
-		m_actions[descrAction.name] = {name = descrAction.name, 
-									   id = descrAction.id, 
-									   pathToTextures = descrAction.pathToTexture, 
-									   type = descrAction.type,
-									   target = descrAction.target, 
-									   effects = descrAction.effects,
-#									   cond = funcref(get_script(), s2),
-									   getInfo = funcref(get_script(), s4),
-									   play = funcref(get_script(), s), 
-									   rangeCond = funcref(get_script(), s3)}
+		var s = descrAction.name + "_action"
+		var s2 = descrAction.name + "_conditions"
+		var s3 = descrAction.name + "_range_conditions"
+		var s4 = descrAction.name + "_get_info"
+		m_actions[descrAction.name] = {"name" : descrAction.name, 
+									   "id" : descrAction.id, 
+									   "path_to_textures" : descrAction.pathToTexture, 
+									   "type" : descrAction.type,
+									   "target" : descrAction.target, 
+									   "effects" : descrAction.effects,
+#									   "cond" : funcref(get_script(), s2),
+									   "getInfo" : funcref(get_script(), s4),
+									   "play" : funcref(get_script(), s), 
+									   "range_cond" : funcref(get_script(), s3)}
 	
-func getAction(var name):
+func get_action(var name):
 	return m_actions[name]

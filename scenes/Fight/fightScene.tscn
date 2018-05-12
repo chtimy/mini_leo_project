@@ -1,13 +1,10 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=2 format=2]
 
 [ext_resource path="res://scripts/Fight/sceneFightPerso.gd" type="Script" id=1]
-[ext_resource path="res://scenes/Fight/caracteristicsMenu.tscn" type="PackedScene" id=2]
 
-[node name="fightScene" type="Node" index="0"]
+[node name="fightScene" type="Node"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause", "Transform", "Z Index" ]
-TILE_SIZE = 0.1
-CARACTERISTIC_MENU_CLASS = ExtResource( 2 )
 
 
