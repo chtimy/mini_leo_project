@@ -1,11 +1,21 @@
 extends Node
 
-var position
+var caracteristics
 
-func _init(var name, var position, var category):
+
+func _init(var name, var groups = [], caracteristics = []):
 	set_name(name)
-	self.position = position
-	add_to_group(category)
+	self.caracteristics = caracteristics
+	for group in groups:
+		add_to_group(group)
+		
+func get_caracteristic(var name):
+	return self.caracteristics[name]
+
+func set_caracteristic(var name, var value):
+	self.caracteristics[name] = value
+	emit_signal("change_caracteristic_from_characterPerso", {"name" : name, "value" : self.caracteristics[name]})
 	
-func set_position_in_matrix(var position):
-	self.position = position
+func add_caracteristic(name, value):
+	self.caracteristics[name].append(value)
+	emit_signal("change_caracteristic_from_characterPerso", {"name" : name, "value" : self.caracteristics[name]})

@@ -26,7 +26,7 @@ func _ready():
 	var characters = []
 	var mesh = load("res://scenes/Fight/leo.tscn").instance()
 	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	var character = PLAYER_CLASS.new("leo", Vector3(0,0,0), ["attack", "cross", "posterize", "up_and_down", "steal", "deplacement", "passe", "passer"], "Players", caracteristics, MENU_ACTION_SCENE, mesh)
+	var character = PLAYER_CLASS.new("leo", Vector3(0,0,0), ["attack", "cross", "posterize", "up_and_down", "steal", "deplacement", "passe", "passer"], ["Players"], caracteristics, MENU_ACTION_SCENE, mesh)
 	var caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
 	caracteristicsMenu.init(character, caracteristics)
 	add_child(caracteristicsMenu)
@@ -47,7 +47,7 @@ func _ready():
 	}
 	mesh = load("res://scenes/Fight/blond.tscn").instance()
 	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	character = PLAYER_CLASS.new("blond", Vector3(0,0,0), ["attack", "steal", "deplacement", "passe", "block", "passer"], "Players", caracteristics, MENU_ACTION_SCENE, mesh)
+	character = PLAYER_CLASS.new("blond", Vector3(0,0,0), ["attack", "steal", "deplacement", "passe", "block", "passer"], ["Players"], caracteristics, MENU_ACTION_SCENE, mesh)
 	
 	caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
 	caracteristicsMenu.init(character, caracteristics)
@@ -69,7 +69,7 @@ func _ready():
 	}
 	mesh = load("res://scenes/Fight/mechant.tscn").instance()
 	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	character = ENEMI_CLASS.new("ennemi", Vector3(0,0,0), ["attack", "cross", "passer"], "Enemis", caracteristics, mesh)
+	character = ENEMI_CLASS.new("ennemi", Vector3(0,0,0), ["attack", "cross", "passer"], ["Enemis"], caracteristics, mesh)
 	
 	caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
 	caracteristicsMenu.init(character, caracteristics)
@@ -86,3 +86,5 @@ func _ready():
 	var map = load("res://scenes/Fight/map_example2.tscn").instance()
 	var scene = SCENE_FIGHT_CLASS.new("res://scripts/Fight/actionPerso.gd", map, selectables)
 	add_child(scene)
+	
+	

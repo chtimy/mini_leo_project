@@ -355,39 +355,62 @@ static func up_and_down_range_conditions(var game, var activeOverlay = false):
 #static func passeConditions(var game):
 #	var map = game.getMap()
 #	return  map.testMatrixConditionFunction(funcref("res://RPGFightFramework/scripts/perso/actionPerso.gd", "deplacement_range_conditions"))
-static func passe_get_info(var game):
-	var map = game.getMap()
-	var pos = map.chooseTile()
-	if pos:
-		game.save_value(pos)
-		return true
-	return false
-static func passeAction(var game, var receiver_character):
+static func passe_action(var game):
 	print("passe Action")
-#	character.pass(receiver_character)
-	game.clear_values()
-	game.getMap().disable_all_overlay_cases()
+	game.set_process(false)
+	var map = game.map
+	var pos = yield(map, "overlay_clicked_from_map")
+	var character = game.current_playing_character()
+	var obj = character.drop_object_from_hand()
+	map.disable_selection()
 static func passe_range_conditions(var game, var activeOverlay = false):
 	var map = game.map
-	var matrix = map.matrix
 	var success = false
 	var character = game.current_playing_character()
-	var position
-	for i in range(matrix.size()):
-		for j in range(matrix[i].size()):
-			for k in range(matrix[i][j].size()):
-				position = Vector3(i, j, k)
-				if character.position.x + character.m_caracteristics.nbMoves >= position.x && character.position.x - character.m_caracteristics.nbMoves <= position.x && character.position.z + character.m_caracteristics.nbMoves >= position.z && character.position.z - character.m_caracteristics.nbMoves <= position.z && map.on_surface(position):
-					var selectable = game.map.get_selectable_from_matrix(position)
-					if selectable && (selectable.get_groups() == character.get_groups()):
-						if activeOverlay:
-							map.add_overlay(position)
-							success = true
-						else:
-							return true
-	if success && activeOverlay:
-		map.moveCursorTo(character.position)
-		map.setCursorVisible(true)
+#	if character.has_
+	var from_position = character.position
+	var to_position
+	var relative_position
+	var zona = range(-3, 4)
+	for i in zona:
+		for j in zona:
+			relative_position = Vector3(i, 0, j)
+			to_position = from_position + relative_position
+			relative_position = relative_position.abs()
+			if relative_position.x + relative_position.z <= 1 && map.is_inside_matrix_bounds(to_position):
+				var selectable = map.get_selectable_from_matrix(to_position)
+				if selectable && selectable.is_in_group("Players") && selectable.get_groups() != character.get_groups():
+					if activeOverlay:
+						map.add_overlay_cell_by_index(to_position)
+						success = true
+					else:
+						return true
+	return success
+	
+static func opportunity_attack_action(var game, var selectable):
+	var map = game.map
+	var character = game.current_playing_character()
+static func opportunity_range_conditions(var game, var selectable, var activeOverlay = false):
+	var map = game.map
+	var success = false
+	var target = game.current_playing_character()
+	var from_position = character.position
+	var to_position
+	var relative_position
+	var zona = range(-1, 2)
+	for i in zona:
+		for j in zona:
+			relative_position = Vector3(i, 0, j)
+			to_position = from_position + relative_position
+			relative_position = relative_position.abs()
+			if relative_position.x + relative_position.z <= 1 && map.is_inside_matrix_bounds(to_position) && map.get_selectable_from_matrix(to_position):
+				#attention quand on gère plusieurs groupes
+				if selectable && selectable == game.current_playing_character():
+					if activeOverlay:
+						map.add_overlay_cell_by_index(to_position)
+						success = true
+					else:
+						return true
 	return success
 
 static func passer_action(var game):

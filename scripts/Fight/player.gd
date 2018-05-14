@@ -1,8 +1,8 @@
-extends "res://scripts/Fight/characterPerso.gd"
+extends "res://scripts/Fight/character.gd"
 
 var menu setget ,menu_get
 
-func _init(var name, var position, var action_names, var category, var caracteristics, var menu_fight_class, var graphics).(name, position, action_names, category, caracteristics, graphics):
+func _init(var name, var graphics, var caracteristics, var position, var action_names, var graphics, var menu_fight_class).(name, groups, caracteristics, position, action_names, graphics):
 	self.menu = menu_fight_class.instance()
 
 func init_menu(var actions_dico):

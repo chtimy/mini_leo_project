@@ -1,6 +1,6 @@
 extends Node
 
-var m_name
-
-func _init(var name):
-	m_name = name
+func _init(var name, var groups):
+	set_name(name)
+	for group in groups:
+		add_to_group(group)

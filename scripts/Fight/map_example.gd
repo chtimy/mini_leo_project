@@ -133,3 +133,31 @@ func _on_OptionButton_item_selected(ID):
 		to_2D_plan(m_camera)
 	if ID == 0:
 		to_3D_plan(m_camera)
+		
+func compare_nodes(var node1, var node2):
+	pass
+static func euclidian_dist(var start, var target):
+	return start.x * target.x + target.z * target.z
+func shortest_path(var start, var target):
+	closedList = Array()
+	openList = Array()
+	var dist = euclidian_dist(start, target)
+	openList[start] = {"cost_g" : 0, "cost_h" : dist, "cost_f" : dist, "parent" : start}
+	while !openList.empty():
+		var u = openList.pop_front()
+		if u.position.x == target.x && u.position.y == target.y:
+			reconstituerChemin(u)
+			return u
+		for v in [Vector3(1,0,0), Vector3(0,0,1), Vector3(-1,0,0), Vector3(0,0,1)]:
+			if !closed_list.has(v):
+				var cout_g = closed_list[u] + euclidian_dist(v, u)
+				var cout_h = euclidian_dist(v, target)
+				var cout_f = cout_g + cout_h
+				var parent = u
+				if open_list.has(v):
+					var find = open_list[v]
+					if cout_f < find.cout_f:
+						open_list[v] = {"cost_g" : cost_g, "cost_h" : cost_h, "cost_f" : cost_f, "parent" : parent}
+				else:
+					open_list[v] = {"cost_g" : cost_g, "cost_h" : cost_h, "cost_f" : cost_f, "parent" : parent}
+	return null
