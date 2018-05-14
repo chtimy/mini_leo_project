@@ -70,9 +70,9 @@ res://images/hud/menuFight/downtownDisabled.png
 
 up_and_down
 6
-res://images/hud/menuFight/updown.png
-res://images/hud/menuFight/updownChecked.png
-res://images/hud/menuFight/updownDisabled.png
+res://images/hud/menuFight/up_and_down.png
+res://images/hud/menuFight/up_and_downChecked.png
+res://images/hud/menuFight/up_and_downDisabled.png
 1
 1
 0

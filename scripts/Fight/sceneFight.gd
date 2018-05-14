@@ -28,7 +28,7 @@ func _init(var actions_file_path, var map, var selectables):
 		
 		#temp
 		var initial_positions_enemis = [Vector3(10, 0, 10), Vector3(11, 0, 11)]
-		var initial_positions_players = [Vector3(19, 0, 19), Vector3(18, 0, 19)]
+		var initial_positions_players = [Vector3(11, 0, 10), Vector3(10, 0, 9)]
 		var indexPlayer = 0
 		var indexEnemi = 0
 		

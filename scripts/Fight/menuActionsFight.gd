@@ -94,6 +94,7 @@ func enable(var boolean):
 		
 func test_actions(var game, var dico_actions):
 	for i in range(self.buttons.size()):
+		print(self.buttons[i].name)
 		if !dico_actions.get_action(self.buttons[i].name).range_cond.call_func(game, false):
 			set_active_button(i, DISABLED_TEXTURE)
 	var i = 0

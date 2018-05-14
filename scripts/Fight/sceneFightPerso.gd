@@ -16,7 +16,7 @@ func _ready():
 	"perception" : 0,
 	"dexterity" : 0,
 	"agility" : 0,
-	"strenght" : 0,
+	"strength" : 0,
 	"state" : [],
 	"life" : 20,
 	"nbMoves" : 3,
@@ -26,7 +26,7 @@ func _ready():
 	var characters = []
 	var mesh = load("res://scenes/Fight/leo.tscn").instance()
 	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	var character = PLAYER_CLASS.new("leo", Vector3(0,0,0), ["attack", "cross", "steal", "deplacement", "passe", "passer"], "Players", caracteristics, MENU_ACTION_SCENE, mesh)
+	var character = PLAYER_CLASS.new("leo", Vector3(0,0,0), ["attack", "cross", "posterize", "up_and_down", "steal", "deplacement", "passe", "passer"], "Players", caracteristics, MENU_ACTION_SCENE, mesh)
 	var caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
 	caracteristicsMenu.init(character, caracteristics)
 	add_child(caracteristicsMenu)
@@ -39,7 +39,7 @@ func _ready():
 	"perception" : 0,
 	"dexterity" : 0,
 	"agility" : 0,
-	"strenght" : 0,
+	"strength" : 0,
 	"state" : [],
 	"life" : 20,
 	"nbMoves" : 3,
@@ -61,7 +61,7 @@ func _ready():
 	"perception" : 0,
 	"dexterity" : 0,
 	"agility" : 0,
-	"strenght" : 0,
+	"strength" : 0,
 	"state" : [],
 	"life" : 20,
 	"nbMoves" : 3,

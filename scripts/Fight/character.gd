@@ -14,14 +14,7 @@ func set_position_in_matrix(var position, var map):
 func set_rotation_by_angle(var angle):
 	var angle_in_radians = angle * 2 * PI / 360.0
 	m_graphics.rotate_y(angle_in_radians)
-	
-func set_rotation_by_vec(var vec):
-	var angle = get_caracteristic("orientation").angle_to(vec)
-	var way = get_caracteristic("orientation").cross(vec)
-	if way.y < 0:
-		angle = -angle
-	set_caracteristic("orientation", vec)
-	m_graphics.rotate_y(angle)
+
 
 func set_rotation_to_target(var target):
 	var vec = (Vector3(target.x, 0, target.z) - Vector3(self.position.x, 0, self.position.z)).normalized()

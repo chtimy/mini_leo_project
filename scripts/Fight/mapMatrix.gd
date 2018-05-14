@@ -1,7 +1,6 @@
 extends "res://scripts/Fight/map.gd"
 
 var m_overlay_cells
-var list_active_overlays = []
 var m_size_cell
 var matrix
 

@@ -2,6 +2,7 @@ extends "res://scripts/Fight/mapMatrix.gd"
 
 var dimensions = Vector3(0, 0, 0)
 var origin = Vector3(0,0,0)
+var list_active_overlays = []
 
 func _init(var dimensions, var origin).():
 	self.dimensions = dimensions
@@ -38,7 +39,9 @@ func disable_selection():
 func remove_all_overlay_cells():
 	var t = Transform(Basis(), Vector3(-1000, -1000, -1000))
 	while !self.list_active_overlays.empty():
-		set_transform_overlay_mesh_instance(self.list_active_overlays.pop_back(), t)
+		var index = self.list_active_overlays.pop_back()
+		set_transform_overlay_mesh_instance(index3D_to_index1D(index), t)
+		matrix[index.x][index.y][index.z].overlay = null
 
 # @function : add_overlay_cell_by_index
 # @Description : Add overlay cell to the input index destination. 
@@ -52,7 +55,7 @@ func add_overlay_cell_by_index(var index):
 		# ATTENTION ici à l'offset de déplacement
 #		transform.origin = indexToPosition(index)
 		set_transform_overlay_mesh_instance(index3D_to_index1D(index), transform)
-		self.list_active_overlays.append(index3D_to_index1D(index))
+		self.list_active_overlays.append(index)
 		self.matrix[index.x][index.y][index.z].overlay = true
 		return true
 	return false
