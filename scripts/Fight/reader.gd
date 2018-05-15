@@ -26,7 +26,7 @@ func readActionsFile():
 	var actions = {
 	}
 	#a mettre en binaire
-	if actionsFightFile.open("res://data/fightScene/actions.txt", File.READ) == 0:
+	if actionsFightFile.open("res://ressources/data/fightScene/actions.txt", File.READ) == 0:
 		var nb = nextLine(actionsFightFile)
 		for i in range(nb):
 			var action = {

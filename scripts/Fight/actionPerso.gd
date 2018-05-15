@@ -30,6 +30,12 @@ static func deplacement_action(var game):
 	game.set_process(false)
 	var pos = yield(game.map, "overlay_clicked_from_map")
 	var map = game.get_map()
+	var path = null
+	if game.current_playing_character().is_in_group("Enemis"):
+		path = map.shortest_path(game.current_playing_character().position, pos, ["Players"])
+	else:
+		path = map.shortest_path(game.current_playing_character().position, pos, ["Enemis"])
+	print(path)
 	map.move_selectable_to(game.current_playing_character().position, pos)
 	game.current_playing_character().set_position_in_matrix(pos, map)
 	map.disable_selection()
@@ -41,13 +47,13 @@ static func deplacement_range_conditions(var game, var activeOverlay = false):
 	var from_position = character.position
 	var to_position
 	var relative_position
-	var zona = range(-character.m_caracteristics.nbMoves, character.m_caracteristics.nbMoves+1)
+	var zona = range(-character.caracteristics.nbMoves, character.caracteristics.nbMoves+1)
 	for i in zona:
 		for j in zona:
 			relative_position = Vector3(i, 0, j)
 			to_position = from_position + relative_position
 			relative_position = relative_position.abs()
-			if relative_position.x + relative_position.z <= character.m_caracteristics.nbMoves && map.is_inside_matrix_bounds(to_position):
+			if relative_position.x + relative_position.z <= character.caracteristics.nbMoves && map.is_inside_matrix_bounds(to_position):
 				var selectable = map.get_selectable_from_matrix(to_position)
 				if !selectable || selectable.is_in_group("objects"):
 					if activeOverlay:
@@ -335,7 +341,7 @@ static func up_and_down_range_conditions(var game, var activeOverlay = false):
 	var from_position = character.position
 	var to_position
 	var relative_position
-	var zona = range(-1, character.m_caracteristics.nbMoves+2)
+	var zona = range(-1, character.caracteristics.nbMoves+2)
 	for i in zona:
 		for j in zona:
 			relative_position = Vector3(i, 0, j)
@@ -394,7 +400,7 @@ static func opportunity_range_conditions(var game, var selectable, var activeOve
 	var map = game.map
 	var success = false
 	var target = game.current_playing_character()
-	var from_position = character.position
+	var from_position = selectable.position
 	var to_position
 	var relative_position
 	var zona = range(-1, 2)

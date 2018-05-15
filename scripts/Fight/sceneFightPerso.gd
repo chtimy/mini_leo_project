@@ -26,7 +26,7 @@ func _ready():
 	var characters = []
 	var mesh = load("res://scenes/Fight/leo.tscn").instance()
 	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	var character = PLAYER_CLASS.new("leo", Vector3(0,0,0), ["attack", "cross", "posterize", "up_and_down", "steal", "deplacement", "passe", "passer"], ["Players"], caracteristics, MENU_ACTION_SCENE, mesh)
+	var character = PLAYER_CLASS.new("leo", ["Players"], caracteristics, Vector3(0,0,0), ["attack", "cross", "posterize", "up_and_down", "steal", "deplacement", "passe", "passer"], mesh, MENU_ACTION_SCENE)
 	var caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
 	caracteristicsMenu.init(character, caracteristics)
 	add_child(caracteristicsMenu)
@@ -47,7 +47,7 @@ func _ready():
 	}
 	mesh = load("res://scenes/Fight/blond.tscn").instance()
 	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	character = PLAYER_CLASS.new("blond", Vector3(0,0,0), ["attack", "steal", "deplacement", "passe", "block", "passer"], ["Players"], caracteristics, MENU_ACTION_SCENE, mesh)
+	character = PLAYER_CLASS.new("blond", ["Players"], caracteristics, Vector3(0,0,0), ["attack", "steal", "deplacement", "passe", "block", "passer"], mesh, MENU_ACTION_SCENE)
 	
 	caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
 	caracteristicsMenu.init(character, caracteristics)
@@ -69,7 +69,7 @@ func _ready():
 	}
 	mesh = load("res://scenes/Fight/mechant.tscn").instance()
 	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	character = ENEMI_CLASS.new("ennemi", Vector3(0,0,0), ["attack", "cross", "passer"], ["Enemis"], caracteristics, mesh)
+	character = ENEMI_CLASS.new("ennemi", ["Enemis"], caracteristics, Vector3(0,0,0), ["attack", "cross", "passer"], mesh)
 	
 	caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
 	caracteristicsMenu.init(character, caracteristics)

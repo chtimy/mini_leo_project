@@ -25,15 +25,15 @@ func set_rotation_to_target(var target):
 	
 func increase_caracteristic(var name, var value):
 	self.caracteristics[name] += value
-	emit_signal("change_caracteristic_from_characterPerso", {"name" : name, "value" : m_caracteristics[name]})
+	emit_signal("change_caracteristic_from_characterPerso", {"name" : name, "value" : self.caracteristics[name]})
 	
 func decrease_caracteristic(var name, var value):
 	self.caracteristics[name] -= value
-	emit_signal("change_caracteristic_from_characterPerso", {"name" : name, "value" : m_caracteristics[name]})
+	emit_signal("change_caracteristic_from_characterPerso", {"name" : name, "value" : self.caracteristics[name]})
 	
 func throw_dice_for_caracteristic(var name):
 	var result = throw_dice(100)
-	return result <= m_caracteristics[name]
+	return result <= self.caracteristics[name]
 
 static func throw_dice(var maxNumber):
 	return randi() % maxNumber + 1

@@ -14,9 +14,9 @@
 
 cross
 0
-res://images/hud/menuFight/cross.png
-res://images/hud/menuFight/crossChecked.png
-res://images/hud/menuFight/crossDisabled.png
+res://ressources/images/hud/menuFight/cross.png
+res://ressources/images/hud/menuFight/crossChecked.png
+res://ressources/images/hud/menuFight/crossDisabled.png
 1
 1
 1
@@ -24,9 +24,9 @@ desequilibre
 
 posterize
 1
-res://images/hud/menuFight/posterize.png
-res://images/hud/menuFight/posterizeChecked.png
-res://images/hud/menuFight/posterizeDisabled.png
+res://ressources/images/hud/menuFight/posterize.png
+res://ressources/images/hud/menuFight/posterizeChecked.png
+res://ressources/images/hud/menuFight/posterizeDisabled.png
 1
 1
 1
@@ -34,72 +34,72 @@ desequilibre
 
 deplacement
 2
-res://images/hud/menuFight/deplacer.png
-res://images/hud/menuFight/deplacerChecked.png
-res://images/hud/menuFight/deplacerDisabled.png
+res://ressources/images/hud/menuFight/deplacer.png
+res://ressources/images/hud/menuFight/deplacerChecked.png
+res://ressources/images/hud/menuFight/deplacerDisabled.png
 0
 0
 0
 
 steal
 3
-res://images/hud/menuFight/steal.png
-res://images/hud/menuFight/stealChecked.png
-res://images/hud/menuFight/stealDisabled.png
+res://ressources/images/hud/menuFight/steal.png
+res://ressources/images/hud/menuFight/stealChecked.png
+res://ressources/images/hud/menuFight/stealDisabled.png
 1
 1
 0
 
 block
 4
-res://images/hud/menuFight/block.png
-res://images/hud/menuFight/blockChecked.png
-res://images/hud/menuFight/blockDisabled.png
+res://ressources/images/hud/menuFight/block.png
+res://ressources/images/hud/menuFight/blockChecked.png
+res://ressources/images/hud/menuFight/blockDisabled.png
 1
 0
 0
 
 from_downtown
 5
-res://images/hud/menuFight/downtown.png
-res://images/hud/menuFight/downtownChecked.png
-res://images/hud/menuFight/downtownDisabled.png
+res://ressources/images/hud/menuFight/downtown.png
+res://ressources/images/hud/menuFight/downtownChecked.png
+res://ressources/images/hud/menuFight/downtownDisabled.png
 1
 1
 0
 
 up_and_down
 6
-res://images/hud/menuFight/up_and_down.png
-res://images/hud/menuFight/up_and_downChecked.png
-res://images/hud/menuFight/up_and_downDisabled.png
+res://ressources/images/hud/menuFight/up_and_down.png
+res://ressources/images/hud/menuFight/up_and_downChecked.png
+res://ressources/images/hud/menuFight/up_and_downDisabled.png
 1
 1
 0
 
 passe
 7
-res://images/hud/menuFight/passe.png
-res://images/hud/menuFight/passeChecked.png
-res://images/hud/menuFight/passeDisabled.png
+res://ressources/images/hud/menuFight/passe.png
+res://ressources/images/hud/menuFight/passeChecked.png
+res://ressources/images/hud/menuFight/passeDisabled.png
 1
 1
 0
 
 passer
 8
-res://images/hud/menuFight/passer.png
-res://images/hud/menuFight/passerChecked.png
-res://images/hud/menuFight/passerDisabled.png
+res://ressources/images/hud/menuFight/passer.png
+res://ressources/images/hud/menuFight/passerChecked.png
+res://ressources/images/hud/menuFight/passerDisabled.png
 1
 0
 0
 
 attack
 9
-res://images/hud/menuFight/attack.png
-res://images/hud/menuFight/attackChecked.png
-res://images/hud/menuFight/attackDisabled.png
+res://ressources/images/hud/menuFight/attack.png
+res://ressources/images/hud/menuFight/attackChecked.png
+res://ressources/images/hud/menuFight/attackDisabled.png
 1
 0
 0

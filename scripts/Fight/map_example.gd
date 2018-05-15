@@ -135,29 +135,72 @@ func _on_OptionButton_item_selected(ID):
 		to_3D_plan(m_camera)
 		
 func compare_nodes(var node1, var node2):
-	pass
+	if node1.cost_f < node2.cost_f:
+		return true
+	return false
+	
 static func euclidian_dist(var start, var target):
-	return start.x * target.x + target.z * target.z
-func shortest_path(var start, var target):
-	closedList = Array()
-	openList = Array()
+	return (start.x - target.x) * (start.x - target.x) + (start.z - target.z) * (start.z - target.z)
+
+func shortest_path(var start, var target, var black_list_groups = []):
+	var closed_list = {}
+	var open_list = []
 	var dist = euclidian_dist(start, target)
-	openList[start] = {"cost_g" : 0, "cost_h" : dist, "cost_f" : dist, "parent" : start}
-	while !openList.empty():
-		var u = openList.pop_front()
-		if u.position.x == target.x && u.position.y == target.y:
-			reconstituerChemin(u)
-			return u
-		for v in [Vector3(1,0,0), Vector3(0,0,1), Vector3(-1,0,0), Vector3(0,0,1)]:
-			if !closed_list.has(v):
-				var cout_g = closed_list[u] + euclidian_dist(v, u)
-				var cout_h = euclidian_dist(v, target)
-				var cout_f = cout_g + cout_h
-				var parent = u
-				if open_list.has(v):
-					var find = open_list[v]
-					if cout_f < find.cout_f:
-						open_list[v] = {"cost_g" : cost_g, "cost_h" : cost_h, "cost_f" : cost_f, "parent" : parent}
+	var current_node = {"position" : start, "cost_g" : 0, "cost_h" : dist, "cost_f" : dist, "parent" : start}
+	open_list.push_back(current_node)
+	while (current_node.position.x != target.x || current_node.position.z != target.z) && !open_list.empty():
+		# take the best node
+		current_node = open_list.pop_front()
+		# add node in the closed list
+		closed_list[current_node.position] = current_node
+		# search neighbor and add to the opened list
+		for offset in [Vector3(1,0,0), Vector3(0,0,1), Vector3(-1,0,0), Vector3(0,0,-1)]: 
+			var neighbour_position = current_node.position + offset
+			var selectable = get_selectable_from_matrix(neighbour_position)
+			var blocked = false
+			if selectable:
+				for group in black_list_groups:
+					if selectable.is_in_group(group):
+						blocked = true
+			if blocked:
+				continue
+						
+			# if the neighbour already is not visited
+			if !closed_list.has(neighbour_position):
+				# distance from start position to the current node position
+				var cost_g = closed_list[current_node.position].cost_g + euclidian_dist(neighbour_position, current_node.position)
+				# distance from the current node position to the target position
+				var cost_h = euclidian_dist(neighbour_position, target)
+				# distance from start position to the current node by the finding path 
+				# and then distance to the target by piou piou back
+				var cost_f = cost_g + cost_h
+				# set the parent to build the final path in the end ()
+				# it's a position because it's the used key for the map (don't use pointers, not safe with a map -> need to think like communist, not like arnarchist #privatejoke)
+				var parent = current_node.position
+				# search inside the array ... O(n) not crazy, but no ordered map -> log(n)
+				var find_index = -1
+				for i in range(open_list.size()):
+					if open_list[i].position == neighbour_position:
+						find_index = i
+						break
+				# if the neighbour is in the open list, need to check if the node is better.
+				# if not, replace this node by the neighbour
+				# + sort the list regards to the criterion
+				if find_index != -1:
+					var find = open_list[find_index]
+					if cost_f < find.cost_f:
+						open_list[find_index] = {"position" : neighbour_position, "cost_g" : cost_g, "cost_h" : cost_h, "cost_f" : cost_f, "parent" : parent}
+						open_list.sort_custom(self, "compare_nodes")
 				else:
-					open_list[v] = {"cost_g" : cost_g, "cost_h" : cost_h, "cost_f" : cost_f, "parent" : parent}
+					open_list.push_back({"position" : neighbour_position, "cost_g" : cost_g, "cost_h" : cost_h, "cost_f" : cost_f, "parent" : parent})
+					open_list.sort_custom(self, "compare_nodes")
+		# check if the current node is the target node, if yes, build the final path (for the revolucion!)
+		if current_node.position.x == target.x && current_node.position.z == target.z:
+			var final_path = []
+			var node = closed_list[target]
+			final_path.push_back(node.position)
+			while node.position != start:
+				node = closed_list[node.parent]
+				final_path.push_back(node.position)
+			return final_path
 	return null
