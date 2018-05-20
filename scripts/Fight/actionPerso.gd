@@ -28,17 +28,24 @@ func _init().():
 
 static func deplacement_action(var game):
 	game.set_process(false)
-	var pos = yield(game.map, "overlay_clicked_from_map")
-	var map = game.get_map()
-	var path = null
+	var map = game.map
+	var character = game.current_playing_character()
 	if game.current_playing_character().is_in_group("Enemis"):
-		path = map.shortest_path(game.current_playing_character().position, pos, ["Players"])
+		map.set_mode(map.DRAW_ARROW, [character.position, ["Players"]])
 	else:
-		path = map.shortest_path(game.current_playing_character().position, pos, ["Enemis"])
-	print(path)
-	map.move_selectable_to(game.current_playing_character().position, pos)
-	game.current_playing_character().set_position_in_matrix(pos, map)
+		map.set_mode(map.DRAW_ARROW, [character.position, ["Enemis"]])
+	var path = yield(map, "move_from_map")
+	var pos = path[path.size() - 1]
 	map.disable_selection()
+	character.path = path
+#	if game.current_playing_character().is_in_group("Enemis"):
+#		character.path = map.shortest_path(character.position, pos, [Vector3(1,0,0), Vector3(0,0,1), Vector3(-1,0,0), Vector3(0,0,-1)], ["Players"])
+#	else:
+#		character.path = map.shortest_path(character.position, pos, [Vector3(1,0,0), Vector3(0,0,1), Vector3(-1,0,0), Vector3(0,0,-1)], ["Enemis"])
+	character.set_process(true)
+	yield(character, "finished_animation_from_character")
+	map.move_selectable_to(character.position, pos)
+	character.position = pos
 	game.end_turn()
 static func deplacement_range_conditions(var game, var activeOverlay = false):
 	var map = game.map
@@ -72,7 +79,7 @@ static func attack_action(var game):
 	var character = game.current_playing_character()
 	var enemi = map.get_selectable_from_matrix(pos)
 	enemi.decrease_caracteristic("life", character.get_caracteristic("attack"))
-	character.set_rotation_to_target(enemi.position)
+	character.set_graphics_rotation_by_vec(enemi.position - character.position)
 	map.disable_selection()
 	game.end_turn()
 static func attack_range_conditions(var game, var activeOverlay = false):
@@ -249,9 +256,9 @@ static func steal_action(var game):
 	print("steal_action")
 #	character.steal(enemi)
 	game.clear_values()
-	game.get_map().disable_all_overlay_cases()
+	game.map.disable_all_overlay_cases()
 static func steal_range_conditions(var game, var activeOverlay = false):
-	var map = game.get_map()
+	var map = game.map
 	var matrix = map.matrix
 	var success = false
 	var character = game.current_playing_character()
@@ -393,14 +400,19 @@ static func passe_range_conditions(var game, var activeOverlay = false):
 						return true
 	return success
 	
-static func opportunity_attack_action(var game, var selectable):
+static func opportunity_attack_action(var game, var character):
 	var map = game.map
-	var character = game.current_playing_character()
-static func opportunity_range_conditions(var game, var selectable, var activeOverlay = false):
+	var target = game.current_playing_character()
+	if character.throw_dice_for_caracteristic("perception"):
+		if !target.throw_dice_for_caracteristic("agility"):
+			target.decrease_caracteristic("life", character.get_caracteristic("attack"))
+			target.stop_moving()
+			
+static func opportunity_attack_range_conditions(var game, var activeOverlay = false):
 	var map = game.map
 	var success = false
 	var target = game.current_playing_character()
-	var from_position = selectable.position
+	var from_position = target.position
 	var to_position
 	var relative_position
 	var zona = range(-1, 2)
@@ -411,6 +423,7 @@ static func opportunity_range_conditions(var game, var selectable, var activeOve
 			relative_position = relative_position.abs()
 			if relative_position.x + relative_position.z <= 1 && map.is_inside_matrix_bounds(to_position) && map.get_selectable_from_matrix(to_position):
 				#attention quand on gère plusieurs groupes
+				var selectable = map.get_selectable_from_matrix(to_position)
 				if selectable && selectable == game.current_playing_character():
 					if activeOverlay:
 						map.add_overlay_cell_by_index(to_position)

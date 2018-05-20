@@ -2,7 +2,6 @@ extends Node
 
 var caracteristics
 
-
 func _init(var name, var groups = [], caracteristics = []):
 	set_name(name)
 	self.caracteristics = caracteristics

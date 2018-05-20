@@ -1,21 +1,21 @@
-extends Node
+extends Object
 
 const PLAYER_CLASS = preload("res://scripts/Fight/player.gd")
 const ENEMI_CLASS = preload("res://scripts/Fight/enemi.gd")
-const SCENE_FIGHT_CLASS = preload("res://scripts/Fight/sceneFight.gd")
-const MENU_ACTION_SCENE = preload("res://scenes/Fight/menuActionsFight.tscn")
-const CARACTERISTIC_MENU_SCENE = preload("res://scenes/Fight/caracteristicsMenu.tscn")
 
-func _ready():
-	set_name("scene_fight_perso")
-	#base de test : ( a supprimer )
-	
+var selectables = []
+var map
+
+func _init():
+	#base de test : ( a supprimer )	
+	self.map = load("res://scenes/Fight/map_example2.tscn").instance()
+
 	var caracteristics = {
 	"attack" : 3,
 	"defense" : 1,
-	"perception" : 0,
+	"perception" : 30,
 	"dexterity" : 0,
-	"agility" : 0,
+	"agility" : 40,
 	"strength" : 0,
 	"state" : [],
 	"life" : 20,
@@ -26,12 +26,18 @@ func _ready():
 	var characters = []
 	var mesh = load("res://scenes/Fight/leo.tscn").instance()
 	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	var character = PLAYER_CLASS.new("leo", ["Players"], caracteristics, Vector3(0,0,0), ["attack", "cross", "posterize", "up_and_down", "steal", "deplacement", "passe", "passer"], mesh, MENU_ACTION_SCENE)
-	var caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
-	caracteristicsMenu.init(character, caracteristics)
-	add_child(caracteristicsMenu)
+	var character = PLAYER_CLASS.new("leo",
+									["Players"],
+									caracteristics,
+									Vector3(0,0,0), 
+									["attack", "cross", "posterize", "up_and_down", "steal", "deplacement", "passe", "passer"], 
+									["opportunity_attack"], 
+									mesh, 
+									map, 
+									load("res://ressources/images/mini_leo/face.png"))
 	
-	characters.append(character)
+	
+	selectables.append(character)
 	
 	caracteristics = {
 	"attack" : 3,
@@ -47,20 +53,24 @@ func _ready():
 	}
 	mesh = load("res://scenes/Fight/blond.tscn").instance()
 	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	character = PLAYER_CLASS.new("blond", ["Players"], caracteristics, Vector3(0,0,0), ["attack", "steal", "deplacement", "passe", "block", "passer"], mesh, MENU_ACTION_SCENE)
+	character = PLAYER_CLASS.new("blond", 
+								["Players"], 
+								caracteristics, 
+								Vector3(0,0,0), 
+								["attack", "steal", "deplacement", "passe", "block", "passer"], 
+								["opportunity_attack"], 
+								mesh, 
+								map,
+								load("res://ressources/images/characters/blond/blond.png"))
 	
-	caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
-	caracteristicsMenu.init(character, caracteristics)
-	add_child(caracteristicsMenu)
-	
-	characters.append(character)
+	selectables.append(character)
 	
 	caracteristics = {
 	"attack" : 3,
 	"defense" : 1,
-	"perception" : 0,
+	"perception" : 40,
 	"dexterity" : 0,
-	"agility" : 0,
+	"agility" : 30,
 	"strength" : 0,
 	"state" : [],
 	"life" : 20,
@@ -69,22 +79,14 @@ func _ready():
 	}
 	mesh = load("res://scenes/Fight/mechant.tscn").instance()
 	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	character = ENEMI_CLASS.new("ennemi", ["Enemis"], caracteristics, Vector3(0,0,0), ["attack", "cross", "passer"], mesh)
+	character = ENEMI_CLASS.new("ennemi", 
+								["Enemis"], 
+								caracteristics, 
+								Vector3(0,0,0), 
+								["attack", "cross", "passer"], 
+								["opportunity_attack"], 
+								mesh, 
+								map,
+								load("res://ressources/images/map/fightScene/ennemi.png"))
 	
-	caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
-	caracteristicsMenu.init(character, caracteristics)
-	add_child(caracteristicsMenu)
-	
-	characters.append(character)
-	
-	var objects = []
-	var selectables = []
-	for c in characters:
-		selectables.append(c)
-	for o in objects:
-		selectables.append(o)
-	var map = load("res://scenes/Fight/map_example2.tscn").instance()
-	var scene = SCENE_FIGHT_CLASS.new("res://scripts/Fight/actionPerso.gd", map, selectables)
-	add_child(scene)
-	
-	
+	selectables.append(character)

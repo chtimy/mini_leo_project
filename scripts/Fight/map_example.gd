@@ -4,6 +4,7 @@ extends "res://scripts/Fight/mapMatrix3D.gd"
 ###################################################		SIGNALS	########################################################################
 ########################################################################################################################################
 signal overlay_clicked_from_map
+signal move_from_map
 
 ########################################################################################################################################
 ###################################################		MEMBERS	########################################################################
@@ -13,10 +14,17 @@ export (PackedScene) var OVERLAY_SCENE
 var m_lastClickPositionInMap
 var m_camera
 var m_plan
-enum {SELECTION_MODE = 1}
+enum {SELECTION_MODE = 1, DRAW_ARROW = 2}
 var mode = SELECTION_MODE
 
 var lastClickedCell = null
+var path = {
+	"cond" : null,
+	"last_solution" : null
+}
+
+var arrow_origin
+var arrow_size = 0.5
 
 ########################################################################################################################################
 ###################################################		METHODS	########################################################################
@@ -67,26 +75,36 @@ func _process(delta):
 	control_camera()
 	
 func _input(event):
-	match self.mode:
-		SELECTION_MODE:
-			if event is InputEventMouseMotion :
-				var position = get_intersection_point(get_mouse_position())
-				if position.x >= origin.x && position.z >= origin.z:
-					var index = position_to_index(position)
-					if is_overlay_cell_at_index(index):
-						if lastClickedCell != null:
-							set_color_overlay_mesh_instance(lastClickedCell, Color(0.0,0.5,0.5))
-						set_color_overlay_mesh_instance(index, Color(1.0,0.0,0.0))
-						lastClickedCell = index
-					elif lastClickedCell != null:
-						set_color_overlay_mesh_instance(lastClickedCell, Color(0.0,0.5,0.5))
-						lastClickedCell = null
-			if event is InputEventMouseButton :
-				if event.get_button_index() == BUTTON_LEFT && event.pressed == false:
+	if self.mode == SELECTION_MODE || self.mode == DRAW_ARROW:
+		if event is InputEventMouseMotion :
+			var position = get_intersection_point(get_mouse_position())
+			if position.x >= origin.x && position.z >= origin.z:
+				var index = position_to_index(position)
+				if is_overlay_cell_at_index(index):
 					if lastClickedCell != null:
-						print("click on ", lastClickedCell)
+						set_color_overlay_mesh_instance(lastClickedCell, Color(0.0,0.5,0.5))
+					set_color_overlay_mesh_instance(index, Color(1.0,0.0,0.0))
+					if DRAW_ARROW:
+						self.path.last_solution = shortest_path(self.arrow_origin, index, [Vector3(1, 0, 0), Vector3(-1, 0, 0), Vector3(0, 0, 1), Vector3(0, 0, -1)], self.path.cond)
+						var arrow = $Arrow
+						arrow.clear()
+						draw_arrow(arrow, self.path.last_solution)
+					lastClickedCell = index
+				elif lastClickedCell != null:
+					set_color_overlay_mesh_instance(lastClickedCell, Color(0.0,0.5,0.5))
+					lastClickedCell = null
+		if event is InputEventMouseButton :
+			if event.get_button_index() == BUTTON_LEFT && event.pressed == false:
+				if lastClickedCell != null:
+					print("click on ", lastClickedCell)
+					if DRAW_ARROW:
+						$Arrow.clear()
+						set_mode(SELECTION_MODE)
+						emit_signal("move_from_map", self.path.last_solution)
+					else:
 						emit_signal("overlay_clicked_from_map", lastClickedCell)
-						#disable_selection()
+					#disable_selection()
+					
 func add_overlay_selection(var index):
 	if is_inside_matrix_bounds(index):
 		if add_overlay_cell_by_index(index):
@@ -96,6 +114,48 @@ func add_overlay_selection(var index):
 			
 func save_overlay_selection():
 	remove_all_overlay_cells()
+	
+func draw_arrow(var geometry, var points):
+	var size_cell_quarter = self.m_size_cell / 4
+	var size_cell_half = self.m_size_cell / 2
+	geometry.begin(Mesh.PRIMITIVE_TRIANGLES)
+	for j in range(0, points.size()):
+		var i = points.size() - j - 1
+		if i == 0:
+			var before_point = indexToPosition(points[i + 1])
+			before_point.y += 0.5
+			var current_point = indexToPosition(points[i])
+			current_point.y += 0.5
+			var direction_normalized = (current_point - before_point).normalized()
+			var ortho = Vector3(-direction_normalized.z, direction_normalized.y, direction_normalized.x)
+			var pt = current_point + ortho * size_cell_half - direction_normalized * size_cell_quarter
+			geometry.set_normal(Vector3(0,1,0))
+			geometry.add_vertex(pt)
+			geometry.add_vertex(pt - ortho * self.m_size_cell)
+			geometry.add_vertex(current_point)
+		else:
+			var before_point = indexToPosition(points[i])
+			before_point.y += 0.5
+			var current_point = indexToPosition(points[i - 1])
+			current_point.y += 0.5
+			var direction = current_point - before_point
+			var direction_normalized = direction.normalized()
+			var ortho = Vector3(-direction_normalized.z, direction_normalized.y, direction_normalized.x)
+			
+			var pt = before_point + ortho * size_cell_quarter - direction_normalized * size_cell_quarter
+			var pt2 = pt + direction
+			var pt3 = pt - ortho * size_cell_half
+	#			print("i : ", i, " pt : ", pt)
+			geometry.set_normal(Vector3(0,1,0))
+			geometry.add_vertex(pt3)
+			geometry.add_vertex(pt2)
+			geometry.add_vertex(pt)
+			geometry.add_vertex(pt2)
+			geometry.add_vertex(pt3)
+			geometry.add_vertex(pt2 - ortho * size_cell_half)
+			
+	geometry.end()
+	return geometry
 	
 #TODO : a gérer mieu que çà surtout pour la 2D
 func control_camera():
@@ -123,7 +183,7 @@ func deselect_overlay(var vec):
 	set_color_overlay_mesh_instance(vec, Color(0, 1, 1))
 	
 func to_2D_plan(var camera):
-	camera.look_at_from_position(Vector3(0,20,0), Vector3(0, 0, 0), Vector3(0,0,1))
+	camera.look_at_from_position(Vector3(0,20,0), Vector3(0, 0, 0), Vector3(1,0,0))
 func to_3D_plan(var camera):
 	camera.look_at_from_position(Vector3(12,12,12), Vector3(2.5,0,2.5), Vector3(0,1,0))
 
@@ -141,8 +201,22 @@ func compare_nodes(var node1, var node2):
 	
 static func euclidian_dist(var start, var target):
 	return (start.x - target.x) * (start.x - target.x) + (start.z - target.z) * (start.z - target.z)
+	
+func ask_around_possible_action(var character):
+	var game = get_node("..")
+	var position = character.position
+	for v in [Vector3(1,0,0), Vector3(0,0,1), Vector3(-1,0,0), Vector3(0,0,-1)]:
+		var selectable = get_selectable_from_matrix(position + v)
+		if selectable && ((selectable.is_in_group("Enemis") && character.is_in_group("Players")) || (selectable.is_in_group("Player") && character.is_in_group("Enemis"))):
+			selectable.do_opportunity_actions(game)
+			
+func set_mode(var mode, var args = []):
+	self.mode = mode
+	if mode == DRAW_ARROW:
+		self.arrow_origin = args[0]
+		self.path.cond = args[1]
 
-func shortest_path(var start, var target, var black_list_groups = []):
+func shortest_path(var start, var target, var list_neighbor_ofsets, var black_list_groups = []):
 	var closed_list = {}
 	var open_list = []
 	var dist = euclidian_dist(start, target)
@@ -154,7 +228,7 @@ func shortest_path(var start, var target, var black_list_groups = []):
 		# add node in the closed list
 		closed_list[current_node.position] = current_node
 		# search neighbor and add to the opened list
-		for offset in [Vector3(1,0,0), Vector3(0,0,1), Vector3(-1,0,0), Vector3(0,0,-1)]: 
+		for offset in list_neighbor_ofsets: 
 			var neighbour_position = current_node.position + offset
 			var selectable = get_selectable_from_matrix(neighbour_position)
 			var blocked = false
