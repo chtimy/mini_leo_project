@@ -1,5 +1,6 @@
 const READER_CLASS = preload("res://scripts/Fight/reader.gd")
 
+
 var m_actions = {
 	}
 var m_toolFunctions = {

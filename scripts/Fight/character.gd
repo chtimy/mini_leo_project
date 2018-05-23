@@ -1,12 +1,18 @@
 extends "res://scripts/Fight/movable.gd"
 
+#########################################################################################################
+########################################## SIGNALS ######################################################
+#########################################################################################################
+
 signal change_caracteristic_from_characterPerso
 signal finished_animation_from_character
 signal ask_around_possible_action_from_character
 
-var m_action_names
+#########################################################################################################
+########################################## ATTRIBUTES ######################################################
+#########################################################################################################
+var action_names
 var opportunity_action_names
-var m_graphics
 var path
 var objects = []
 var object_in_hand
@@ -15,55 +21,48 @@ var map
 var actions_dico
 var image
 
-func _init(var name, var groups, var caracteristics, var position, var action_names, var opp_action_names, var graphics, var map, var image).(name, groups, caracteristics, position):
-	m_graphics = graphics
-	m_action_names = action_names
+#########################################################################################################
+########################################## METHODS ######################################################
+#########################################################################################################
+
+func _init(var name, var groups, var caracteristics, var graphics, var position, var action_names, var opp_action_names, var map, var image).(name, groups, caracteristics, graphics, position):
+	self.action_names = action_names
 	self.opportunity_action_names = opp_action_names
-	print(self.opportunity_action_names)
 	self.map = map
 	self.image = image
 	add_to_group("Characters")
 	randomize()
-
+	
+##################################### ACTIONS #############################################
+# @function : do_opportunity_actions
+# @Description : Check and make all opportunities actions
+# @params :
+#	game : Game node
+# @return : True if an opportunity action was processing, false otherwise
 func do_opportunity_actions(var game):
 	for action_name in self.opportunity_action_names:
 		var action = self.actions_dico.get_action(action_name)
 		#if action.range_cond.call_func(game, true):
-		action.play.call_func(game, self)
-	#return false
-
+		return action.play.call_func(game, self)
+# @function : preprocess_path
+# @Description : Check for each point in the path, if there is an opportunity attack and resize
+# 				 the path up to the last cell where is an opportunity action
+# @params :
+#	paths : Array of points composing the path
+func preprocess_path(var paths):
+	for i in range(paths.size()-1):
+		var cell = paths[i]
+		var neighbor = self.map.neighbor(self.position, [Vector3(1,0,0), Vector3(-1,0,0), Vector3(0,0,1), Vector3(0,0,-1)], ["Characters"])
+		for neighbour in neighbor:
+			if neighbour.do_opportunity_actions(get_node("..")):
+				paths.resize(i)
+				return 
+		
+##################################### GRAPHICS #############################################
 func stop_moving():
 	path.clear()
-
-func set_position(var position, var map):
-	var old_position = self.position
-	.set_position_in_matrix(position)
-	translate_graphics(position - old_position)
 	
-func translate_graphics(var translation):
-	m_graphics.transform.origin += translation
-	
-func set_graphics_position(var position):
-	m_graphics.transform.origin = position
-	
-func set_graphics_rotation_by_angle_in_degrees(var angle_in_degrees):
-	var angle_in_radians = angle_in_degrees * 2 * PI / 360.0
-	m_graphics.rotate_y(angle_in_radians)
-	
-func set_graphics_rotation_by_vec(var vec):
-	var orientation = get_caracteristic("orientation")
-	var way = orientation.cross(vec)
-	var angle = orientation.angle_to(vec)
-	if way.y < 0:
-		angle = -angle
-	m_graphics.rotate_y(angle)
-	set_caracteristic("orientation", vec)
-	
-#func set_graphics_rotation_to_target(var target):
-#	var vec = (Vector3(target.x, 0, target.z) - Vector3(self.position.x, 0, self.position.z)).normalized()
-##	print("direction : ", vec)
-#	set_rotation_by_vec(vec)
-	
+##################################### CARACTERISTICS #############################################
 func increase_caracteristic(var name, var value):
 	self.caracteristics[name] += value
 	emit_signal("change_caracteristic_from_characterPerso", {"name" : name, "value" : self.caracteristics[name]})
@@ -73,11 +72,10 @@ func decrease_caracteristic(var name, var value):
 	emit_signal("change_caracteristic_from_characterPerso", {"name" : name, "value" : self.caracteristics[name]})
 	
 func throw_dice_for_caracteristic(var name):
-	var result = throw_dice(100)
+	var result = tools.throw_dice(100)
 	return result <= self.caracteristics[name]
-
-static func throw_dice(var maxNumber):
-	return randi() % maxNumber + 1
+	
+##################################### NEIGHBOR #############################################
 	
 func behind(var i = 1):
 	var orientation = get_caracteristic("orientation")
@@ -95,9 +93,19 @@ func left(var i = 1):
 	var orientation = get_caracteristic("orientation")
 	return self.position + Vector3(-orientation.z, 0, -orientation.x)	
 	
+##################################### OBJECTS #############################################
+# @function : receive_object
+# @Description : Add the object to the own objects
+# @params :
+#	object : Input object to add
 func receive_object(var object):
 	objects.append(object)
 	
+# @function : drop_object
+# @Description : Drop an object
+# @params :
+#	name : name of the own object to drop
+# @return : Return the dropped object
 func drop_object(var name):
 	var object = null
 	for i in range(self.objects.size()):
@@ -107,42 +115,54 @@ func drop_object(var name):
 			break
 	return object
 	
+# @function : take_in_hand
+# @Description : Put an own object in the hand of the character
+# @params :
+#	object : Object to put in the hands of the character
 func take_in_hand(var object):
+	if object_in_hand:
+		drop_from_hand()
 	object_in_hand = object
-	
-func drop_from_hand():
+
+# @function : drop_from_hand
+# @Description : Drop an object from the hands
+# @return : The objet to drop, null if the object doesn't exist
+func drop_object_from_hand():
 	var obj = object_in_hand
+	obj.set_position(self.position)
 	object_in_hand = null
 	return obj
 	
-#func do_opportunity_actions():
-#	for action in opportunity_action_names:
-#		self.actions_dico.action()
-	
+# @function : has_object_in_hands
+# @Description : Check if the character has an object in hands
+# @return : True if the character has an object in hands, false otherwise
+func has_object_in_hands():
+	if object_in_hand != null:
+		return true
+	return false
+##################################### NODE #############################################
 func _ready():
-	self.add_child(m_graphics)
+	self.add_child(self.graphics)
 	set_process(false)
 
 func _process(delta):
 	if path.size() > 1:
-		self.map.ask_around_possible_action(self)
-		if path.size() > 1:
-			var to_walk = delta * SPEED
-			var from = path[path.size() - 1]
-			while to_walk > 0 and path.size() >= 2:
-				var pfrom = path[path.size() - 1]
-				var pto = path[path.size() - 2]
-				var d = pfrom.distance_to(pto)
-				if d <= to_walk:
-					path.remove(path.size() - 1)
-					to_walk -= d
-				else:
-					path[path.size() - 1] = pfrom.linear_interpolate(pto, to_walk/d)
-					to_walk = 0
-			var atpos = path[path.size() - 1]
-			var vec = atpos - from
-			set_graphics_rotation_by_vec(vec.normalized())
-			m_graphics.transform.origin += vec
+		var to_walk = delta * SPEED
+		var from = path[path.size() - 1]
+		while to_walk > 0 and path.size() >= 2:
+			var pfrom = path[path.size() - 1]
+			var pto = path[path.size() - 2]
+			var d = pfrom.distance_to(pto)
+			if d <= to_walk:
+				path.remove(path.size() - 1)
+				to_walk -= d
+			else:
+				path[path.size() - 1] = pfrom.linear_interpolate(pto, to_walk/d)
+				to_walk = 0
+		var atpos = path[path.size() - 1]
+		var vec = atpos - from
+		set_graphics_rotation_by_vec(vec.normalized())
+		self.graphics.transform.origin += vec
 	else:
 		emit_signal("finished_animation_from_character")
 		set_process(false)

@@ -51,7 +51,7 @@ func remove_all_overlay_cells():
 func add_overlay_cell_by_index(var index):
 	if !self.matrix[index.x][index.y][index.z].has("overlay") || self.matrix[index.x][index.y][index.z].overlay == null:
 #		var overlayIndex = addInstanceOverlay()
-		var transform = Transform(Basis(), indexToPosition(index))
+		var transform = Transform(Basis(), index_to_position(index))
 		# ATTENTION ici à l'offset de déplacement
 #		transform.origin = indexToPosition(index)
 		set_transform_overlay_mesh_instance(index3D_to_index1D(index), transform)
@@ -79,11 +79,11 @@ func set_color_overlay_mesh_instance(var index_instance, var color):
 	.set_color_overlay_mesh_instance(index3D_to_index1D(index_instance), color)
 	
 func position_to_index(var position):
-	var pos = (position - get_origin()) / m_size_cell
+	var pos = (position - get_origin()) / self.size_cell
 	return Vector3(round(pos.x), round(pos.y), round(pos.z))
 	
-func indexToPosition(var index):
-	return index * m_size_cell + self.origin
+func index_to_position(var index):
+	return index * self.size_cell + self.origin
 
 # @function : is_inside_matrix_bounds
 # @Description : Test if the input index is inside the matrix bound
@@ -110,53 +110,61 @@ func is_cell_contains_sth(var index, var sth):
 	return false
 
 # @function : add_selectable_to_cell
-# @Description : Add a selectable to the cell with the input index
+# @Description : Add a selectable to the cell at index
 # @params :
 #	selectable : Selectable to add to the cell
 #	index : Index of the cell to add a selectable
-# a completer au fur et a mesure des types de case
-#du moins à modifier et faire en fct des catégories
 func add_selectable_to_cell(var selectable, var index):
-	self.matrix[index.x][index.y][index.z].selectable = selectable
+	if !self.matrix[index.x][index.y][index.z].has("selectables"):
+		self.matrix[index.x][index.y][index.z]["selectables"] = []
+	self.matrix[index.x][index.y][index.z].selectables.push_back(selectable)
 
 # @function : move_selectable_to
-# @Description : Move a selectable from a cell to another cell in the map
+# @Description : Move a selectable from a cell to another cell in the map. 
+#				 BE CAREFUL : don't move the graphics selectable
 # @params :
-#	inindex_fromdexFrom : Index of the cell to move away the selectable
+#	selectable : Selectable to move
+#	index_from : Index of the cell to move away the selectable
 #	index_to : Index of the cell to move in the selectable
-#move the selectable to the new position . BE CAREFUL : don't move the graphics selectable
-func move_selectable_to(var index_from, var index_to):
-	# don't check if the final position is busy by something or not
-	if is_cell_contains_sth(index_from, "selectable"):
-		self.matrix[index_to.x][index_to.y][index_to.z].selectable = self.matrix[index_from.x][index_from.y][index_from.z].selectable
-		remove_selectable_from_cell(index_from)
+# @return : True if the selectable is moved, false otherwise
+func move_selectable_to(var selectable, var index_from, var index_to):
+	var s = remove_selectable_from_cell(selectable, index_from)
+	if s:
+		add_selectable_to_cell(selectable, index_to)
 		return true
 	return false
 
 # @function : remove_selectable_from_cell
-# @Description : Remove a selectable from the cell. Just set cell.selectable to null
+# @Description : Remove a selectable from the cell.
 # @params :
+#	selectable : Selectable to remove
 #	index : Index of the cell to remove the selectable
-func remove_selectable_from_cell(var index):
-	self.matrix[index.x][index.y][index.z].selectable = null
+# @return : The removed selectable, null if the selectable doesn't exist in the cell
+func remove_selectable_from_cell(var selectable, var index):
+	var selectables = self.matrix[index.x][index.y][index.z].selectables
+	if selectables:
+		for i in range(selectables.size()):
+			if selectable == selectables[i]:
+				var s = selectables[i]
+				selectables.remove(i)
+				return s
+	return null
 
-# @function : get_selectable_froself.matrix
+# @function : get_selectables_from_cell
 # @Description : Get the selectable in the map with the input index
 # @params :
 #	index : Index in the map of the selectable
-# @return
-#	The selectable if exists at the index position, null otherwise
-func get_selectable_from_matrix(var index):
-	if !is_cell_contains_sth(index, "selectable"):
+# @return : The selectable if exists at the index position, null otherwise
+func get_selectables_from_cell(var index):
+	if !is_cell_contains_sth(index, "selectables"):
 		return null
-	return self.matrix[index.x][index.y][index.z].selectable
+	return self.matrix[index.x][index.y][index.z].selectables
 
-# @function : get_selectable_position_froself.matrix
+# @function : get_selectable_position_from_matrix
 # @Description : Get the position in the map of the selectable with the input index
 # @params :
 #	index : Index in the matrix of the selectable
-# @return
-#	The position of the selectable on the map
+# @return : The position of the selectable on the map
 func get_selectable_position_from_matrix(var index):
 	var size_element = get_size_cell()
 	var y = index.y
@@ -173,3 +181,10 @@ func on_surface(position):
 	if (position.y == 0):# and self.matrix[position.x][position.y][position.z].type == 0 ) or ( is_inside_matrix_bounds(Vector3(position.x, position.y+1, position.z)) and self.matrix[position.x][position.y+1][position.z].type == 0 && self.matrix[position.x][position.y][position.z].type != 0 ) :
 		return true
 	return false
+	
+func print_selectables():
+	for i in matrix.size():
+		for j in matrix[i].size():
+			for k in matrix[i][j].size():
+				if matrix[i][j][k].has("selectables"):
+					print("cell : (",i,",",j,",",k,") : ", matrix[i][j][k].selectables)

@@ -6,8 +6,6 @@ var map
 var selectables = []
 var turn_handler
 var actions_dico
-
-var values = {}
 var current_menu_attack
 var current_action
 
@@ -15,8 +13,6 @@ var state = INIT_TURN
 #order of turns
 var turns = []
 enum{INIT_TURN, CHOOSE_MENU, PLAY, END_TURN}
-
-var TURN_SCENE = preload("res://scenes/Fight/turn.tscn")
 const CARACTERISTIC_MENU_SCENE = preload("res://scenes/Fight/caracteristicsMenu.tscn")
 export (Script) var INPUT_SCRIPT
 
@@ -45,10 +41,10 @@ func _ready():
 		var position = null
 		var i = 0
 		for selectable in self.selectables:
-			selectable.actions_dico = actions_dico
 			if selectable.is_in_group("Objects"):
 				self.objects.append(selectable)
 			else:
+				selectable.actions_dico = actions_dico
 				if selectable.is_in_group("Players"):
 					position = initial_positions_players[index_player]
 					self.turns.push_back(i)
@@ -60,29 +56,26 @@ func _ready():
 					self.turns.push_back(i)
 					i += 1
 				self.map.add_selectable_to_cell(selectable, position)
-				selectable.set_position(position, self.map)
+				selectable.set_position(position)
 				self.characters.append(selectable)
 				
-				var caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
-				caracteristicsMenu = CARACTERISTIC_MENU_SCENE.instance()
-				caracteristicsMenu.init(selectable, selectable.caracteristics)
-				add_child(caracteristicsMenu)
-	
-		self.turn_handler = TURN_SCENE.instance()
+				var caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()
+				caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()
+				caracteristics_menu.init(selectable, selectable.caracteristics)
+				add_child(caracteristics_menu)
+		self.turn_handler = $HUD/turn_counter
+		self.turn_handler.add_characters(self.characters)
 	else:
 		print("Error : Impossible to load all the scripts")
 		
-		
 	self.set_name("sceneFight")
-	add_child(self.map)
+	$CenterContainer.add_child(self.map)
 	#Generation des selectables
 	var i = 0
 	var j = 0
 	for selectable in self.selectables:
 		#selectable.initMenu(get_node("."), m_actionsDico, viewportSize)
 		add_child(selectable)
-	add_child(self.turn_handler)
-	self.turn_handler.set_process(true)
 
 func _process(delta):
 	var turn = get_current_turn()
@@ -142,15 +135,7 @@ func get_current_turn():
 func next_turn():
 	self.turns.push_back(self.turns.pop_front())
 	
-func save_value(var key, var value):
-	self.values[key] = value
-func get_value(var key):
-	return self.values[key]
-func load_value(var key):
-	var value = self.values[key]
-	self.values[key] = null
-	return value
-func has_value(var key):
-	return self.values.has(key)
-func clear_values():
-	self.values.clear()
+func drop_object_on_the_floor(var object, var position):
+	self.map.add_selectable_to_cell(object, position)
+	object.set_position(position)
+	add_child(object.graphics)

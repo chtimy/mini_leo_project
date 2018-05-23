@@ -19,8 +19,8 @@ func init(var selectable, var list_caracteristics):
 		grid_container.add_child(label)
 	
 	selectable.connect("change_caracteristic_from_characterPerso", self, "on_change_caracteristic")
-	selectable.m_graphics.get_node("RigidBody").connect("mouse_entered", self, "on_mouse_entered_character")
-	selectable.m_graphics.get_node("RigidBody").connect("mouse_exited", self, "on_mouse_exited_character")
+	selectable.graphics.get_node("Area").connect("mouse_entered", self, "on_mouse_entered_character")
+	selectable.graphics.get_node("Area").connect("mouse_exited", self, "on_mouse_exited_character")
 	
 	self.set_visible(false)
 	

@@ -14,6 +14,10 @@ config/name="mini_leo"
 run/main_scene="res://scenes/Fight/fightScene.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+tools="*res://scripts/Fight/tools.gd"
+
 [display]
 
 window/size/height=768
