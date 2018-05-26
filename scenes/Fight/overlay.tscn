@@ -1,29 +1,20 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene format=2]
 
-[ext_resource path="res://materials/overlay.tres" type="Material" id=1]
+[node name="Overlay" type="ColorRect"]
 
-[sub_resource type="CubeMesh" id=1]
-
-size = Vector3( 1, 0.2, 1 )
-subdivide_width = 0
-subdivide_height = 0
-subdivide_depth = 0
-
-[node name="MeshInstance" type="MeshInstance"]
-
-transform = Transform( 1, 0, 0, 0, 0.05, 0, 0, 0, 1, 0, 0, 0 )
-layers = 1
-material_override = null
-cast_shadow = 1
-extra_cull_margin = 0.0
-use_in_baked_light = false
-lod_min_distance = 0.0
-lod_min_hysteresis = 0.0
-lod_max_distance = 0.0
-lod_max_hysteresis = 0.0
-mesh = SubResource( 1 )
-skeleton = NodePath("..")
-material/0 = ExtResource( 1 )
-_sections_unfolded = [ "Geometry", "LOD", "Transform", "material" ]
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+margin_right = 64.0
+margin_bottom = 64.0
+rect_pivot_offset = Vector2( 0, 0 )
+rect_clip_content = false
+mouse_filter = 0
+mouse_default_cursor_shape = 0
+size_flags_horizontal = 1
+size_flags_vertical = 1
+color = Color( 0.935662, 0.949219, 0.515396, 0.801098 )
+_sections_unfolded = [ "Margin" ]
 
 

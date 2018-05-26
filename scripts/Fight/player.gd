@@ -4,7 +4,7 @@ const MENU_ACTION_SCENE = preload("res://scenes/Fight/menuActionsFight.tscn")
 
 var menu
 
-func _init(var name, var groups, var caracteristics, var graphics, var position, var action_names, var opp_attack_names, var map, var image).(name, groups, caracteristics, graphics, position, action_names, opp_attack_names, map, image):
+func _init(var name, var groups, var caracteristics, var position, var action_names, var opp_attack_names, var map, var image).(name, groups, caracteristics, position, action_names, opp_attack_names, map, image):
 	pass
 
 func _ready():

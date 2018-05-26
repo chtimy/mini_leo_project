@@ -25,7 +25,7 @@ var image
 ########################################## METHODS ######################################################
 #########################################################################################################
 
-func _init(var name, var groups, var caracteristics, var graphics, var position, var action_names, var opp_action_names, var map, var image).(name, groups, caracteristics, graphics, position):
+func _init(var name, var groups, var caracteristics, var position, var action_names, var opp_action_names, var map, var image).(name, groups, caracteristics, position):
 	self.action_names = action_names
 	self.opportunity_action_names = opp_action_names
 	self.map = map
@@ -79,19 +79,19 @@ func throw_dice_for_caracteristic(var name):
 	
 func behind(var i = 1):
 	var orientation = get_caracteristic("orientation")
-	return self.position - orientation * i
+	return self.position_in_matrix - orientation * i
 	
 func front(var i = 1):
 	var orientation = get_caracteristic("orientation")
-	return self.position + orientation * i
+	return self.position_in_matrix + orientation * i
 	
 func right(var i = 1):
 	var orientation = get_caracteristic("orientation")
-	return self.position + Vector3(orientation.z, 0, orientation.x)
+	return self.position_in_matrix + Vector3(orientation.z, 0, orientation.x)
 	
 func left(var i = 1):
 	var orientation = get_caracteristic("orientation")
-	return self.position + Vector3(-orientation.z, 0, -orientation.x)	
+	return self.position_in_matrix + Vector3(-orientation.z, 0, -orientation.x)	
 	
 ##################################### OBJECTS #############################################
 # @function : receive_object
@@ -142,7 +142,6 @@ func has_object_in_hands():
 	return false
 ##################################### NODE #############################################
 func _ready():
-	self.add_child(self.graphics)
 	set_process(false)
 
 func _process(delta):

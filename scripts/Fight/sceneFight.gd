@@ -28,12 +28,11 @@ func _ready():
 	var ACTIONS_CLASS = load("res://scripts/Fight/actionPerso.gd")
 	if ACTIONS_CLASS:
 		self.actions_dico = ACTIONS_CLASS.new()
-		self.map = map
 		self.selectables = selectables
 		
 		#temp
-		var initial_positions_enemis = [Vector3(10, 0, 10), Vector3(11, 0, 11)]
-		var initial_positions_players = [Vector3(11, 0, 10), Vector3(10, 0, 9)]
+		var initial_positions_enemis = [Vector2(5, 5), Vector2(6, 6)]
+		var initial_positions_players = [Vector2(7,7), Vector2(8, 8)]
 		var index_player = 0
 		var index_enemi = 0
 		
@@ -56,7 +55,10 @@ func _ready():
 					self.turns.push_back(i)
 					i += 1
 				self.map.add_selectable_to_cell(selectable, position)
-				selectable.set_position(position)
+				selectable.set_position_in_matrix(position)
+				selectable.set_graphics_position(position * map.size_cell)
+				print(selectable.get_node("animation").position)
+				print( map.size_cell)
 				self.characters.append(selectable)
 				
 				var caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()

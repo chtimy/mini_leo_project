@@ -4,11 +4,8 @@ var m_overlay_cells
 var size_cell
 var matrix
 
-func _init().():
-	pass
-	
-func get_size_cell():
-	return self.size_cell
+func _init(var size_cell).():
+	self.size_cell = size_cell
 
 #func add_instance_overlay():
 #	var nb_instances = m_overlay_cells.get_multimesh().get_instance_count()

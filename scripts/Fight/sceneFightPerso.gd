@@ -9,7 +9,7 @@ var map
 
 func _init():
 	#base de test : ( a supprimer )	
-	self.map = load("res://scenes/Fight/map_example2.tscn").instance()
+	self.map = load("res://scenes/Fight/dungeon_map.tscn").instance()
 
 	var caracteristics = {
 	"attack" : 3,
@@ -21,33 +21,31 @@ func _init():
 	"state" : [],
 	"life" : 20,
 	"nbMoves" : 3,
-	"orientation" : Vector3(1,0,0)
+	"orientation" : Vector2(1,0)
 	}
 
-	var mesh = load("res://scenes/Fight/characters/mini_leo_sprite3D.tscn").instance()
-	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	var character = PLAYER_CLASS.new("leo",
+	var animation = load("res://scenes/Fight/characters/MiniLeo.tscn").instance()
+	var selectable = PLAYER_CLASS.new("leo",
 									["Players"],
 									caracteristics,
-									mesh,
-									Vector3(0,0,0), 
+									Vector2(0,0), 
 									["attack", "cross", "posterize", "up_and_down", "steal", "deplacement", "passe", "passer"], 
 									["opportunity_attack"], 
 									map, 
 									load("res://ressources/images/fight/leo_tile.png"))
+	selectable.add_child(animation)
+	selectables.append(selectable)
 	
 	
-	selectables.append(character)
 	
-	mesh = load("res://scenes/Fight/object.tscn").instance()
-	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	var object = OBJECT_CLASS.new("sword",
+	animation = load("res://scenes/Fight/objects/Bow.tscn").instance()
+	selectable = OBJECT_CLASS.new("sword",
 								["Objects"],
 								{},
-								mesh,
-								Vector3(0,0,0))
-	character.take_in_hand(object)
-	selectables.append(object)
+								Vector2(0,0))
+	selectable.add_child(animation)
+	selectables[0].take_in_hand(selectable)
+	selectables.append(selectable)
 	
 	caracteristics = {
 	"attack" : 3,
@@ -59,21 +57,19 @@ func _init():
 	"state" : [],
 	"life" : 20,
 	"nbMoves" : 3,
-	"orientation" : Vector3(1,0,0)
+	"orientation" : Vector2(1,0)
 	}
-	mesh = load("res://scenes/Fight/characters/blond_sprite3D.tscn").instance()
-	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	character = PLAYER_CLASS.new("blond", 
+	animation = load("res://scenes/Fight/characters/Blond.tscn").instance()
+	selectable = PLAYER_CLASS.new("blond", 
 								["Players"], 
 								caracteristics, 
-								mesh,
-								Vector3(0,0,0), 
+								Vector2(0,0), 
 								["attack", "steal", "deplacement", "passe", "block", "passer"], 
 								["opportunity_attack"], 
 								map,
 								load("res://ressources/images/fight/blond_tile.png"))
-	
-	selectables.append(character)
+	selectable.add_child(animation)
+	selectables.append(selectable)
 	
 	caracteristics = {
 	"attack" : 3,
@@ -85,20 +81,16 @@ func _init():
 	"state" : [],
 	"life" : 20,
 	"nbMoves" : 3,
-	"orientation" : Vector3(1,0,0)
+	"orientation" : Vector2(1,0)
 	}
-	mesh = load("res://scenes/Fight/characters/enemi_sprite3D.tscn").instance()
-	mesh.transform.origin += (Vector3(-10,0.5,-10) - mesh.transform.origin)
-	character = ENEMI_CLASS.new("ennemi", 
+	animation = load("res://scenes/Fight/characters/Enemi.tscn").instance()
+	selectable = ENEMI_CLASS.new("ennemi", 
 								["Enemis"], 
 								caracteristics, 
-								mesh,
-								Vector3(0,0,0), 
+								Vector2(0,0), 
 								["attack", "cross", "passer"], 
 								["opportunity_attack"], 
 								map,
 								load("res://ressources/images/fight/enemi_tile.png"))
-								
-	
-	
-	selectables.append(character)
+	selectable.add_child(animation)
+	selectables.append(selectable)

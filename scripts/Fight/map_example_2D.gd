@@ -31,45 +31,18 @@ var arrow_size = 0.5
 ########################################################################################################################################
 
 ##################################### NODE #############################################
-func _init().(Vector3(20, 5, 20), Vector3(-10,0,-10)):
-	self.size_cell = Vector3(1,1,1)
+func _init().(Vector2(15, 15), Vector2(0, 0), Vector2(64, 64)):
 	self.matrix = []
 	for i in range(dimensions.x):
 		self.matrix.append([])
 		for j in range(dimensions.y):
-			self.matrix[i].append([])
-			for k in range(dimensions.z):
-				self.matrix[i][j].append([])
-				self.matrix[i][j][k] = {}
+				self.matrix[i].append([])
+				self.matrix[i][j] = {}
 	
 func _ready():
-	m_camera = Camera.new()
-	m_camera.set_environment(get_node("environment").get_environment())
-	m_camera.look_at_from_position(Vector3(12,18,12), Vector3(2.5,0,2.5), Vector3(0,1,0))
+	m_camera = Camera2D.new()
+	m_camera.set_position(Vector2(12,12))
 	add_child(m_camera)
-	
-	var mesh_instance = get_node("MeshInstance")
-	mesh_instance.set_scale(Vector3(dimensions.x + self.size_cell.x, 1, dimensions.z + self.size_cell.z))
-	
-	m_overlay_cells = MultiMeshInstance.new()
-	m_overlay_cells.set_name("Overlays")
-	var multimesh = MultiMesh.new()
-	multimesh.set_color_format(MultiMesh.COLOR_FLOAT)
-	multimesh.set_mesh(OVERLAY_SCENE.instance().get_mesh())
-	#A report : Bug de chez Godot ?? Si on met à la main dans l'instanciation de la scène çà ne marche pas
-	multimesh.set_transform_format(MultiMesh.TRANSFORM_3D)
-	multimesh.set_instance_count(dimensions.x * dimensions.z)
-	var material = SpatialMaterial.new()
-	m_overlay_cells.set_multimesh(multimesh)
-	m_overlay_cells.set_material_override(material)
-	material.set_flag(SpatialMaterial.FLAG_ALBEDO_FROM_VERTEX_COLOR, true)
-	for i in range(dimensions.x * dimensions.z):
-		var t = Transform(Basis(), Vector3(-1000, -1000, -1000))
-		m_overlay_cells.get_multimesh().set_instance_transform(i, t)
-		m_overlay_cells.get_multimesh().set_instance_color(i, Color(0, 1, 1))
-	add_child(m_overlay_cells)
-	
-	m_plan = Plane(Vector3(0,1,0), 0)
 	
 	set_process(true)
 	
