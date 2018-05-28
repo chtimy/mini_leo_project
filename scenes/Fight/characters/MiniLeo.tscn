@@ -11,6 +11,7 @@ animations = [ {
 "name": "face",
 "speed": 5.0
 } ]
+_sections_unfolded = [ "Resource" ]
 
 [sub_resource type="RectangleShape2D" id=2]
 
