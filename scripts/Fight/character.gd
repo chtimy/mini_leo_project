@@ -16,7 +16,7 @@ var opportunity_action_names
 var path
 var objects = []
 var object_in_hand
-var SPEED = 10
+var SPEED = 5
 var map
 var actions_dico
 var image
@@ -50,13 +50,16 @@ func do_opportunity_actions(var game):
 # @params :
 #	paths : Array of points composing the path
 func preprocess_path(var paths):
-	for i in range(paths.size()-1):
-		var cell = paths[i]
-		var neighbor = self.map.neighbor(self.position, [Vector3(1,0,0), Vector3(-1,0,0), Vector3(0,0,1), Vector3(0,0,-1)], ["Characters"])
+	var size = paths.size()-1
+	for i in range(size):
+		var cell = paths[size - i]
+		var neighbor = self.map.neighbor(self.position_in_matrix, [Vector2(1,0), Vector2(-1,0), Vector2(0,1), Vector2(0,-1)], ["Characters"])
 		for neighbour in neighbor:
 			if neighbour.do_opportunity_actions(get_node("..")):
-				paths.resize(i)
-				return 
+				for j in range(i, size):
+					path.pop_front()
+				return path.front()
+	return paths.front()
 		
 ##################################### GRAPHICS #############################################
 func stop_moving():
@@ -72,26 +75,26 @@ func decrease_caracteristic(var name, var value):
 	emit_signal("change_caracteristic_from_characterPerso", {"name" : name, "value" : self.caracteristics[name]})
 	
 func throw_dice_for_caracteristic(var name):
-	var result = tools.throw_dice(100)
+	var result = Tools.throw_dice(100)
 	return result <= self.caracteristics[name]
 	
 ##################################### NEIGHBOR #############################################
 	
 func behind(var i = 1):
 	var orientation = get_caracteristic("orientation")
-	return self.position_in_matrix - orientation * i
+	return Tools.behind(self.position_in_matrix, orientation, i)
 	
 func front(var i = 1):
 	var orientation = get_caracteristic("orientation")
-	return self.position_in_matrix + orientation * i
+	return Tools.front(self.position_in_matrix, orientation, i)
 	
 func right(var i = 1):
 	var orientation = get_caracteristic("orientation")
-	return self.position_in_matrix + Vector3(orientation.z, 0, orientation.x)
+	return Tools.right(self.position_in_matrix, orientation, i)
 	
 func left(var i = 1):
 	var orientation = get_caracteristic("orientation")
-	return self.position_in_matrix + Vector3(-orientation.z, 0, -orientation.x)	
+	return Tools.left(self.position_in_matrix, orientation, i)
 	
 ##################################### OBJECTS #############################################
 # @function : receive_object
@@ -159,9 +162,9 @@ func _process(delta):
 				path[path.size() - 1] = pfrom.linear_interpolate(pto, to_walk/d)
 				to_walk = 0
 		var atpos = path[path.size() - 1]
-		var vec = atpos - from
-		set_graphics_rotation_by_vec(vec.normalized())
-		self.graphics.transform.origin += vec
+		var vec = map.index_to_position(atpos) - map.index_to_position(from)
+#		set_graphics_rotation_by_vec(vec.normalized())
+		translate_graphics(vec)
 	else:
 		emit_signal("finished_animation_from_character")
 		set_process(false)

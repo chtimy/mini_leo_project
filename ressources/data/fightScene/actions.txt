@@ -68,11 +68,11 @@ res://ressources/images/hud/menuFight/downtownDisabled.png
 1
 0
 
-up_and_down
+up_and_under
 6
-res://ressources/images/hud/menuFight/up_and_down.png
-res://ressources/images/hud/menuFight/up_and_downChecked.png
-res://ressources/images/hud/menuFight/up_and_downDisabled.png
+res://ressources/images/hud/menuFight/up_and_under.png
+res://ressources/images/hud/menuFight/up_and_underChecked.png
+res://ressources/images/hud/menuFight/up_and_underDisabled.png
 1
 1
 0

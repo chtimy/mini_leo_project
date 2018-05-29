@@ -6,9 +6,6 @@ var size_tile
 func _init(var name, var groups, var caracteristics, var position).(name, groups, caracteristics):
 	self.position_in_matrix = position
 	
-func set_position_in_matrix(var position):
-	self.position_in_matrix = position
-	
 func set_position(var position):
 	var old_position = self.position_in_matrix
 	set_position_in_matrix(position_in_matrix)
@@ -25,13 +22,14 @@ func set_graphics_position(var position):
 #	m_graphics.rotate_y(angle_in_radians)
 	
 func set_graphics_rotation_by_vec(var vec):
-	var orientation = get_caracteristic("orientation")
-	var way = orientation.cross(vec)
-	var angle = orientation.angle_to(vec)
-	if way.y < 0:
-		angle = -angle
-	self.graphics.rotate_y(angle)
-	set_caracteristic("orientation", vec)
+	if vec == Vector2(1, 0):
+		$animation.set_animation("wait_right")
+	elif vec == Vector2(-1, 0):
+		$animation.set_animation("wait_left")
+	elif vec == Vector2(0, 1):
+		$animation.set_animation("wait_front")
+	elif vec == Vector2(0, -1):
+		$animation.set_animation("wait_back")
 	
 func set_graphics_rotation_to_target(var target):
 	set_graphics_rotation_by_vec((target - self.position).normalized())

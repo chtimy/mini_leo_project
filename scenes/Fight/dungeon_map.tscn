@@ -1,10 +1,49 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://ressources/tileset/dungeon/dungeon_tileset.res" type="TileSet" id=1]
 [ext_resource path="res://scripts/Fight/map_example_2D.gd" type="Script" id=2]
 [ext_resource path="res://scenes/Fight/overlay.tscn" type="PackedScene" id=3]
 
-[node name="TileMap" type="TileMap"]
+[sub_resource type="GDScript" id=1]
+
+script/source = "extends Node2D
+
+var path
+
+enum {NORMAL_MODE, DRAW_ARROW}
+
+var mode = NORMAL_MODE
+
+func _ready():
+    pass
+
+func _draw():
+	if(mode == DRAW_ARROW):
+    	draw_arrow()
+	
+func draw_arrow():
+	var map = get_node(\"..\")
+	var half_size_cell = map.size_cell / 2.0
+	for j in range(0, path.size()):
+		var i = path.size() - j - 1
+		if i == 1:
+			var before_point = map.index_to_position(path[i]) + half_size_cell
+			var current_point = map.index_to_position(path[i - 1]) + half_size_cell
+			var dir = (before_point - current_point) / 2
+			draw_line(before_point, current_point + dir, Color(0, 0, 1), 10)
+			dir = dir / 1.5
+			var up = Vector2(-dir.y, dir.x) / 1.5
+			var colors = [Color(0, 0, 1)]
+			var triangle = [current_point, current_point + dir + up, current_point + dir - up]
+			draw_polygon(triangle, colors)
+			break
+		else:
+			var before_point = map.index_to_position(path[i]) + half_size_cell
+			var current_point = map.index_to_position(path[i - 1]) + half_size_cell
+			draw_line(before_point, current_point, Color(0, 0, 1), 10)
+"
+
+[node name="TileMap" type="TileMap" index="0"]
 
 mode = 0
 tile_set = ExtResource( 1 )
@@ -28,28 +67,8 @@ _sections_unfolded = [ "Cell" ]
 ZOOM_FACTOR = 0.1
 OVERLAY_SCENE = ExtResource( 3 )
 
-[node name="Light2D" type="Light2D" parent="." index="0"]
+[node name="draw_space" type="Node2D" parent="." index="0"]
 
-enabled = true
-editor_only = false
-texture = null
-offset = Vector2( 0, 0 )
-texture_scale = 1.0
-color = Color( 1, 1, 1, 1 )
-energy = 1.0
-mode = 0
-range_height = 0.0
-range_z_min = -1024
-range_z_max = 1024
-range_layer_min = 0
-range_layer_max = 0
-range_item_cull_mask = 1
-shadow_enabled = false
-shadow_color = Color( 0, 0, 0, 0 )
-shadow_buffer_size = 2048
-shadow_gradient_length = 0.0
-shadow_filter = 0
-shadow_filter_smooth = 0.0
-shadow_item_cull_mask = 1
+script = SubResource( 1 )
 
 

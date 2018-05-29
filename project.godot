@@ -16,7 +16,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-tools="*res://scripts/Fight/tools.gd"
+Tools="*res://scripts/Fight/tools.gd"
 
 [display]
 

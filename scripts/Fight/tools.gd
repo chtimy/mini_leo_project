@@ -53,7 +53,7 @@ func compare_nodes(var node1, var node2):
 	return false
 	
 func euclidian_dist(var start, var target):
-	return (start.x - target.x) * (start.x - target.x) + (start.z - target.z) * (start.z - target.z)
+	return (start.x - target.x) * (start.x - target.x) + (start.y - target.y) * (start.y - target.y)
 	
 func shortest_path(var start, var target, var matrix, var list_neighbor_ofsets, var black_list_groups = []):
 	var closed_list = {}
@@ -61,7 +61,7 @@ func shortest_path(var start, var target, var matrix, var list_neighbor_ofsets, 
 	var dist = euclidian_dist(start, target)
 	var current_node = {"position" : start, "cost_g" : 0, "cost_h" : dist, "cost_f" : dist, "parent" : start}
 	open_list.push_back(current_node)
-	while (current_node.position.x != target.x || current_node.position.z != target.z) && !open_list.empty():
+	while (current_node.position.x != target.x || current_node.position.y != target.y) && !open_list.empty():
 		# take the best node
 		current_node = open_list.pop_front()
 		# add node in the closed list
@@ -69,7 +69,7 @@ func shortest_path(var start, var target, var matrix, var list_neighbor_ofsets, 
 		# search neighbor and add to the opened list
 		for offset in list_neighbor_ofsets: 
 			var neighbour_position = current_node.position + offset
-			var selectable = tools.search_character(matrix.get_selectables_from_cell(neighbour_position), "Characters")
+			var selectable = Tools.search_character(matrix.get_selectables_from_cell(neighbour_position), "Characters")
 			var blocked = false
 			if selectable:
 				for group in black_list_groups:
@@ -108,7 +108,7 @@ func shortest_path(var start, var target, var matrix, var list_neighbor_ofsets, 
 					open_list.push_back({"position" : neighbour_position, "cost_g" : cost_g, "cost_h" : cost_h, "cost_f" : cost_f, "parent" : parent})
 					open_list.sort_custom(self, "compare_nodes")
 		# check if the current node is the target node, if yes, build the final path (for the revolucion!)
-		if current_node.position.x == target.x && current_node.position.z == target.z:
+		if current_node.position.x == target.x && current_node.position.y == target.y:
 			var final_path = []
 			var node = closed_list[target]
 			final_path.push_back(node.position)
@@ -140,6 +140,14 @@ func search_character(var selectables, var group):
 			return selectable
 	return null
 	
+func right(var position, var orientation, var i = 1):
+	return position + Vector2(orientation.y, -orientation.x) * i
+func left(var position, var orientation, var i = 1):
+	return position - Vector2(orientation.y, -orientation.x) * i
+func behind(var position, var orientation, var i = 1):
+	return position - orientation * i
+func front(var position, var orientation, var i = 1):
+	return position + orientation * i
 	
 func print_error(var message):
 	print("##########################################################")

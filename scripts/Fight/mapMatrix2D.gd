@@ -36,10 +36,9 @@ func disable_selection():
 # @function : remove_all_overlay_cells
 # @Description : Remove all the overlay cells in the map
 func remove_all_overlay_cells():
-	var t = Transform2D(0, Vector2(-1000, -1000))
 	while !self.list_active_overlays.empty():
 		var index = self.list_active_overlays.pop_back()
-		set_transform_overlay_mesh_instance(index2D_to_index1D(index), t)
+		remove_overlay(index2D_to_index1D(index))
 		matrix[index.x][index.y].overlay = null
 
 # @function : add_overlay_cell_by_index
@@ -49,18 +48,15 @@ func remove_all_overlay_cells():
 #	index : Index in the matrix of the cell to add the overlay cell
 func add_overlay_cell_by_index(var index):
 	if !self.matrix[index.x][index.y].has("overlay") || self.matrix[index.x][index.y].overlay == null:
-#		var overlayIndex = addInstanceOverlay()
-		var transform = Transform(Basis(), index_to_position(index))
 		# ATTENTION ici à l'offset de déplacement
-#		transform.origin = indexToPosition(index)
-		set_transform_overlay_mesh_instance(index2D_to_index1D(index), transform)
+		set_transform_overlay_mesh_instance(index2D_to_index1D(index), index_to_position(index))
 		self.list_active_overlays.append(index)
 		self.matrix[index.x][index.y].overlay = true
 		return true
 	return false
 
 func index2D_to_index1D(var index2D):
-	return index2D.y * self.matrix[0].size() * self.matrix[0][0].size() + index2D.x * self.matrix[0][0].size() + index2D.z
+	return index2D.y * self.matrix[0].size() + index2D.x
 	
 # @function : func add_overlay_cell_by_position(var position):
 # @Description : Add overlay cell to the input position destination (position is normalized to the center of the cell). 
@@ -79,6 +75,7 @@ func set_color_overlay_mesh_instance(var index_instance, var color):
 	
 func position_to_index(var position):
 	var pos = (position - get_origin()) / self.size_cell
+	pos = pos.floor()
 	return Vector2(round(pos.x), round(pos.y))
 	
 func index_to_position(var index):

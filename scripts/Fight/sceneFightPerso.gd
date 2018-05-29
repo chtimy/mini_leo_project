@@ -29,7 +29,7 @@ func _init():
 									["Players"],
 									caracteristics,
 									Vector2(0,0), 
-									["attack", "cross", "posterize", "up_and_down", "steal", "deplacement", "passe", "passer"], 
+									["attack", "cross", "posterize", "up_and_under", "steal", "deplacement", "passe", "passer"], 
 									["opportunity_attack"], 
 									map, 
 									load("res://ressources/images/fight/leo_tile.png"))

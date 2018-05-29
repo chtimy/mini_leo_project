@@ -24,14 +24,13 @@ var path = {
 }
 
 var arrow_origin
-var arrow_size = 0.5
 
 ########################################################################################################################################
 ###################################################		METHODS	########################################################################
 ########################################################################################################################################
 
 ##################################### NODE #############################################
-func _init().(Vector2(15, 15), Vector2(0, 0), Vector2(64, 64)):
+func _init().(Vector2(15, 15), Vector2(0, 0), Vector2(128,128)):
 	self.matrix = []
 	for i in range(dimensions.x):
 		self.matrix.append([])
@@ -44,6 +43,8 @@ func _ready():
 	m_camera.set_position(Vector2(12,12))
 	add_child(m_camera)
 	
+	overlay_scene = OVERLAY_SCENE
+	
 	set_process(true)
 	
 func _process(delta):
@@ -53,28 +54,27 @@ func _process(delta):
 func _input(event):
 	if self.mode == SELECTION_MODE || self.mode == DRAW_ARROW:
 		if event is InputEventMouseMotion :
-			var position = get_intersection_point(get_mouse_position())
-			if position.x >= origin.x && position.z >= origin.z:
+			var position = get_mouse_position()
+			if position.x >= origin.x && position.y >= origin.y:
 				var index = position_to_index(position)
 				if is_overlay_cell_at_index(index):
 					if lastClickedCell != null:
-						set_color_overlay_mesh_instance(lastClickedCell, Color(0.0,0.5,0.5))
-					set_color_overlay_mesh_instance(index, Color(1.0,0.0,0.0))
+						set_color_overlay_mesh_instance(lastClickedCell, Color("cceef283"))
+					set_color_overlay_mesh_instance(index, Color(1.0,0.0,0.0,0.5))
 					if self.mode == DRAW_ARROW:
-						self.path.last_solution = tools.shortest_path(self.arrow_origin, index, self, [Vector3(1, 0, 0), Vector3(-1, 0, 0), Vector3(0, 0, 1), Vector3(0, 0, -1)], self.path.cond)
-						var arrow = $Arrow
-						arrow.clear()
-						tools.draw_arrow(arrow, self.path.last_solution, self)
+						self.path.last_solution = Tools.shortest_path(self.arrow_origin, index, self, [Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1)], self.path.cond)
+						$draw_space.mode = $draw_space.DRAW_ARROW
+						$draw_space.path = self.path.last_solution
+						$draw_space.update()
 					lastClickedCell = index
 				elif lastClickedCell != null:
-					set_color_overlay_mesh_instance(lastClickedCell, Color(0.0,0.5,0.5))
+					set_color_overlay_mesh_instance(lastClickedCell, Color("cceef283"))
 					lastClickedCell = null
 		if event is InputEventMouseButton :
 			if event.get_button_index() == BUTTON_LEFT && event.pressed == false:
 				if lastClickedCell != null:
 					print("click on ", lastClickedCell)
 					if self.mode == DRAW_ARROW:
-						$Arrow.clear()
 						set_mode(SELECTION_MODE)
 						emit_signal("move_from_map", self.path.last_solution)
 					else:
@@ -131,7 +131,7 @@ func _on_OptionButton_item_selected(ID):
 	
 ##################################### MAP #############################################
 func get_intersection_point(var mouse_position):
-	return m_plan.intersects_ray(m_camera.project_ray_origin(mouse_position), m_camera.project_ray_normal(mouse_position)) 
+	return get_mouse_position()
 	
 func get_mouse_position():
 	return get_viewport().get_mouse_position()
@@ -140,7 +140,7 @@ func get_mouse_position():
 func neighbor(var position, var neighbouring, var white_list):
 	var selectables = []
 	for neighbour in neighbouring:
-		var selectable = tools.search_character(get_selectables_from_cell(position + neighbour), "Characters")
+		var selectable = Tools.search_character(get_selectables_from_cell(position + neighbour), "Characters")
 		if selectable:
 			var is_enemi = true
 			for group in white_list:

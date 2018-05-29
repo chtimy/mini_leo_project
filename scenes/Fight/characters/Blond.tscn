@@ -1,13 +1,31 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://ressources/images/characters/blond/blond_face.png" type="Texture" id=1]
+[ext_resource path="res://ressources/images/characters/blond/blond_face01.png" type="Texture" id=1]
+[ext_resource path="res://ressources/images/characters/blond/blond_face03.png" type="Texture" id=2]
+[ext_resource path="res://ressources/images/characters/blond/blond_face02.png" type="Texture" id=3]
+[ext_resource path="res://ressources/images/characters/blond/blond_face.png" type="Texture" id=4]
 
 [sub_resource type="SpriteFrames" id=1]
 
 animations = [ {
 "frames": [ ExtResource( 1 ) ],
 "loop": true,
-"name": "face",
+"name": "wait_left",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 2 ) ],
+"loop": true,
+"name": "wait_right",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 3 ) ],
+"loop": true,
+"name": "wait_back",
+"speed": 5.0
+}, {
+"frames": [ ExtResource( 4 ) ],
+"loop": true,
+"name": "wait_front",
 "speed": 5.0
 } ]
 
@@ -20,7 +38,7 @@ extents = Vector2( 20, 60 )
 
 scale = Vector2( 2, 2 )
 frames = SubResource( 1 )
-animation = "face"
+animation = "wait_front"
 centered = false
 _sections_unfolded = [ "Transform" ]
 
