@@ -10,7 +10,7 @@
 # si > 0 alors 
 	# nom de l'effet
 
-11
+12
 
 cross
 0
@@ -104,8 +104,17 @@ res://ressources/images/hud/menuFight/attackDisabled.png
 0
 0
 
-opportunity_attack
+ramasser
 10
+res://ressources/images/hud/menuFight/ramasser.png
+res://ressources/images/hud/menuFight/ramasserChecked.png
+res://ressources/images/hud/menuFight/ramasserDisabled.png
+1
+0
+0
+
+opportunity_attack
+11
 null
 null
 null

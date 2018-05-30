@@ -2,20 +2,21 @@ extends "res://scripts/Fight/selectable.gd"
 
 var position_in_matrix
 var size_tile
+var map
 
-func _init(var name, var groups, var caracteristics, var position).(name, groups, caracteristics):
+func _init(var name, var groups, var caracteristics, var position, var map).(name, groups, caracteristics):
 	self.position_in_matrix = position
+	self.map = map
 	
-func set_position(var position):
-	var old_position = self.position_in_matrix
-	set_position_in_matrix(position_in_matrix)
-	translate_graphics(position - old_position)
+func set_position_in_matrix(var position_to):
+	map.move_selectable_to(self, position_in_matrix, position_to)
+	position_in_matrix = position_to
 	
 func translate_graphics(var translation):
 	$animation.position += translation
 	
 func set_graphics_position(var position):
-	$animation.position = position
+	$animation.position = position * map.size_cell
 	
 #func set_graphics_rotation_by_angle_in_degrees(var angle_in_degrees):
 #	var angle_in_radians = angle_in_degrees * 2 * PI / 360.0

@@ -132,13 +132,21 @@ func has_value(var key):
 func clear_values():
 	self.values.clear()
 	
-func search_character(var selectables, var group):
+func search_selectable_in_tab_by_group(var selectables, var group):
 	if !selectables:
 		return null
 	for selectable in selectables:
 		if selectable.is_in_group(group):
 			return selectable
 	return null
+	
+func search_selectable_in_tab_by_object(var selectables, var object):
+	if !selectables:
+		return null 
+	for i in range(selectables.size()):
+		if selectables[i] == object:
+			return i
+	return -1
 	
 func right(var position, var orientation, var i = 1):
 	return position + Vector2(orientation.y, -orientation.x) * i

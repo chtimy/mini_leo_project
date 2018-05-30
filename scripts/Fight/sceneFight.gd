@@ -56,9 +56,7 @@ func _ready():
 					i += 1
 				self.map.add_selectable_to_cell(selectable, position)
 				selectable.position_in_matrix = position
-				selectable.set_graphics_position(position * map.size_cell)
-				print(selectable.get_node("animation").position)
-				print( map.size_cell)
+				selectable.set_graphics_position(position)
 				self.characters.append(selectable)
 				
 				var caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()
@@ -139,5 +137,14 @@ func next_turn():
 	
 func drop_object_on_the_floor(var object, var position):
 	self.map.add_selectable_to_cell(object, position)
-	object.set_position(position)
-	add_child(object.graphics)
+	var selectables = map.get_selectables_from_cell(position)
+	object.set_graphics_position(position)
+	print(object.get_node("animation"))
+	add_child(object)
+	
+func pick_object_from_the_floor(var position):
+	var selectables = map.get_selectables_from_cell(position)
+	var object = Tools.search_selectable_in_tab_by_group(selectables, "Objects")
+	map.remove_selectable_from_cell(object, position)
+	remove_child(object)
+	return object

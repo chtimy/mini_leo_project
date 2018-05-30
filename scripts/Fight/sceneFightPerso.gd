@@ -29,7 +29,7 @@ func _init():
 									["Players"],
 									caracteristics,
 									Vector2(0,0), 
-									["attack", "cross", "posterize", "up_and_under", "steal", "deplacement", "passe", "passer"], 
+									["attack", "cross", "posterize", "up_and_under", "steal", "deplacement", "passe", "passer", "ramasser"], 
 									["opportunity_attack"], 
 									map, 
 									load("res://ressources/images/fight/leo_tile.png"))
@@ -39,13 +39,14 @@ func _init():
 	
 	
 	animation = load("res://scenes/Fight/objects/Bow.tscn").instance()
-	selectable = OBJECT_CLASS.new("sword",
+	selectable = OBJECT_CLASS.new("bow",
 								["Objects"],
 								{},
-								Vector2(0,0))
+								Vector2(0,0),
+								map)
 	selectable.add_child(animation)
 	selectables[0].take_in_hand(selectable)
-	selectables.append(selectable)
+#	selectables.append(selectable)
 	
 	caracteristics = {
 	"attack" : 3,
@@ -64,7 +65,7 @@ func _init():
 								["Players"], 
 								caracteristics, 
 								Vector2(0,0), 
-								["attack", "steal", "deplacement", "passe", "block", "passer"], 
+								["attack", "steal", "deplacement", "passe", "block", "passer", "ramasser"], 
 								["opportunity_attack"], 
 								map,
 								load("res://ressources/images/fight/blond_tile.png"))
@@ -88,7 +89,7 @@ func _init():
 								["Enemis"], 
 								caracteristics, 
 								Vector2(0,0), 
-								["attack", "cross", "passer"], 
+								["attack", "cross", "passer", "ramasser"], 
 								["opportunity_attack"], 
 								map,
 								load("res://ressources/images/fight/enemi_tile.png"))

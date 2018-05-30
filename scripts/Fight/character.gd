@@ -17,7 +17,6 @@ var path
 var objects = []
 var object_in_hand
 var SPEED = 5
-var map
 var actions_dico
 var image
 
@@ -25,10 +24,9 @@ var image
 ########################################## METHODS ######################################################
 #########################################################################################################
 
-func _init(var name, var groups, var caracteristics, var position, var action_names, var opp_action_names, var map, var image).(name, groups, caracteristics, position):
+func _init(var name, var groups, var caracteristics, var position, var action_names, var opp_action_names, var map, var image).(name, groups, caracteristics, position, map):
 	self.action_names = action_names
 	self.opportunity_action_names = opp_action_names
-	self.map = map
 	self.image = image
 	add_to_group("Characters")
 	randomize()
@@ -132,7 +130,6 @@ func take_in_hand(var object):
 # @return : The objet to drop, null if the object doesn't exist
 func drop_object_from_hand():
 	var obj = object_in_hand
-	obj.set_position(self.position)
 	object_in_hand = null
 	return obj
 	

@@ -16,7 +16,7 @@
    viewBox="0 0 210 297"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="menuAttack.svg">
   <defs
      id="defs2">
@@ -53,8 +53,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="0.49497475"
-     inkscape:cx="450.29239"
-     inkscape:cy="625.70928"
+     inkscape:cx="81.586714"
+     inkscape:cy="140.83606"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -79,6 +79,40 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <g
+       id="g1013"
+       transform="translate(0,39.55589)"
+       inkscape:export-filename="F:\Documents\Projet_Godot\mini_leo_project\ressources\images\hud\menuFight\ramasserDisabled.png"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409">
+      <rect
+         inkscape:export-ydpi="409"
+         inkscape:export-xdpi="409"
+         style="opacity:1;vector-effect:none;fill:#717175;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         id="rect1003"
+         width="91.659233"
+         height="21.733627"
+         x="278.93332"
+         y="373.3967"
+         inkscape:export-filename="C:\Users\Jérémy Riffet\Godot\mini_leo\images\hud\menuFight\up_and_downChecked.png" />
+    </g>
+    <g
+       id="g1001"
+       transform="translate(0,39.55589)"
+       inkscape:export-filename="F:\Documents\Projet_Godot\mini_leo_project\ressources\images\hud\menuFight\ramasserChecked.png"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409">
+      <rect
+         inkscape:export-filename="C:\Users\Jérémy Riffet\Godot\mini_leo\images\hud\menuFight\up_and_downChecked.png"
+         y="373.3967"
+         x="152.68929"
+         height="21.733627"
+         width="91.659233"
+         id="rect991"
+         style="opacity:1;vector-effect:none;fill:#8ad462;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+         inkscape:export-xdpi="409"
+         inkscape:export-ydpi="409" />
+    </g>
     <rect
        style="opacity:1;vector-effect:none;fill:#ffffd3;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
        id="rect4487"
@@ -852,5 +886,60 @@
            width="346.42859"
            id="rect985" /></flowRegion><flowPara
          style="font-size:53.33333588px"
-         id="flowPara989">Attaquer</flowPara></flowRoot>  </g>
+         id="flowPara989">Attaquer</flowPara></flowRoot>    <rect
+       inkscape:export-ydpi="409"
+       inkscape:export-xdpi="409"
+       y="412.6853"
+       x="32.15073"
+       height="21.733627"
+       width="91.659233"
+       id="rect979"
+       style="opacity:1;vector-effect:none;fill:#ffffd3;fill-opacity:1;fill-rule:nonzero;stroke:#000000;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:normal"
+       inkscape:export-filename="F:\Documents\Projet_Godot\mini_leo_project\ressources\images\hud\menuFight\ramasser.png" />
+    <flowRoot
+       inkscape:export-ydpi="409"
+       inkscape:export-xdpi="409"
+       transform="matrix(0.26458333,0,0,0.26458333,17.027996,356.33219)"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot987"
+       xml:space="preserve"
+       inkscape:export-filename="F:\Documents\Projet_Godot\mini_leo_project\ressources\images\hud\menuFight\ramasser.png"><flowRegion
+         id="flowRegion983"><rect
+           y="231.80539"
+           x="130"
+           height="65.980415"
+           width="444.91846"
+           id="rect981" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+         id="flowPara985">Ramasser</flowPara></flowRoot>    <flowRoot
+       inkscape:export-filename="F:\Documents\Projet_Godot\mini_leo_project\ressources\images\hud\menuFight\ramasserChecked.png"
+       xml:space="preserve"
+       id="flowRoot1021"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       transform="matrix(0.26458333,0,0,0.26458333,137.56655,356.33219)"
+       inkscape:export-xdpi="409"
+       inkscape:export-ydpi="409"><flowRegion
+         id="flowRegion1017"><rect
+           id="rect1015"
+           width="444.91846"
+           height="65.980415"
+           x="130"
+           y="231.80539" /></flowRegion><flowPara
+         id="flowPara1019"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start">Ramasser</flowPara></flowRoot>    <flowRoot
+       inkscape:export-ydpi="409"
+       inkscape:export-xdpi="409"
+       transform="matrix(0.26458333,0,0,0.26458333,263.81058,356.33219)"
+       style="font-style:normal;font-weight:normal;font-size:26.66666603px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none"
+       id="flowRoot1029"
+       xml:space="preserve"
+       inkscape:export-filename="F:\Documents\Projet_Godot\mini_leo_project\ressources\images\hud\menuFight\ramasserDisabled.png"><flowRegion
+         id="flowRegion1025"><rect
+           y="231.80539"
+           x="130"
+           height="65.980415"
+           width="444.91846"
+           id="rect1023" /></flowRegion><flowPara
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start"
+         id="flowPara1027">Ramasser</flowPara></flowRoot>  </g>
 </svg>
