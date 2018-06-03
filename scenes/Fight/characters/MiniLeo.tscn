@@ -1,17 +1,20 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=18 format=2]
 
 [ext_resource path="res://ressources/images/characters/mini_leo/cote_gauche.png" type="Texture" id=1]
 [ext_resource path="res://ressources/images/characters/mini_leo/cote_droit.png" type="Texture" id=2]
 [ext_resource path="res://ressources/images/characters/mini_leo/face02.png" type="Texture" id=3]
-[ext_resource path="res://ressources/images/characters/mini_leo/derriere.png" type="Texture" id=4]
-[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/sprite_0.png" type="Texture" id=5]
-[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/sprite_1.png" type="Texture" id=6]
-[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/sprite_2.png" type="Texture" id=7]
-[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/sprite_3.png" type="Texture" id=8]
-[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/sprite_4.png" type="Texture" id=9]
-[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/sprite_5.png" type="Texture" id=10]
-[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/sprite_6.png" type="Texture" id=11]
-[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/sprite_7.png" type="Texture" id=12]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/wait_back/sprite_0.png" type="Texture" id=4]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/wait_back/sprite_1.png" type="Texture" id=5]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/wait_back/sprite_2.png" type="Texture" id=6]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/wait_back/sprite_3.png" type="Texture" id=7]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/front/sprite_0.png" type="Texture" id=8]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/front/sprite_1.png" type="Texture" id=9]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/front/sprite_2.png" type="Texture" id=10]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/front/sprite_3.png" type="Texture" id=11]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/front/sprite_4.png" type="Texture" id=12]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/front/sprite_5.png" type="Texture" id=13]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/front/sprite_6.png" type="Texture" id=14]
+[ext_resource path="res://ressources/images/characters/mini_leo/animation/wait/front/sprite_7.png" type="Texture" id=15]
 
 [sub_resource type="SpriteFrames" id=1]
 
@@ -31,12 +34,12 @@ animations = [ {
 "name": "face",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 4 ) ],
+"frames": [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ) ],
 "loop": true,
 "name": "wait_back",
-"speed": 5.0
+"speed": 4.0
 }, {
-"frames": [ ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ) ],
+"frames": [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 11 ), ExtResource( 12 ), ExtResource( 13 ), ExtResource( 14 ), ExtResource( 15 ) ],
 "loop": true,
 "name": "wait_front",
 "speed": 4.0
@@ -53,7 +56,7 @@ extents = Vector2( 30, 60 )
 z_index = 2
 frames = SubResource( 1 )
 animation = "wait_front"
-frame = 5
+frame = 7
 playing = true
 centered = false
 _sections_unfolded = [ "Pause", "Transform", "Z Index" ]

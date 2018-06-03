@@ -69,7 +69,7 @@ func shortest_path(var start, var target, var matrix, var list_neighbor_ofsets, 
 		# search neighbor and add to the opened list
 		for offset in list_neighbor_ofsets: 
 			var neighbour_position = current_node.position + offset
-			var selectable = Tools.search_character(matrix.get_selectables_from_cell(neighbour_position), "Characters")
+			var selectable = Tools.search_selectable_in_tab_by_group(matrix.get_selectables_from_cell(neighbour_position), "Characters")
 			var blocked = false
 			if selectable:
 				for group in black_list_groups:

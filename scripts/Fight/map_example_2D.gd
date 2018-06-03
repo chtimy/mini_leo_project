@@ -140,7 +140,7 @@ func get_mouse_position():
 func neighbor(var position, var neighbouring, var white_list):
 	var selectables = []
 	for neighbour in neighbouring:
-		var selectable = Tools.search_character(get_selectables_from_cell(position + neighbour), "Characters")
+		var selectable = Tools.search_selectable_in_tab_by_group(get_selectables_from_cell(position + neighbour), "Characters")
 		if selectable:
 			var is_enemi = true
 			for group in white_list:
