@@ -62,6 +62,7 @@ func _input(event):
 						set_color_overlay_mesh_instance(lastClickedCell, Color("cceef283"))
 					set_color_overlay_mesh_instance(index, Color(1.0,0.0,0.0,0.5))
 					if self.mode == DRAW_ARROW:
+						$draw_space.show()
 						self.path.last_solution = Tools.shortest_path(self.arrow_origin, index, self, [Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1)], self.path.cond)
 						$draw_space.mode = $draw_space.DRAW_ARROW
 						$draw_space.path = self.path.last_solution
@@ -76,6 +77,7 @@ func _input(event):
 					print("click on ", lastClickedCell)
 					if self.mode == DRAW_ARROW:
 						set_mode(SELECTION_MODE)
+						$draw_space.hide()
 						emit_signal("move_from_map", self.path.last_solution)
 					else:
 						emit_signal("overlay_clicked_from_map", lastClickedCell)
