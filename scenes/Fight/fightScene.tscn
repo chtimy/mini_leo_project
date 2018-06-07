@@ -4,7 +4,7 @@
 [ext_resource path="res://scripts/Fight/sceneFightPerso.gd" type="Script" id=2]
 [ext_resource path="res://scripts/Fight/turn.gd" type="Script" id=3]
 
-[node name="fightScene" type="Node" index="0"]
+[node name="fightScene" type="Node"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause", "Transform", "Z Index" ]
