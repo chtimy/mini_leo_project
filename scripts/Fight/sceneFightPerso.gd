@@ -48,7 +48,31 @@ func _init():
 	selectables[0].take_in_hand(selectable)
 #	selectables.append(selectable)
 
-
+	caracteristics = {
+	"attack" : 3,
+	"defense" : 1,
+	"perception" : 30,
+	"dexterity" : 0,
+	"agility" : 40,
+	"strength" : 0,
+	"state" : [],
+	"life" : 20,
+	"nbMoves" : 3,
+	"orientation" : Vector2(1,0)
+	}
+	
+	animation = load("res://scenes/Fight/characters/Jerem.tscn").instance()
+	selectable = PLAYER_CLASS.new("jerem",
+									["Players"],
+									caracteristics,
+									Vector2(0,0), 
+									["attack", "cross", "posterize", "up_and_under", "steal", "deplacement", "passe", "passer", "ramasser"], 
+									["opportunity_attack"], 
+									map, 
+									load("res://ressources/images/fight/leo_tile.png"))
+	selectable.add_child(animation)
+	selectables.append(selectable)
+	
 	caracteristics = {
 		"attack" : 3,
 		"defense" : 1,
