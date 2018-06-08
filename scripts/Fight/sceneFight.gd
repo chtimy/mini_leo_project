@@ -31,7 +31,7 @@ func _ready():
 		self.selectables = selectables
 		
 		#temp
-		var initial_positions_enemis = [Vector2(2, 2), Vector2(4, 4)]
+		var initial_positions_enemis = [Vector2(2, 1), Vector2(4, 4)]
 		var initial_positions_players = [Vector2(3,3), Vector2(4, 3), Vector2(2,3), Vector2(5, 3)]
 		var index_player = 0
 		var index_enemi = 0
