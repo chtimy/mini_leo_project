@@ -55,8 +55,8 @@ func preprocess_path(var paths):
 		for neighbour in neighbor:
 			if neighbour.do_opportunity_actions(get_node("..")):
 				for j in range(i, size):
-					path.pop_front()
-				return path.front()
+					paths.pop_front()
+				return paths.front()
 	return paths.front()
 		
 ##################################### GRAPHICS #############################################

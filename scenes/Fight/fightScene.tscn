@@ -5,7 +5,7 @@
 [ext_resource path="res://scripts/Fight/turn.gd" type="Script" id=3]
 [ext_resource path="res://ressources/music/innuendo.ogg" type="AudioStream" id=4]
 
-[node name="fightScene" type="Node" index="0"]
+[node name="fightScene" type="Node"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Pause", "Transform", "Z Index" ]
@@ -62,20 +62,5 @@ max_distance = 2000.0
 attenuation = 1.0
 bus = "Master"
 area_mask = 1
-
-[node name="Control" type="Control" parent="." index="3"]
-
-anchor_left = 0.0
-anchor_top = 0.0
-anchor_right = 0.0
-anchor_bottom = 0.0
-margin_right = 40.0
-margin_bottom = 40.0
-rect_pivot_offset = Vector2( 0, 0 )
-rect_clip_content = false
-mouse_filter = 0
-mouse_default_cursor_shape = 0
-size_flags_horizontal = 1
-size_flags_vertical = 1
 
 
