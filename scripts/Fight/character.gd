@@ -16,7 +16,7 @@ var opportunity_action_names
 var path
 var objects = []
 var object_in_hand
-var SPEED = 5
+var SPEED = 3
 var actions_dico
 var image
 
@@ -160,7 +160,7 @@ func _process(delta):
 				to_walk = 0
 		var atpos = path[path.size() - 1]
 		var vec = map.index_to_position(atpos) - map.index_to_position(from)
-		set_graphics_rotation_by_vec(vec.normalized())
+		set_graphics_rotation_by_vec(vec.normalized(), "walk")
 		translate_graphics(vec)
 	else:
 		emit_signal("finished_animation_from_character")

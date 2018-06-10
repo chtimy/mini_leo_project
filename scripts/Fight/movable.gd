@@ -22,15 +22,15 @@ func set_graphics_position(var position):
 #	var angle_in_radians = angle_in_degrees * 2 * PI / 360.0
 #	m_graphics.rotate_y(angle_in_radians)
 	
-func set_graphics_rotation_by_vec(var vec):
+func set_graphics_rotation_by_vec(var vec, var anim):
 	if vec == Vector2(1, 0):
-		$animation.set_animation("wait_right")
+		$animation.set_animation(anim + "_right")
 	elif vec == Vector2(-1, 0):
-		$animation.set_animation("wait_left")
+		$animation.set_animation(anim + "_left")
 	elif vec == Vector2(0, 1):
-		$animation.set_animation("wait_front")
+		$animation.set_animation(anim + "_front")
 	elif vec == Vector2(0, -1):
-		$animation.set_animation("wait_back")
+		$animation.set_animation(anim + "_back")
 	
 func set_graphics_rotation_to_target(var target):
 	set_graphics_rotation_by_vec((target - self.position).normalized())

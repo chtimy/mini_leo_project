@@ -45,6 +45,7 @@ static func deplacement_action(var game):
 	character.path = path
 	character.set_process(true)
 	yield(character, "finished_animation_from_character")
+	character.set_graphics_rotation_by_vec(character.get_caracteristic("orientation"), "wait")
 	game.end_turn()
 static func deplacement_range_conditions(var game, var activeOverlay = false):
 	var map = game.map
