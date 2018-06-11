@@ -30,7 +30,7 @@ var arrow_origin
 ########################################################################################################################################
 
 ##################################### NODE #############################################
-func _init().(Vector2(15, 15), Vector2(0, 0), Vector2(128,128)):
+func _init().(Vector2(15, 15), Vector2(0, 0), Vector2(64,64)):
 	self.matrix = []
 	for i in range(dimensions.x):
 		self.matrix.append([])
@@ -123,7 +123,7 @@ func to_2D_plan(var camera):
 	camera.look_at_from_position(Vector3(0,20,0), Vector3(0, 0, 0), Vector3(1,0,0))
 func to_3D_plan(var camera):
 	camera.look_at_from_position(Vector3(12,12,12), Vector3(2.5,0,2.5), Vector3(0,1,0))
-	
+
 func _on_OptionButton_item_selected(ID):
 	print(ID)
 	if ID == 1:
@@ -148,7 +148,8 @@ func neighbor(var position, var neighbouring, var white_list):
 			for group in white_list:
 				if selectable.is_in_group(group):
 					is_enemi = false
-			selectables.push_back(selectable)
+			if is_enemi:
+				selectables.push_back(selectable)
 	return selectables
 	
 func ask_around_possible_action(var character):

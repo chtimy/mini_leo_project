@@ -55,7 +55,7 @@ func compare_nodes(var node1, var node2):
 func euclidian_dist(var start, var target):
 	return (start.x - target.x) * (start.x - target.x) + (start.y - target.y) * (start.y - target.y)
 	
-func shortest_path(var start, var target, var matrix, var list_neighbor_ofsets, var black_list_groups = []):
+func shortest_path(var start, var target, var matrix, var list_neighbor_ofsets, var black_list_groups = [], var white_list_groups = []):
 	var closed_list = {}
 	var open_list = []
 	var dist = euclidian_dist(start, target)
@@ -70,12 +70,16 @@ func shortest_path(var start, var target, var matrix, var list_neighbor_ofsets, 
 		for offset in list_neighbor_ofsets: 
 			var neighbour_position = current_node.position + offset
 			var selectable = Tools.search_selectable_in_tab_by_group(matrix.get_selectables_from_cell(neighbour_position), "Characters")
-			var blocked = false
+			var black_blocked = false
+			var white_blocked = true
 			if selectable:
 				for group in black_list_groups:
 					if selectable.is_in_group(group):
-						blocked = true
-			if blocked:
+						black_blocked = true
+				for group in white_list_groups:
+					if selectable.is_in_group(group):
+						white_blocked = false
+			if black_blocked && !white_blocked:
 				continue
 						
 			# if the neighbour already is not visited
