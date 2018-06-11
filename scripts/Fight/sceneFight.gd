@@ -25,14 +25,15 @@ func _ready():
 	var input = INPUT_SCRIPT.new()
 	self.selectables = input.selectables
 	self.map = input.map
+	self.turn_handler = $HUD/turn_counter
 	var ACTIONS_CLASS = load("res://scripts/Fight/actionPerso.gd")
 	if ACTIONS_CLASS:
 		self.actions_dico = ACTIONS_CLASS.new()
 		self.selectables = selectables
 		
 		#temp
-		var initial_positions_enemis = [Vector2(2, 2), Vector2(4, 4)]
-		var initial_positions_players = [Vector2(3,3), Vector2(4, 3), Vector2(2,3), Vector2(5, 3)]
+		var initial_positions_enemis = [Vector2(2, 1), Vector2(4, 4)]
+		var initial_positions_players = [Vector2(3,3), Vector2(4, 3), Vector2(2,3), Vector2(2, 2)]
 		var index_player = 0
 		var index_enemi = 0
 		
@@ -56,7 +57,6 @@ func _ready():
 					i += 1
 				self.map.add_selectable_to_cell(selectable, position)
 				selectable.position_in_matrix = position
-				selectable.set_position_in_matrix(position)
 				selectable.set_graphics_position(position)
 				self.characters.append(selectable)
 				
@@ -64,8 +64,7 @@ func _ready():
 				caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()
 				caracteristics_menu.init(selectable, selectable.caracteristics)
 				add_child(caracteristics_menu)
-		self.turn_handler = $HUD/turn_counter
-		self.turn_handler.add_characters(self.characters)
+				self.turn_handler.add_character(selectable)
 	else:
 		print("Error : Impossible to load all the scripts")
 		
@@ -79,15 +78,15 @@ func _ready():
 		add_child(selectable)
 
 func _process(delta):
-	var turn = get_current_turn()
+	var turn = self.turn_handler.get_current_turn()
 	if self.characters[turn].is_in_group("Players"):
 		#Players turn
 		if player_turn(turn):
-			next_turn()
+			$HUD/turn_counter.next_turn()
 	elif self.characters[turn].is_in_group("Enemis"):
 		#Enemis turn (IA)
 		if enemi_turn(turn):
-			next_turn()
+			$HUD/turn_counter.next_turn()
 	
 # @function : playerTurn
 # @description : Gestion du tour du joueur
@@ -128,13 +127,7 @@ func enemi_turn(var turn):
 	return true
 	
 func current_playing_character():
-	return self.characters[get_current_turn()]
-
-func get_current_turn():
-	return self.turns.front()
-	
-func next_turn():
-	self.turns.push_back(self.turns.pop_front())
+	return self.characters[turn_handler.get_current_turn()]
 	
 func drop_object_on_the_floor(var object, var position):
 	self.map.add_selectable_to_cell(object, position)

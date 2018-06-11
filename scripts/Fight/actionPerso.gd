@@ -35,9 +35,12 @@ static func deplacement_action(var game):
 	else:
 		map.set_mode(map.DRAW_ARROW, [character.position_in_matrix, ["Enemis"]])
 	var path = yield(map, "move_from_map")
+	print(path)
 	map.disable_selection()
 	#data
 	var final_position = character.preprocess_path(path)
+	print(path)
+	
 	character.set_position_in_matrix(final_position)
 	character.set_caracteristic("orientation", path.front() - path[1])
 	
