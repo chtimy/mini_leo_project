@@ -10,15 +10,15 @@ animations = [ {
 "name": "wait_right",
 "speed": 5.0
 }, {
-"frames": [ ExtResource( 1 ) ],
-"loop": true,
-"name": "wait_front",
-"speed": 4.0
-}, {
 "frames": [  ],
 "loop": true,
 "name": "wait_left",
 "speed": 5.0
+}, {
+"frames": [ ExtResource( 1 ) ],
+"loop": true,
+"name": "wait_front",
+"speed": 4.0
 }, {
 "frames": [  ],
 "loop": true,
@@ -32,7 +32,7 @@ _sections_unfolded = [ "Resource" ]
 custom_solver_bias = 0.0
 extents = Vector2( 20, 60 )
 
-[node name="animation" type="AnimatedSprite" index="0"]
+[node name="animation" type="AnimatedSprite"]
 
 frames = SubResource( 1 )
 animation = "wait_front"

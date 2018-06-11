@@ -1,14 +1,26 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://ressources/images/characters/GB/wait_front.png" type="Texture" id=1]
+[ext_resource path="res://ressources/images/characters/GB/wait/front/wait_front1.png" type="Texture" id=1]
+[ext_resource path="res://ressources/images/characters/GB/wait/front/wait_front2.png" type="Texture" id=2]
+[ext_resource path="res://ressources/images/characters/GB/wait/front/wait_front3.png" type="Texture" id=3]
+[ext_resource path="res://ressources/images/characters/GB/wait/front/wait_front4.png" type="Texture" id=4]
+[ext_resource path="res://ressources/images/characters/GB/wait/back/wait_back1.png" type="Texture" id=5]
+[ext_resource path="res://ressources/images/characters/GB/wait/back/wait_back2.png" type="Texture" id=6]
+[ext_resource path="res://ressources/images/characters/GB/wait/back/wait_back3.png" type="Texture" id=7]
+[ext_resource path="res://ressources/images/characters/GB/wait/back/wait_back4.png" type="Texture" id=8]
 
 [sub_resource type="SpriteFrames" id=1]
 
 animations = [ {
-"frames": [ ExtResource( 1 ) ],
+"frames": [ ExtResource( 1 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 4 ) ],
 "loop": true,
 "name": "wait_front",
-"speed": 5.0
+"speed": 2.0
+}, {
+"frames": [ ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ) ],
+"loop": true,
+"name": "wait_back",
+"speed": 2.0
 } ]
 
 [sub_resource type="RectangleShape2D" id=2]
@@ -16,11 +28,12 @@ animations = [ {
 custom_solver_bias = 0.0
 extents = Vector2( 20, 60 )
 
-[node name="animation" type="AnimatedSprite"]
+[node name="animation" type="AnimatedSprite" index="0"]
 
 position = Vector2( 0, 2 )
 frames = SubResource( 1 )
 animation = "wait_front"
+frame = 3
 playing = true
 centered = false
 offset = Vector2( 0, -30 )

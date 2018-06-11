@@ -11,6 +11,7 @@ func _init(var name, var groups, var caracteristics, var position, var map).(nam
 func set_position_in_matrix(var position_to):
 	map.move_selectable_to(self, position_in_matrix, position_to)
 	position_in_matrix = position_to
+	$animation.set_z_index(position_in_matrix.y)
 	
 func translate_graphics(var translation):
 	$animation.position += translation
