@@ -38,7 +38,8 @@ static func deplacement_action(var game):
 	print(path)
 	map.disable_selection()
 	#data
-	var final_position = character.preprocess_path(path)
+#	var final_position = character.preprocess_path(path)
+	var final_position = path[path.size()-1]
 	print(path)
 	
 	character.set_position_in_matrix(final_position)
@@ -84,10 +85,24 @@ static func attack_action(var game):
 	var enemi = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(pos), "Characters")
 	#data
 	enemi.decrease_caracteristic("life", character.get_caracteristic("attack"))
-	character.set_graphics_rotation_by_vec(enemi.position_in_matrix - character.position_in_matrix)
-	
-	#animation
+	character.set_caracteristic("orientation", enemi.position_in_matrix - character.position_in_matrix)
+	print(enemi.position_in_matrix - character.position_in_matrix)
+#	character.set_graphics_rotation_by_vec(enemi.position_in_matrix - character.position_in_matrix)
 	map.disable_selection()
+
+	#animation
+	var old_position = character.get_node("animation").position
+	character.path = [old_position + character.get_caracteristic("orientation")*90]
+	character.move_mode = "DIRECT"
+	character.set_process(true)
+	yield(character, "finished_animation_from_character")
+	character.play_animation("attack_hand")
+	yield(character, "finished_animation_from_character")
+	character.path = [old_position]
+	character.set_process(true)
+	yield(character, "finished_animation_from_character")
+	character.move_mode = "PATH"
+	character.set_graphics_rotation_by_vec(character.get_caracteristic("orientation"), "wait")
 	game.end_turn()
 static func attack_range_conditions(var game, var activeOverlay = false):
 	var map = game.map

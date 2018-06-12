@@ -5,7 +5,6 @@ extends "res://scripts/Fight/movable.gd"
 #########################################################################################################
 
 signal change_caracteristic_from_characterPerso
-signal finished_animation_from_character
 signal ask_around_possible_action_from_character
 
 #########################################################################################################
@@ -13,10 +12,8 @@ signal ask_around_possible_action_from_character
 #########################################################################################################
 var action_names
 var opportunity_action_names
-var path
 var objects = []
 var object_in_hand
-var SPEED = 3
 var actions_dico
 var image
 
@@ -62,6 +59,14 @@ func preprocess_path(var paths):
 ##################################### GRAPHICS #############################################
 func stop_moving():
 	path.clear()
+	
+func play_animation(var name):
+	var animation_orientation = get_animation_orientation()
+	$animation.set_animation(name+"_"+animation_orientation)
+	
+func on_animation_finished():
+	if($animation.animation != "walk_front" && $animation.animation != "walk_back" && $animation.animation != "walk_right" && $animation.animation != "walk_left"):
+		emit_signal("finished_animation_from_character")
 	
 ##################################### CARACTERISTICS #############################################
 func increase_caracteristic(var name, var value):
@@ -142,26 +147,5 @@ func has_object_in_hands():
 	return false
 ##################################### NODE #############################################
 func _ready():
+	$animation.connect("animation_finished", self, "on_animation_finished")
 	set_process(false)
-
-func _process(delta):
-	if path.size() > 1:
-		var to_walk = delta * SPEED
-		var from = path[path.size() - 1]
-		while to_walk > 0 and path.size() >= 2:
-			var pfrom = path[path.size() - 1]
-			var pto = path[path.size() - 2]
-			var d = pfrom.distance_to(pto)
-			if d <= to_walk:
-				path.remove(path.size() - 1)
-				to_walk -= d
-			else:
-				path[path.size() - 1] = pfrom.linear_interpolate(pto, to_walk/d)
-				to_walk = 0
-		var atpos = path[path.size() - 1]
-		var vec = map.index_to_position(atpos) - map.index_to_position(from)
-		set_graphics_rotation_by_vec(vec.normalized(), "walk")
-		translate_graphics(vec)
-	else:
-		emit_signal("finished_animation_from_character")
-		set_process(false)

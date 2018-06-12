@@ -97,6 +97,30 @@ func _init():
 									load("res://ressources/images/fight/leo_tile.png"))
 	selectable.add_child(animation)
 	selectables.append(selectable)
+	
+	caracteristics = {
+	"attack" : 3,
+	"defense" : 1,
+	"perception" : 0,
+	"dexterity" : 0,
+	"agility" : 30,
+	"strength" : 0,
+	"state" : [],
+	"life" : 20,
+	"nbMoves" : 3,
+	"orientation" : Vector2(1,0)
+	}
+	animation = load("res://scenes/Fight/characters/Enemi.tscn").instance()
+	selectable = ENEMI_CLASS.new("ennemi", 
+								["Enemis"], 
+								caracteristics, 
+								Vector2(0,0), 
+								["attack", "cross", "passer", "ramasser"], 
+								["opportunity_attack"], 
+								map,
+								load("res://ressources/images/fight/enemi_tile.png"))
+	selectable.add_child(animation)
+	selectables.append(selectable)
 
 
 
@@ -125,26 +149,3 @@ func _init():
 	selectable.add_child(animation)
 	selectables.append(selectable)
 	
-	caracteristics = {
-	"attack" : 3,
-	"defense" : 1,
-	"perception" : 0,
-	"dexterity" : 0,
-	"agility" : 30,
-	"strength" : 0,
-	"state" : [],
-	"life" : 20,
-	"nbMoves" : 3,
-	"orientation" : Vector2(1,0)
-	}
-	animation = load("res://scenes/Fight/characters/Enemi.tscn").instance()
-	selectable = ENEMI_CLASS.new("ennemi", 
-								["Enemis"], 
-								caracteristics, 
-								Vector2(0,0), 
-								["attack", "cross", "passer", "ramasser"], 
-								["opportunity_attack"], 
-								map,
-								load("res://ressources/images/fight/enemi_tile.png"))
-	selectable.add_child(animation)
-	selectables.append(selectable)
