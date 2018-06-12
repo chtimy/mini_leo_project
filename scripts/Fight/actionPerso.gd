@@ -104,28 +104,37 @@ static func attack_action(var game):
 	character.move_mode = "PATH"
 	character.set_graphics_rotation_by_vec(character.get_caracteristic("orientation"), "wait")
 	game.end_turn()
-static func attack_range_conditions(var game, var activeOverlay = false):
-	var map = game.map
-	var success = false
-	var character = game.current_playing_character()
-	var from_position = character.position_in_matrix
-	var to_position
-	var relative_position
-	var zona = range(-1, 2)
-	for i in zona:
-		for j in zona:
-			relative_position = Vector2(i, j)
-			to_position = from_position + relative_position
-			relative_position = relative_position.abs()
-			if relative_position.x + relative_position.y <= 1 && map.is_inside_matrix_bounds(to_position):
-				var selectable = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(to_position), "Characters")
-				if selectable && (selectable.is_in_group("Players") || selectable.is_in_group("Enemis")) && selectable.get_groups() != character.get_groups():
-					if activeOverlay:
-						map.add_overlay_cell_by_index(to_position)
-						success = true
-					else:
-						return true
-	return success
+#static func attack_range_conditions(var game, var activeOverlay = false):
+#	var map = game.map
+#	var success = false
+#	var character = game.current_playing_character()
+#	var from_position = character.position_in_matrix
+#	var to_position
+#	var relative_position
+#	var zona = range(-1, 2)
+#	for i in zona:
+#		for j in zona:
+#			relative_position = Vector2(i, j)
+#			to_position = from_position + relative_position
+#			relative_position = relative_position.abs()
+#			if relative_position.x + relative_position.y <= 1 && map.is_inside_matrix_bounds(to_position):
+#				var selectable = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(to_position), "Characters")
+#				if selectable && (selectable.is_in_group("Players") || selectable.is_in_group("Enemis")) && selectable.get_groups() != character.get_groups():
+#					if activeOverlay:
+#						map.add_overlay_cell_by_index(to_position)
+#						success = true
+#					else:
+#						return true
+#	return success
+	
+static func attack_range_conditions(var game, var character_src):
+	var character_dst = game.current_playing_character()
+	var from_position = character_src.position_in_matrix
+	var to_position = character_dst.position_in_matrix
+	var dist = Tools.manhattan_dist(from_position, to_position)
+	if dist <= 1:
+		return true
+	return false
 
 static func posterize_action(var game):
 	game.set_process(false)
@@ -156,28 +165,36 @@ static func posterize_action(var game):
 	enemi.set_graphics_rotation_by_vec(enemi.get_caracteristic("orientation"))
 	game.end_turn()
 	
-static func posterize_range_conditions(var game, var activeOverlay = false):
-	var map = game.map
-	var success = false
-	var character = game.current_playing_character()
-	var from_position = character.position_in_matrix
-	var to_position
-	var relative_position
-	var zona = range(-1, 2)
-	for i in zona:
-		for j in zona:
-			relative_position = Vector2(i, j)
-			to_position = from_position + relative_position
-			relative_position = relative_position.abs()
-			if relative_position.x + relative_position.y <= 1 && map.is_inside_matrix_bounds(to_position):
-				var selectable = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(to_position), "Characters")
-				if selectable && (selectable.is_in_group("Players") || selectable.is_in_group("Enemis")) && selectable.get_groups() != character.get_groups():
-					if activeOverlay:
-						map.add_overlay_cell_by_index(to_position)
-						success = true
-					else:
-						return true
-	return success
+#static func posterize_range_conditions(var game, var activeOverlay = false):
+#	var map = game.map
+#	var success = false
+#	var character = game.current_playing_character()
+#	var from_position = character.position_in_matrix
+#	var to_position
+#	var relative_position
+#	var zona = range(-1, 2)
+#	for i in zona:
+#		for j in zona:
+#			relative_position = Vector2(i, j)
+#			to_position = from_position + relative_position
+#			relative_position = relative_position.abs()
+#			if relative_position.x + relative_position.y <= 1 && map.is_inside_matrix_bounds(to_position):
+#				var selectable = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(to_position), "Characters")
+#				if selectable && (selectable.is_in_group("Players") || selectable.is_in_group("Enemis")) && selectable.get_groups() != character.get_groups():
+#					if activeOverlay:
+#						map.add_overlay_cell_by_index(to_position)
+#						success = true
+#					else:
+#						return true
+#	return success
+
+static func posterize_range_conditions(var game, var character_src):
+	var character_to = game.current_playing_character()
+	var from_position = character_to.position_in_matrix
+	var to_position = character_src.position_in_matrix
+	if Tools.manhattan_dist(to_position, from_position) <= 1:
+		return true
+	return false
 
 static func cross_action(var game):
 	print("crossAction")
@@ -239,56 +256,54 @@ static func cross_action(var game):
 	enemi.set_graphics_rotation_by_vec(enemi.get_caracteristic("orientation"))
 	game.end_turn()
 #fonction qui établit la range possible en fonction des caractéristiques également
-static func cross_range_conditions(var game, var activeOverlay = false):
-	var map = game.map
-	var success = false
-	var character = game.current_playing_character()
-	var from_position = character.position_in_matrix
-	var to_position
-	var relative_position
-	var list_positions = []
-	var list_positions2 = []
-	var zona = range(-1, 2)
-	for i in zona:
-		for j in zona:
-			relative_position = Vector2(i, j)
-			to_position = from_position + relative_position
-			relative_position = relative_position.abs()
-			if relative_position.x + relative_position.y <= 1 && map.is_inside_matrix_bounds(to_position):
-				var selectable = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(to_position), "Characters")
-				if selectable && (selectable.is_in_group("Players") || selectable.is_in_group("Enemis")) && selectable.get_groups() != character.get_groups():
-					if selectable.get_caracteristic("orientation") == character.position_in_matrix - selectable.position_in_matrix:
-						if !success:
-							#espace autour du joueur
-							var cases_to = []
-							print(character.front())
-							cases_to.push_back(Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(character.front()), "Characters"))
-							cases_to.push_back(Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(character.behind()), "Characters"))
-							cases_to.push_back(Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(selectable.front()), "Characters"))
-							cases_to.push_back(Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(selectable.behind()), "Characters"))
-							for case_to in cases_to:
-								if !case_to || !case_to.is_in_group("Players") && !case_to.is_in_group("Enemis"):
-									success = true
-						if activeOverlay:
-							list_positions.append(to_position)
-						elif success:
-								return true
-	if success && activeOverlay:
-		for pos in list_positions:
-			map.add_overlay_cell_by_index(pos)
-		Tools.save_value("tour", {"treated" : true, "number" : 1})
-	return success
+#static func cross_range_conditions(var game, var activeOverlay = false):
+#	var map = game.map
+#	var success = false
+#	var character = game.current_playing_character()
+#	var from_position = character.position_in_matrix
+#	var to_position
+#	var relative_position
+#	var list_positions = []
+#	var list_positions2 = []
+#	var zona = range(-1, 2)
+#	for i in zona:
+#		for j in zona:
+#			relative_position = Vector2(i, j)
+#			to_position = from_position + relative_position
+#			relative_position = relative_position.abs()
+#			if relative_position.x + relative_position.y <= 1 && map.is_inside_matrix_bounds(to_position):
+#				var selectable = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(to_position), "Characters")
+#				if selectable && (selectable.is_in_group("Players") || selectable.is_in_group("Enemis")) && selectable.get_groups() != character.get_groups():
+#					if selectable.get_caracteristic("orientation") == character.position_in_matrix - selectable.position_in_matrix:
+#						if !success:
+#							#espace autour du joueur
+#							var cases_to = []
+#							print(character.front())
+#							cases_to.push_back(Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(character.front()), "Characters"))
+#							cases_to.push_back(Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(character.behind()), "Characters"))
+#							cases_to.push_back(Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(selectable.front()), "Characters"))
+#							cases_to.push_back(Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(selectable.behind()), "Characters"))
+#							for case_to in cases_to:
+#								if !case_to || !case_to.is_in_group("Players") && !case_to.is_in_group("Enemis"):
+#									success = true
+#						if activeOverlay:
+#							list_positions.append(to_position)
+#						elif success:
+#								return true
+#	if success && activeOverlay:
+#		for pos in list_positions:
+#			map.add_overlay_cell_by_index(pos)
+#		Tools.save_value("tour", {"treated" : true, "number" : 1})
+#	return success
+	
+static func cross_range_conditions(var game, var character_src):
+	var character_to = game.current_playing_character()
+	var from_position = character_to.position_in_matrix
+	var to_position = character_to.position_in_matrix
+	if Tools.manhattan_dist(from_position, to_position) != 1:
+		return false
+	return true
 
-#static func stealConditions(var game):
-#	var map = game.getMap()
-#	return  map.testMatrixConditionFunction(funcref("res://RPGFightFramework/scripts/perso/actionPerso.gd", "deplacement_range_conditions"))
-static func steal_get_info(var game):
-	var map = game.getMap()
-	var pos = map.chooseTile()
-	if pos:
-		game.save_value(pos)
-		return true
-	return false
 static func steal_action(var game):
 	print("steal_action")
 #	character.steal(enemi)
@@ -314,7 +329,6 @@ static func steal_range_conditions(var game, var activeOverlay = false):
 #	return success
 	return true
 
-#static func blockConditions(var game):
 static func block_action(var game):
 	print("blockAction")
 	game.current_playing_character().add_caracteristic("state", {"block": 1})
@@ -380,28 +394,37 @@ static func up_and_under_action(var game):
 	
 	#animation
 	character.set_graphics_position(character.position_in_matrix)
-static func up_and_under_range_conditions(var game, var activeOverlay = false):
-	var map = game.map
-	var success = false
+#static func up_and_under_range_conditions(var game, var activeOverlay = false):
+#	var map = game.map
+#	var success = false
+#	var character = game.current_playing_character()
+#	var from_position = character.position_in_matrix
+#	var to_position
+#	var relative_position
+#	var zona = range(-1, character.caracteristics.nbMoves+2)
+#	for i in zona:
+#		for j in zona:
+#			relative_position = Vector2(i, j)
+#			to_position = from_position + relative_position
+#			relative_position = relative_position.abs()
+#			if relative_position.x + relative_position.y <= 1 && map.is_inside_matrix_bounds(to_position):
+#				var selectable = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(to_position), "Characters")
+#				if selectable && selectable.is_in_group("Enemis") && selectable.get_groups() != character.get_groups() && Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(selectable.behind()), "Characters") == null:
+#					if activeOverlay:
+#						map.add_overlay_cell_by_index(to_position)
+#						success = true
+#					else:
+#						return true
+#	return success
+	
+static func up_and_under_range_conditions(var game, var character_src):
 	var character = game.current_playing_character()
 	var from_position = character.position_in_matrix
-	var to_position
-	var relative_position
-	var zona = range(-1, character.caracteristics.nbMoves+2)
-	for i in zona:
-		for j in zona:
-			relative_position = Vector2(i, j)
-			to_position = from_position + relative_position
-			relative_position = relative_position.abs()
-			if relative_position.x + relative_position.y <= 1 && map.is_inside_matrix_bounds(to_position):
-				var selectable = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(to_position), "Characters")
-				if selectable && selectable.is_in_group("Enemis") && selectable.get_groups() != character.get_groups() && Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(selectable.behind()), "Characters") == null:
-					if activeOverlay:
-						map.add_overlay_cell_by_index(to_position)
-						success = true
-					else:
-						return true
-	return success
+	var to_position = character_src.position_in_matrix
+	var distance = Tools.manhattan_dist(from_position, to_position)
+	if distance == 1:
+		return true
+	return false
 	
 
 #static func passeConditions(var game):
@@ -431,30 +454,39 @@ static func passe_action(var game):
 	#animation
 	game.end_turn()
 	
-static func passe_range_conditions(var game, var activeOverlay = false):
-	var map = game.map
+#static func passe_range_conditions(var game, var activeOverlay = false):
+#	var map = game.map
+#	var character = game.current_playing_character()
+#	if !character.has_object_in_hands():
+#		return false
+#	var success = false
+#	var from_position = character.position_in_matrix
+#	var to_position
+#	var relative_position
+#	var zona = range(-3, 4)
+#	for i in zona:
+#		for j in zona:
+#			relative_position = Vector2(i, j)
+#			to_position = from_position + relative_position
+#			relative_position = relative_position.abs()
+#			if relative_position.x + relative_position.y <= 4 && map.is_inside_matrix_bounds(to_position):
+#				var selectable = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(to_position), "Characters")
+#				if selectable && selectable.get_groups() == character.get_groups() && selectable != character:
+#					if activeOverlay:
+#						map.add_overlay_cell_by_index(to_position)
+#						success = true
+#					else:
+#						return true
+#	return success
+	
+static func passe_range_conditions(var game, var character_src):
 	var character = game.current_playing_character()
-	if !character.has_object_in_hands():
-		return false
-	var success = false
 	var from_position = character.position_in_matrix
-	var to_position
-	var relative_position
-	var zona = range(-3, 4)
-	for i in zona:
-		for j in zona:
-			relative_position = Vector2(i, j)
-			to_position = from_position + relative_position
-			relative_position = relative_position.abs()
-			if relative_position.x + relative_position.y <= 4 && map.is_inside_matrix_bounds(to_position):
-				var selectable = Tools.search_selectable_in_tab_by_group(map.get_selectables_from_cell(to_position), "Characters")
-				if selectable && selectable.get_groups() == character.get_groups() && selectable != character:
-					if activeOverlay:
-						map.add_overlay_cell_by_index(to_position)
-						success = true
-					else:
-						return true
-	return success
+	var to_position = character_src.position_in_matrix
+	var distance = Tools.manhattan_dist(from_position, to_position)
+	if distance <= 4:
+		return true
+	return false
 	
 static func opportunity_attack_action(var game, var character):
 	var map = game.map
@@ -465,29 +497,38 @@ static func opportunity_attack_action(var game, var character):
 			return true
 	return false
 			
-static func opportunity_attack_range_conditions(var game, var activeOverlay = false):
-	var map = game.map
-	var success = false
-	var target = game.current_playing_character()
-	var from_position = target.position
-	var to_position
-	var relative_position
-	var zona = range(-1, 2)
-	for i in zona:
-		for j in zona:
-			relative_position = Vector2(i, j)
-			to_position = from_position + relative_position
-			relative_position = relative_position.abs()
-			if relative_position.x + relative_position.y <= 1 && map.is_inside_matrix_bounds(to_position) && map.get_selectable_from_matrix(to_position):
-				#attention quand on gère plusieurs groupes
-				var selectable = map.get_selectable_from_matrix(to_position)
-				if selectable && selectable == game.current_playing_character():
-					if activeOverlay:
-						map.add_overlay_cell_by_index(to_position)
-						success = true
-					else:
-						return true
-	return success
+#static func opportunity_attack_range_conditions(var game, var activeOverlay = false):
+#	var map = game.map
+#	var success = false
+#	var target = game.current_playing_character()
+#	var from_position = target.position
+#	var to_position
+#	var relative_position
+#	var zona = range(-1, 2)
+#	for i in zona:
+#		for j in zona:
+#			relative_position = Vector2(i, j)
+#			to_position = from_position + relative_position
+#			relative_position = relative_position.abs()
+#			if relative_position.x + relative_position.y <= 1 && map.is_inside_matrix_bounds(to_position) && map.get_selectable_from_matrix(to_position):
+#				#attention quand on gère plusieurs groupes
+#				var selectable = map.get_selectable_from_matrix(to_position)
+#				if selectable && selectable == game.current_playing_character():
+#					if activeOverlay:
+#						map.add_overlay_cell_by_index(to_position)
+#						success = true
+#					else:
+#						return true
+#	return success
+	
+static func opportunity_attack_range_conditions(var game, var character_src):
+	var character = game.current_playing_character()
+	var from_position = character.position_in_matrix
+	var to_position = character_src.position_in_matrix
+	var distance = Tools.manhattan_dist(from_position, to_position)
+	if distance <= 1:
+		return true
+	return false
 
 static func ramasser_action(var game):
 	var map = game.map
@@ -496,14 +537,23 @@ static func ramasser_action(var game):
 	character.take_in_hand(object)
 	game.end_turn()
 	
-static func ramasser_range_conditions(var game, var activeOverlay = false):
-	var map = game.map
-	var success = false
-	var target = game.current_playing_character()
-	#attention quand on gère plusieurs groupes
-	var selectables = map.get_selectables_from_cell(target.position_in_matrix)
-	if selectables && Tools.search_selectable_in_tab_by_group(selectables, "Objects") != null:
+#static func ramasser_range_conditions(var game, var activeOverlay = false):
+#	var map = game.map
+#	var success = false
+#	var target = game.current_playing_character()
+#	#attention quand on gère plusieurs groupes
+#	var selectables = map.get_selectables_from_cell(target.position_in_matrix)
+#	if selectables && Tools.search_selectable_in_tab_by_group(selectables, "Objects") != null:
+#		return true
+		
+static func ramasser_range_conditions(var game, var character_src):
+	var character_to = game.current_playing_character()
+	var from_position = character_to.position_in_matrix
+	var to_position = character_src.position_in_matrix
+	var distance = Tools.manhattan_dist(from_position, to_position)
+	if distance == 0:
 		return true
+	return false
 
 static func passer_action(var game):
 	game.end_turn()
