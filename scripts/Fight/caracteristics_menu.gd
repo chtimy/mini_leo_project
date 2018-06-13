@@ -17,9 +17,7 @@ func init(var selectable, var list_caracteristics):
 		label = Label.new()
 		label.set_text(String(list_caracteristics[caracteristic]))
 		grid_container.add_child(label)
-		
-	print(selectable.get_node("animation"))
-	
+
 	selectable.connect("change_caracteristic_from_characterPerso", self, "on_change_caracteristic")
 	selectable.get_node("animation").get_node("Area2D").connect("mouse_entered", self, "on_mouse_entered_character")
 	selectable.get_node("animation").get_node("Area2D").connect("mouse_exited", self, "on_mouse_exited_character")
@@ -33,6 +31,7 @@ func on_change_caracteristic(var carac):
 			children[i+1].set_text(String(carac.value))
 			
 func on_mouse_entered_character():
+	print("ttt")
 	self.set_position(get_viewport().get_mouse_position())
 	self.set_visible(true)
 	

@@ -11,7 +11,8 @@ var current_menu_attack
 var current_action
 
 var state = INIT_TURN
-
+#order of turns
+var turns = []
 enum{INIT_TURN, CHOOSE_MENU, PLAY, END_TURN}
 const CARACTERISTIC_MENU_SCENE = preload("res://scenes/Fight/caracteristicsMenu.tscn")
 export (Script) var INPUT_SCRIPT
@@ -46,36 +47,40 @@ func _ready():
 			else:
 				if selectable.is_in_group("Players"):
 					position = initial_positions_players[index_player]
+					self.turns.push_back(i)
 					index_player += 1
 					i += 1
 				else:
 					position = initial_positions_enemis[index_enemi]
 					index_enemi += 1
+					self.turns.push_back(i)
 					i += 1
 				self.map.add_selectable_to_cell(selectable, position)
 				selectable.position_in_matrix = position
 				selectable.set_graphics_position(position)
 				self.characters.append(selectable)
 				
-#				var caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()
-#				caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()
-#				caracteristics_menu.init(selectable, selectable.caracteristics)
-#				add_child(caracteristics_menu)
+				var caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()
+				caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()
+				caracteristics_menu.init(selectable, selectable.caracteristics)
+				add_child(caracteristics_menu)
 				self.turn_handler.add_character(selectable)
 	else:
 		print("Error : Impossible to load all the scripts")
 		
 	self.set_name("sceneFight")
-	add_child(self.map)
+	$CenterContainer.add_child(self.map)
 	#Generation des selectables
 	var i = 0
 	var j = 0
 	for selectable in self.selectables:
+		#selectable.initMenu(get_node("."), m_actionsDico, viewportSize)
 		add_child(selectable)
 	set_process(true)
 	
 func _process(delta):
-	play_turn()
+	pass
+#	play_turn()
 	set_process(false)
 		
 func play_turn():
@@ -101,14 +106,11 @@ func player_turn(var turn):
 #		self.current_menu_attack.enable(true)
 #		self.current_menu_attack.test_actions(self, self.actions_dico)
 		self.state = CHOOSE_MENU
-		player_turn(turn)
 	elif self.state == CHOOSE_MENU:
 		#si menu retourne action
-		var args = yield(self, "choose_action_signal")
-		print(args)
-		self.current_action = Tools.actions_dico.get_action(args[1])
+		var action_name = yield(self, "choose_action_signal")
+		self.current_action = Tools.actions_dico.get_action(action_name)
 		self.state = PLAY
-		player_turn(turn)
 	elif self.state == PLAY:
 		self.current_action.play.call_func(self)
 	elif self.state == END_TURN:
@@ -121,7 +123,7 @@ func end_turn():
 	self.state = END_TURN
 	set_process(true)
 	
-func on_choose_action(var action_name, var selectable):
+func choose_action(var action_name, var selectable):
 	emit_signal("choose_action_signal", action_name, selectable)
 	
 # @function enemiTurn

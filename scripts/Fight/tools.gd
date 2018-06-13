@@ -2,6 +2,11 @@ extends Node
 
 var values = {}
 
+var actions_dico
+var MENU_SCENE = load("res://scenes/Fight/menuActionsFight.tscn")
+
+var current_menu
+
 func throw_dice(var maxNumber):
 	return randi() % maxNumber + 1
 	
@@ -151,6 +156,9 @@ func search_selectable_in_tab_by_object(var selectables, var object):
 		if selectables[i] == object:
 			return i
 	return -1
+	
+func manhattan_dist(var p1, var p2):
+	return abs(p1.x - p2.x) + abs(p1.y - p2.y)
 	
 func right(var position, var orientation, var i = 1):
 	return position + Vector2(orientation.y, -orientation.x) * i

@@ -55,7 +55,7 @@ block
 res://ressources/images/hud/menuFight/block.png
 res://ressources/images/hud/menuFight/blockChecked.png
 res://ressources/images/hud/menuFight/blockDisabled.png
-1
+2
 0
 0
 
@@ -91,7 +91,7 @@ passer
 res://ressources/images/hud/menuFight/passer.png
 res://ressources/images/hud/menuFight/passerChecked.png
 res://ressources/images/hud/menuFight/passerDisabled.png
-1
+2
 0
 0
 
@@ -109,7 +109,7 @@ ramasser
 res://ressources/images/hud/menuFight/ramasser.png
 res://ressources/images/hud/menuFight/ramasserChecked.png
 res://ressources/images/hud/menuFight/ramasserDisabled.png
-1
+2
 0
 0
 
@@ -118,6 +118,6 @@ opportunity_attack
 null
 null
 null
-1
+2
 0
 0
