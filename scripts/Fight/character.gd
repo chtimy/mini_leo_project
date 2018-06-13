@@ -14,7 +14,6 @@ var action_names
 var opportunity_action_names
 var objects = []
 var object_in_hand
-var actions_dico
 var image
 
 #########################################################################################################
@@ -145,7 +144,5 @@ func has_object_in_hands():
 	if object_in_hand != null:
 		return true
 	return false
+	
 ##################################### NODE #############################################
-func _ready():
-	$animation.connect("animation_finished", self, "on_animation_finished")
-	set_process(false)
