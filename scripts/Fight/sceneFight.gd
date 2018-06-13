@@ -1,6 +1,7 @@
 extends Node
 
 signal choose_action_signal
+signal end_turn_signal
 
 var characters = []
 var objects = []
@@ -25,6 +26,7 @@ func _ready():
 	var input = INPUT_SCRIPT.new()
 	self.selectables = input.selectables
 	self.map = input.map
+	map.connect("move_from_map_signal", self, "on_map_clicked_for_move")
 	self.turn_handler = $HUD/turn_counter
 	var ACTIONS_CLASS = load("res://scripts/Fight/actionPerso.gd")
 	if ACTIONS_CLASS:
@@ -57,6 +59,8 @@ func _ready():
 				selectable.set_graphics_position(position)
 				self.characters.append(selectable)
 				
+				selectable.create_menu(self)
+				
 #				var caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()
 #				caracteristics_menu = CARACTERISTIC_MENU_SCENE.instance()
 #				caracteristics_menu.init(selectable, selectable.caracteristics)
@@ -72,64 +76,77 @@ func _ready():
 	var j = 0
 	for selectable in self.selectables:
 		add_child(selectable)
+	connect("end_turn_signal", self, "play_turn")
 	set_process(true)
 	
 func _process(delta):
+	print("process")
 	play_turn()
 	set_process(false)
 		
 func play_turn():
+	print("new turn")
 	var turn = self.turn_handler.get_current_turn()
+	print("new turn with ", self.characters[turn])
 	if self.characters[turn].is_in_group("Players"):
 		#Players turn
-		if player_turn(turn):
-			$HUD/turn_counter.next_turn()
+		player_turn(turn)
 	elif self.characters[turn].is_in_group("Enemis"):
 		#Enemis turn (IA)
-		if enemi_turn(turn):
-			$HUD/turn_counter.next_turn()
+		enemi_turn(turn)
+			
 	
 # @function : playerTurn
 # @description : Gestion du tour du joueur
 # @params :
 #	turn : Numéro de tour courant
 func player_turn(var turn):
-	if self.state == INIT_TURN:
-		for selectable in selectables:
-			selectable.create_menu(self)
-#		self.current_menu_attack = self.characters[turn].menu
-#		self.current_menu_attack.enable(true)
-#		self.current_menu_attack.test_actions(self, self.actions_dico)
-		self.state = CHOOSE_MENU
-		player_turn(turn)
-	elif self.state == CHOOSE_MENU:
-		#si menu retourne action
-		var args = yield(self, "choose_action_signal")
-		print(args)
-		self.current_action = Tools.actions_dico.get_action(args[1])
-		self.state = PLAY
-		player_turn(turn)
-	elif self.state == PLAY:
-		self.current_action.play.call_func(self)
-	elif self.state == END_TURN:
-		#if pas mort alors on met le tour derriere
-		self.state = INIT_TURN
-		return true
-	return false
+	print("current : ", current_playing_character())
+	#init menu of each character
+	for selectable in selectables:
+		selectable.init_menu(self)
+	#init move zona on the map
+	var action = Tools.actions_dico.get_action("deplacement")
+	action.range_cond.call_func(self)
+	var character = current_playing_character()
+	if character.is_in_group("Enemis"):
+		map.set_mode(map.DRAW_ARROW, [character.position_in_matrix, ["Players"]])
+	else:
+		map.set_mode(map.DRAW_ARROW, [character.position_in_matrix, ["Enemis"]])
+	#wait for an action from the player
+	var args = yield(self, "choose_action_signal")
+	#close all menus and play the action
+	for selectable in selectables:
+		selectable.close_menu()
+	self.current_action = Tools.actions_dico.get_action(args[0])
+	self.current_action.play.call_func(self, args[1])
+	#let the animations running till an signal emitted (call end_turn method)
 	
 func end_turn():
-	self.state = END_TURN
-	set_process(true)
+	#end of turn
+	#pass to the next turn
+	$HUD/turn_counter.next_turn()
+	play_turn()
 	
 func on_choose_action(var action_name, var selectable):
+	print(action_name, selectable)
 	emit_signal("choose_action_signal", action_name, selectable)
+	
+func on_map_clicked_for_move(var path):
+	map.disable_selection()
+	var character = current_playing_character()
+	character.path = path
+	emit_signal("choose_action_signal", "deplacement", character)
 	
 # @function enemiTurn
 # @description : Gestion du tour de l'ennemi
 # @params :
 # 	turn : tour courant
 func enemi_turn(var turn):
-	return true
+	$HUD/turn_counter.next_turn()
+	print("next turn : ", current_playing_character())
+	set_process(true)
+	print(is_processing())
 	
 func current_playing_character():
 	return self.characters[turn_handler.get_current_turn()]

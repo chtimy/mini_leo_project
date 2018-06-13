@@ -3,8 +3,8 @@ extends "res://scripts/Fight/mapMatrix2D.gd"
 ########################################################################################################################################
 ###################################################		SIGNALS	########################################################################
 ########################################################################################################################################
-signal overlay_clicked_from_map
-signal move_from_map
+#signal overlay_clicked_from_map
+signal move_from_map_signal
 
 ########################################################################################################################################
 ###################################################		MEMBERS	########################################################################
@@ -71,16 +71,23 @@ func _input(event):
 				elif lastClickedCell != null:
 					set_color_overlay_mesh_instance(lastClickedCell, Color("cceef283"))
 					lastClickedCell = null
+				#if mouse outside the yellow zona (overlays for move)
+				else:
+					$draw_space.hide()
+		#if the user clicked on the map (with the left button of the mouse)
 		if event is InputEventMouseButton :
 			if event.get_button_index() == BUTTON_LEFT && event.pressed == false:
+				#if it's an overlay tile
 				if lastClickedCell != null:
 					print("click on ", lastClickedCell)
+					#if it's a move action
 					if self.mode == DRAW_ARROW:
 						set_mode(SELECTION_MODE)
 						$draw_space.hide()
-						emit_signal("move_from_map", self.path.last_solution)
-					else:
-						emit_signal("overlay_clicked_from_map", lastClickedCell)
+						emit_signal("move_from_map_signal", self.path.last_solution)
+					#peut être plus utile ici (c'était pour choisir les ennemis mais on a fait une autre mécanisme)
+#					else:
+#						emit_signal("overlay_clicked_from_map", lastClickedCell)
 
 func set_mode(var mode, var args = []):
 	self.mode = mode

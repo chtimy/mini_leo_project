@@ -6,6 +6,11 @@ extends "res://scripts/Fight/character.gd"
 
 func _init(var name, var groups, var caracteristics, var position, var action_names, var opp_attack_names, var map, var image).(name, groups, caracteristics, position, action_names, opp_attack_names, map, image):
 	pass
+	
+func same_side(var selectable):
+	if selectable.is_in_group("Players"):
+		return true
+	return false
 
 #func _ready():
 #	self.menu = MENU_ACTION_SCENE.instance()

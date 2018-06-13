@@ -1,5 +1,7 @@
 extends Control
 
+signal choose_action_signal
+
 const MENU_ATTACK_SIZE = Vector2(0.1, 0.2)
 const MENU_ATTACK_POSITION = Vector2(0.1, 0.15)
 
@@ -43,9 +45,23 @@ func add(var action, var game, var selectable):
 		"action_id" : action.id
 	}
 	self.buttons.append(button)
-	button.actionner.texture_button.connect("overlay", game, "on_choose_action", [selectable, button.name])
+	button.actionner.texture_button.connect("gui_input", self, "on_button_event", [selectable, button.name])
 	button.actionner.texture_button.connect("mouse_entered", self, "on_button_mouse_entered", [button])
 	button.actionner.texture_button.connect("mouse_exited", self, "on_button_mouse_exited", [button])
+	
+	var viewport_size = get_viewport().get_size()
+	var vbox = $ScrollContainer/VBoxContainer
+	var size_menu = MENU_ATTACK_SIZE * viewport_size
+	vbox.add_child(button.actionner.texture_button)
+	#on essaye de scaler le bouton pour le case dans le layout à la bonne taille
+	var scale_button = (size_menu.y * 0.2) / button.actionner.texture_button.texture_normal.get_size().y
+	button.actionner.texture_button.set_custom_minimum_size(button.actionner.texture_button.texture_normal.get_size() * scale_button)
+#	#utile??
+#	button.actionner.texture_button.set_size(button.actionner.texture_button.texture_normal.get_size() * scale_button)
+	
+func on_button_event(ev, var selectable, var button):
+	if ev is InputEventMouseButton && ev.pressed && ev.button_index == BUTTON_LEFT:
+		emit_signal("choose_action_signal", button, selectable)
 	
 func on_button_mouse_entered(var button):
 	set_active_button(button, ACTIVE_TEXTURE)
@@ -126,18 +142,25 @@ func test_actions(var game, var dico_actions):
 		return true
 	return false
 
-func _ready():
-	var viewport_size = get_viewport().get_size()
-	set_position(MENU_ATTACK_POSITION * viewport_size)
-	var vbox = $ScrollContainer/VBoxContainer
-	var size_menu = MENU_ATTACK_SIZE * viewport_size
+func clear():
 	for button in self.buttons:
-		vbox.add_child(button.actionner.texture_button)
-		#on essaye de scaler le bouton pour le case dans le layout à la bonne taille
-		var scale_button = (size_menu.y * 0.2) / button.actionner.texture_button.texture_normal.get_size().y
-		button.actionner.texture_button.set_custom_minimum_size(button.actionner.texture_button.texture_normal.get_size() * scale_button)
-		#utile??
-		button.actionner.texture_button.set_size(button.actionner.texture_button.texture_normal.get_size() * scale_button)
+		button.actionner.texture_button.queue_free()
+		var textures = button.actionner.textures
+	buttons.clear()
+	
+func _ready():
+	pass
+#	var viewport_size = get_viewport().get_size()
+#	set_position(MENU_ATTACK_POSITION * viewport_size)
+#	var vbox = $ScrollContainer/VBoxContainer
+#	var size_menu = MENU_ATTACK_SIZE * viewport_size
+#	for button in self.buttons:
+#		vbox.add_child(button.actionner.texture_button)
+#		#on essaye de scaler le bouton pour le case dans le layout à la bonne taille
+#		var scale_button = (size_menu.y * 0.2) / button.actionner.texture_button.texture_normal.get_size().y
+#		button.actionner.texture_button.set_custom_minimum_size(button.actionner.texture_button.texture_normal.get_size() * scale_button)
+#		#utile??
+#		button.actionner.texture_button.set_size(button.actionner.texture_button.texture_normal.get_size() * scale_button)
 	
 	#if first option -> active the button
 #	if self.buttons.size() > 0:
